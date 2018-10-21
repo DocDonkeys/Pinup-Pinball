@@ -21,9 +21,11 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
+	SDL_Rect mapRect;	// @Carles
 
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;
+	SDL_Texture* map = nullptr;	// @Carles, CHANGE/FIX: Initialization to NULL is done on constructor: change or keep?
 	uint bonus_fx;
 };

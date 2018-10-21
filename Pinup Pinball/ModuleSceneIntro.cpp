@@ -10,6 +10,9 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	circle = box = rick = NULL;
+
+	// @Carles
+	mapRect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -26,6 +29,8 @@ bool ModuleSceneIntro::Start()
 	circle = App->textures->Load("pinball/wheel.png"); 
 	box = App->textures->Load("pinball/crate.png");
 	rick = App->textures->Load("pinball/rick_head.png");
+	map = App->textures->Load("pinball/sprites/map.png");
+
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	return ret;
@@ -130,6 +135,8 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
+
+	App->renderer->Blit(map, 0, 0, &mapRect);	// @Carles
 
 	return UPDATE_CONTINUE;
 }
