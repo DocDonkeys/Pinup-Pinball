@@ -1,0 +1,77 @@
+LIGHT SIZE:
+16x16
+
+LIGHT COORDINATES:
+Top Left:
+35x132
+60x132
+85x132
+109x132
+
+Top:
+183x236
+208x236
+233x236
+258x236
+
+Left:
+42x472
+
+Right:
+342x472
+
+Down Left:
+37x572
+
+Down Right:
+347x572
+
+ARROW SIZES:
+Left: 16x26
+Middle: 14x26
+Right: 20x27
+
+ARROW COORDINATES:
+Left: 149x231
+Middle: 320x200
+Right: 354x210
+
+PEG SIZE:
+10x10
+
+PEG COORDINATES:
+Left: 20x515
+Middle: 195x759
+Right: 370x515
+
+MISSING TOP RIGHT BUMP SIZE & COORDINATES:
+27x29 / 389x142
+
+LOGIC:
+3 Starting balls
+"Pegs" collide with ball, then change to wasted (they are saveguard)
+When "peg" is hit changes sprite, can be restored via ramp lights
+Down side lights only turned on/off by ramp, but always score
+Tunnel time: 2 sec
+Tunnel green light: 1 sec before exiting tunnel
+Bumpers: Add velocity depending on angle
+Lights don't have colliders, only grey bars and red buttons.
+"Pegs" are restarted when losing a ball
+
+REWARD LOGIC:
+All Top Left Lights = Activate Ramp C (Hide Small Bumper)
+All Top Lights = +1 Score Multiplier
+Side Lights: Activate "Ramps Event"
+Ramps Event = +2 in-game balls from Left Jump Booster
+Down Side Light turned off = Recieve points for light and 2 pegs (small grey circles) and restore those 2 pegs to unhit state if hit.
+Each +30k Score = +1 retry ball
+
+SCORE (All multiplied by multiplier):
+Left Jump Booster: 5
+Top Left Lights = 3
+Big Down Bumbers = 5
+Small Top Bumbers = 44
+Tunnel: 33
+Down Side Lights & Small grey buttons: 9
+Lights w/ Buttons: 11
+Enter Ramp: 444
