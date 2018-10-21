@@ -17,6 +17,8 @@ ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app,
 	world = NULL;
 	mouse_joint = NULL;
 	debug = true;
+	//Stuff made by us
+	body_clicked = nullptr;
 }
 
 // Destructor
@@ -53,6 +55,32 @@ bool ModulePhysics::Start()
 	fixture.shape = &shape;
 	big_ball->CreateFixture(&fixture);
 
+	//Creating the Flipper Stuff
+	int x_ = SCREEN_WIDTH / 4;
+	int y_ = SCREEN_HEIGHT / 2.5f;
+	int diameter_ = SCREEN_WIDTH / 8;
+
+	b2BodyDef flipper_attacher_body;
+	flipper_attacher_body.type = b2_staticBody;
+	flipper_attacher_body.position.Set(PIXEL_TO_METERS(x_), PIXEL_TO_METERS(y_));
+
+	flipper_attacher = world->CreateBody(&flipper_attacher_body);
+
+	b2CircleShape flipper_attacher_shape;
+	flipper_attacher_shape.m_radius = PIXEL_TO_METERS(diameter_) * 0.5f;
+
+	b2FixtureDef flipper_attacher_fixture;
+	flipper_attacher_fixture.shape = &flipper_attacher_shape;
+	flipper_attacher->CreateFixture(&flipper_attacher_fixture);
+
+	//Creating the Flipper Stuff FLIPPER
+	flipper = CreateRectangle(x_,y_,100,10);
+
+	//Create the joint between the flipper and the flipper attacher
+	b2RevoluteJointDef jointDef;
+	jointDef.Initialize(flipper_attacher, flipper->body, flipper_attacher->GetWorldCenter());
+
+	flipper_joint = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 	return true;
 }
 
