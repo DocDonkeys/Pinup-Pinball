@@ -332,44 +332,24 @@ update_status ModulePhysics::PostUpdate()
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && body_clicked != nullptr)
 		{
 			//The mouse Joint previously created (def) is in the world JointList
-			for (b2MouseJoint* b_mouse_joint = (b2MouseJoint*)world->GetJointList(); b_mouse_joint; b_mouse_joint = (b2MouseJoint*)b_mouse_joint->GetNext())
-			{
+			
 				//UPDATE THE TARGET
-				b_mouse_joint->SetTarget({ PIXEL_TO_METERS((float32)App->input->GetMouseX()), PIXEL_TO_METERS((float32)App->input->GetMouseY()) });
+				mouse_joint->SetTarget({ PIXEL_TO_METERS((float32)App->input->GetMouseX()), PIXEL_TO_METERS((float32)App->input->GetMouseY()) });
 
 			//Draw the line between both points
-				App->renderer->DrawLine(METERS_TO_PIXELS(b_mouse_joint->GetAnchorB().x), METERS_TO_PIXELS(b_mouse_joint->GetAnchorB().y),
-					METERS_TO_PIXELS(b_mouse_joint->GetTarget().x), METERS_TO_PIXELS( b_mouse_joint->GetTarget().y),
+				App->renderer->DrawLine(METERS_TO_PIXELS(mouse_joint->GetAnchorB().x), METERS_TO_PIXELS(mouse_joint->GetAnchorB().y),
+					METERS_TO_PIXELS(mouse_joint->GetTarget().x), METERS_TO_PIXELS( mouse_joint->GetTarget().y),
 					255, 0, 0, 255);
-			}
+			
 		}
 		
-	
-
-
-	
-
 	// TODO 4: If the player releases the mouse button, destroy the joint
-		for (b2MouseJoint* b_mouse_joint = (b2MouseJoint*)world->GetJointList(); b_mouse_joint;
-			b_mouse_joint = (b2MouseJoint*)b_mouse_joint->GetNext())
-		{
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && mouse_joint != nullptr)
 			{
-				world->DestroyJoint(b_mouse_joint);
-				b_mouse_joint = nullptr;
+				world->DestroyJoint(mouse_joint);
+				mouse_joint = nullptr;
 				body_clicked = nullptr;
-				break;
-
-				//for (b2MouseJoint* b_mouse_joint = (b2MouseJoint*)world->GetJointList(); 
-				//	b_mouse_joint != nullptr; 
-				//	b_mouse_joint = (b2MouseJoint*)b_mouse_joint->GetNext())
-				//{
-				//	//Destroy the joint
-				//	world->DestroyJoint(b_mouse_joint);
-				//	b_mouse_joint = nullptr;
-				//}
 			}
-		}
 
 	return UPDATE_CONTINUE;
 }
