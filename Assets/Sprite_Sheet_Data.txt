@@ -1,0 +1,16 @@
+COORDINATES/SIZE:
+Ball: 0x0/18x18 (2dBox Ball Radius = 9)
+Missing Bumper: 20x0/27x29
+Light On: 48x12/16x16
+Light Off: 65x12/16x16
+Left Down Green: 49x0/5x5
+Right Up Green: 55x0/5x5
+Left Peg: 62x0/10x10
+Middle Peg: 73x0/10x10
+Right Peg: 84x0/10x10
+Left Arrow: 0x31/16x26
+Middle Arrow: 17x31/14x26
+Right Arrow: 32x30/20x27
+Kicker: 82x24/6x34
+Blue on Kicker: 89x44/15x13
+Down Bumpers: ???

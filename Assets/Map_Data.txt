@@ -47,6 +47,12 @@ Right: 370x515
 MISSING TOP RIGHT BUMP SIZE & COORDINATES:
 27x29 / 389x142
 
+KICKER:
+409x776/6x34
+
+BLUE ABOVE KICKER:
+405x796/15x13
+
 LOGIC:
 3 Starting balls
 "Pegs" collide with ball, then change to wasted (they are saveguard)
