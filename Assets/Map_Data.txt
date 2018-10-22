@@ -36,6 +36,13 @@ Left: 149x231
 Middle: 320x200
 Right: 354x210
 
+GREEN LIGHTS SIZE:
+5x5
+
+GREEN LIGHTS:
+Left: 47x427
+Right: 407x304
+
 PEG SIZE:
 10x10
 

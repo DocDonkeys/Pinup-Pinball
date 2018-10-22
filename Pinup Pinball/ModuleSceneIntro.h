@@ -6,6 +6,16 @@
 
 class PhysBody;
 
+struct static_element {	// @Carles
+	iPoint position;
+	SDL_Rect rect;
+
+	void create(iPoint position, SDL_Rect rect) {
+		this->position = position;
+		this->rect = rect;
+	}
+};
+
 class ModuleSceneIntro : public Module
 {
 public:
@@ -18,14 +28,41 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
+	//PhysBodies
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
-	SDL_Rect mapRect;	// @Carles
+	
+	//Textures
+	SDL_Texture* circle;	// CHANGE/FIX: Old
+	SDL_Texture* box;	// CHANGE/FIX: Old
+	SDL_Texture* rick;	// CHANGE/FIX: Old
+	SDL_Texture* map;
+	SDL_Texture* ramps;
+	SDL_Texture* spriteSheet;
 
-	SDL_Texture* circle;
-	SDL_Texture* box;
-	SDL_Texture* rick;
-	SDL_Texture* map = nullptr;	// @Carles, CHANGE/FIX: Initialization to NULL is done on constructor: change or keep?
+	//Lights
+	usPoint lightPosList[12];
+	SDL_Rect lightRect;
+
+	//Static elements
+	static_element missingBumper;
+
+	static_element greenLeftLight;
+	static_element greenRightLight;
+
+	static_element pegLeft;
+	static_element pegMiddle;
+	static_element pegRight;
+
+	static_element arrowLeft;
+	static_element arrowMiddle;
+	static_element arrowRight;
+
+	static_element blueOverKicker;
+
+	//Rect that covers the full screen
+	SDL_Rect fullScreenRect;	// @Carles
+
 	uint bonus_fx;
 };

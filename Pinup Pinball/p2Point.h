@@ -101,6 +101,9 @@ public:
 };
 
 typedef p2Point<int> iPoint;
+typedef p2Point<short> sPoint;
+typedef p2Point<uint> uPoint;
+typedef p2Point<unsigned short> usPoint;
 typedef p2Point<float> fPoint;
 
 template<class TYPE>

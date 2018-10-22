@@ -12,6 +12,7 @@ void log(const char file[], int line, const char* format, ...);
 #define RADTODEG 57.295779513082320876f
 
 typedef unsigned int uint;
+typedef unsigned short ushort;
 
 enum update_status
 {
