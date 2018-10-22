@@ -62,5 +62,7 @@ private:
 	//Bodies to try and make a flipper
 	b2Body* flipper_attacher;
 	PhysBody* flipper;
+
+public:
 	b2RevoluteJoint* flipper_joint;
 };

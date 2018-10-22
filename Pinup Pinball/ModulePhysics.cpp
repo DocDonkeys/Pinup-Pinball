@@ -74,11 +74,19 @@ bool ModulePhysics::Start()
 	flipper_attacher->CreateFixture(&flipper_attacher_fixture);
 
 	//Creating the Flipper Stuff FLIPPER
-	flipper = CreateRectangle(x_,y_,100,10);
+	flipper = CreateRectangle(x_ + 50,y_,100,10);
 
 	//Create the joint between the flipper and the flipper attacher
 	b2RevoluteJointDef jointDef;
 	jointDef.Initialize(flipper_attacher, flipper->body, flipper_attacher->GetWorldCenter());
+
+	//SET the limits for the joint (this will limit the angle of the flipper)
+	jointDef.enableLimit = true;
+	jointDef.lowerAngle = -0.25f * b2_pi; // -45 degrees
+	jointDef.upperAngle = 0.25f * b2_pi; // 45 degrees
+
+	//Activate the motor ESSENTIAL STEP
+	jointDef.enableMotor = true;
 
 	flipper_joint = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 	return true;

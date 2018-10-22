@@ -47,6 +47,18 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	/*if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_DOWN || KEY_REPEAT))
+	{
+		App->physics->flipper_joint->SetMaxMotorTorque(400.0f);
+		App->physics->flipper_joint->SetMotorSpeed(-500.0f);
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_UP))
+	{
+		App->physics->flipper_joint->SetMaxMotorTorque(-20.0f);
+		App->physics->flipper_joint->SetMotorSpeed(0.0f);
+	}*/
+
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
