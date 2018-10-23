@@ -56,9 +56,9 @@ bool ModulePhysics::Start()
 	big_ball->CreateFixture(&fixture);
 
 	//Creating the Flipper Stuff
-	int x_ = SCREEN_WIDTH / 4;
-	int y_ = SCREEN_HEIGHT / 2.5f;
-	int diameter_ = SCREEN_WIDTH / 8;
+	int x_ = SCREEN_WIDTH / 2.8f;
+	int y_ = SCREEN_HEIGHT -SCREEN_HEIGHT / 11.0f;
+	int diameter_ = 9;
 
 	b2BodyDef flipper_attacher_body;
 	flipper_attacher_body.type = b2_staticBody;
@@ -74,16 +74,32 @@ bool ModulePhysics::Start()
 	flipper_attacher->CreateFixture(&flipper_attacher_fixture);
 
 	//Creating the Flipper Stuff FLIPPER
-	flipper = CreateRectangle(x_ + 50,y_,100,10);
+	//flipper = CreateRectangle(x_ + 50,y_,100,10);
 
+	//Flipper
+	// Pivot 0, 0
+	int sprite_sheet[16] = {
+		6, 92,
+		15, 92,
+		47, 112,
+		47, 116,
+		43, 116,
+		5, 107,
+		1, 101,
+		1, 96,
+	};
+	flipper = CreateFlipper(x_ - 11, y_ -100, sprite_sheet, 16);
+
+	//flipper->body->CreateFixture()
 	//Create the joint between the flipper and the flipper attacher
 	b2RevoluteJointDef jointDef;
 	jointDef.Initialize(flipper_attacher, flipper->body, flipper_attacher->GetWorldCenter());
 
+	jointDef.collideConnected = false;
 	//SET the limits for the joint (this will limit the angle of the flipper)
 	jointDef.enableLimit = true;
 	jointDef.lowerAngle = -0.25f * b2_pi; // -45 degrees
-	jointDef.upperAngle = 0.25f * b2_pi; // 45 degrees
+	jointDef.upperAngle = 0.00f * b2_pi; // 45 degrees
 
 	//Activate the motor ESSENTIAL STEP
 	jointDef.enableMotor = true;
@@ -221,6 +237,44 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
+PhysBody* ModulePhysics::CreateFlipper(int x, int y, int* points, int size)
+{
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box; //Dídac
+
+	//b2ChainShape shape;
+	b2Vec2* p = new b2Vec2[size / 2];
+
+	for (uint i = 0; i < size / 2; ++i)
+	{
+		p[i].x = PIXEL_TO_METERS(points[i * 2 + 0]);
+		p[i].y = PIXEL_TO_METERS(points[i * 2 + 1]);
+	}
+
+	//shape.CreateLoop(p, size / 2);
+	box.Set(p, size / 2);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	//@Dídac
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	delete p;
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = 0;
+
+	return pbody;
+}
+
 // 
 update_status ModulePhysics::PostUpdate()
 {
@@ -283,8 +337,8 @@ update_status ModulePhysics::PostUpdate()
 						prev = v;
 					}
 
-					v = b->GetWorldPoint(shape->m_vertices[0]);
-					App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
+					//v = b->GetWorldPoint(shape->m_vertices[0]);
+					//App->renderer->DrawLine(METERS_TO_PIXELS(prev.x), METERS_TO_PIXELS(prev.y), METERS_TO_PIXELS(v.x), METERS_TO_PIXELS(v.y), 100, 255, 100);
 				}
 				break;
 
