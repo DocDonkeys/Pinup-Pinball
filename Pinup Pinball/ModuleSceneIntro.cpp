@@ -224,6 +224,18 @@ update_status ModuleSceneIntro::Update()
 	// Draw ramps -------------------------------------------------------------	// CHANGE/FIX: Add conditions so ball can draw after this and not before
 	App->renderer->Blit(ramps, 0, 0, &fullScreenRect);	// @Carles
 
+
+	//SUPER F'd UP Blit for left flipper @Dídac   MUST FIX/CHANGE
+	int x_, y_;
+	App->physics->flipper->GetPosition(x_,y_);
+	SDL_Rect l_flipper_rect;
+	l_flipper_rect.h = 27;
+	l_flipper_rect.w = 50;
+	l_flipper_rect.x = 0;
+	l_flipper_rect.y = 92;
+
+	App->renderer->Blit(spriteSheet, x_, y_,&l_flipper_rect, 1.0f, App->physics->flipper->GetRotation());
+
 	return UPDATE_CONTINUE;
 }
 

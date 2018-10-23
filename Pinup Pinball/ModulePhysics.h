@@ -62,10 +62,12 @@ private:
 	//Vars created by me
 	b2Body* body_clicked;
 
-	//Bodies to try and make a flipper
-	b2Body* flipper_attacher;
-	PhysBody* flipper;
+	
 
 public:
 	b2RevoluteJoint* flipper_joint;
+
+	//Bodies to try and make a flipper
+	b2Body* flipper_attacher;
+	PhysBody* flipper;
 };
