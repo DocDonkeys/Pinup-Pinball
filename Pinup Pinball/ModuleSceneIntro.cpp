@@ -234,7 +234,7 @@ update_status ModuleSceneIntro::Update()
 	l_flipper_rect.x = 0;
 	l_flipper_rect.y = 92;
 
-	App->renderer->Blit(spriteSheet, x_, y_,&l_flipper_rect, 1.0f, App->physics->flipper->GetRotation());
+	App->renderer->Blit(spriteSheet, x_, y_ + l_flipper_rect.y,&l_flipper_rect, 1.0f, App->physics->flipper->GetRotation(), 0, -l_flipper_rect.y);
 
 	return UPDATE_CONTINUE;
 }
