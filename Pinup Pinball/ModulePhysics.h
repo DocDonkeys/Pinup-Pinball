@@ -58,6 +58,9 @@ public:
 	b2RevoluteJoint* CreateFlipperJoint(const flipper &f, int lowerAngle, int upperAngle);
 	flipper CreateFlipper(int posX, int posY, int att_diameter, int flipper_chain[], int chain_size,
 						  SDL_Rect flipper_rect, int lowerAngle, int upperAngle);
+	//Flipper movement
+	void FlipperSetMaxMotorTorque(flipper &f, float32 MaxTorque);
+	void FlipperSetMotorSpeed(flipper &f, float32 MotorSpeed);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

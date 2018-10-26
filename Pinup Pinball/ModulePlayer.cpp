@@ -31,7 +31,7 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	/*if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
 		App->physics->flipper_joint->SetMaxMotorTorque(400.0f);
 		App->physics->flipper_joint->SetMotorSpeed(-500.0f);
@@ -41,7 +41,7 @@ update_status ModulePlayer::Update()
 	{
 		App->physics->flipper_joint->SetMaxMotorTorque(-20.0f);
 		App->physics->flipper_joint->SetMotorSpeed(0.0f);
-	}
+	}*/
 
 	return UPDATE_CONTINUE;
 }

@@ -106,17 +106,28 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	/*if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_DOWN || KEY_REPEAT))
+	//Fix @Dídac
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
-		App->physics->flipper_joint->SetMaxMotorTorque(400.0f);
-		App->physics->flipper_joint->SetMotorSpeed(-500.0f);
+		App->physics->FlipperSetMaxMotorTorque(leftFlipper,400.0f);
+		App->physics->FlipperSetMotorSpeed(leftFlipper, -500.f);
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_UP))
+	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_UP))
 	{
-		App->physics->flipper_joint->SetMaxMotorTorque(-20.0f);
-		App->physics->flipper_joint->SetMotorSpeed(0.0f);
-	}*/
+		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 10.0f);
+		App->physics->FlipperSetMotorSpeed(leftFlipper, 500.f);
+	}
+	//Fix @Dídac
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+	{
+		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 400.0f);
+		App->physics->FlipperSetMotorSpeed(rightFlipper, 500.f);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_UP))
+	{
+		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 10.0f);
+		App->physics->FlipperSetMotorSpeed(rightFlipper, -500.f);
+	}
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{

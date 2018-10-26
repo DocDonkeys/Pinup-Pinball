@@ -331,6 +331,15 @@ b2RevoluteJoint* ModulePhysics::CreateFlipperJoint(const flipper &f, int lowerAn
 	return (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 }
 
+void ModulePhysics::FlipperSetMaxMotorTorque(flipper &f, float32 MaxTorque)
+{
+	f.Joint->SetMaxMotorTorque(MaxTorque);
+}
+
+void ModulePhysics::FlipperSetMotorSpeed(flipper &f, float32 MotorSpeed)
+{
+	f.Joint->SetMotorSpeed(MotorSpeed);
+}
 // 
 update_status ModulePhysics::PostUpdate()
 {
