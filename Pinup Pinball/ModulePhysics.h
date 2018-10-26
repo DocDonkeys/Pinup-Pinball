@@ -12,6 +12,8 @@
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
+
+struct flipper; // So we don't need to include headers
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -48,7 +50,8 @@ public:
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 
 	//@Dídac
-	PhysBody* CreateFlipper(int x, int y, int* points, int size);
+	flipper*  CreateFlipper();
+	PhysBody* CreateFlipperPbody(int x, int y, int* points, int size);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);

@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "ModulePhysics.h"
+#include "ModuleSceneIntro.h"
 #include "p2Point.h"
 #include "math.h"
 
@@ -88,7 +89,7 @@ bool ModulePhysics::Start()
 		1, 101,
 		1, 96,
 	};
-	flipper = CreateFlipper(x_ - 11, y_ -100, sprite_sheet, 16);
+	flipper = CreateFlipperPbody(x_ - 11, y_ -100, sprite_sheet, 16);
 
 	//flipper->body->CreateFixture()
 	//Create the joint between the flipper and the flipper attacher
@@ -237,7 +238,15 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateFlipper(int x, int y, int* points, int size)
+
+
+flipper* ModulePhysics::CreateFlipper()
+{
+	//flipper f;
+	return nullptr;
+}
+
+PhysBody* ModulePhysics::CreateFlipperPbody(int x, int y, int* points, int size)
 {
 	b2BodyDef body;
 	body.type = b2_dynamicBody;

@@ -5,6 +5,8 @@
 #include "Globals.h"
 
 class PhysBody;
+struct b2Body;
+struct b2RevoluteJoint;
 
 struct static_element {	// @Carles
 	iPoint position;
@@ -14,6 +16,18 @@ struct static_element {	// @Carles
 		this->position = position;
 		this->rect = rect;
 	}
+};
+
+
+struct flipper
+{
+	//Bodies of the flipper
+	b2Body* Attacher;
+	PhysBody* Pbody;
+	//Joint of the flipper elements
+	b2RevoluteJoint* Joint;
+	//Rect for blitting purposes
+	SDL_Rect Rect;
 };
 
 class ModuleSceneIntro : public Module
@@ -63,6 +77,10 @@ public:
 
 	//Rect that covers the full screen
 	SDL_Rect fullScreenRect;	// @Carles
+
+	//Flippers @Dídac
+	flipper leftFlipper;
+	flipper rightFlipper;
 
 	uint bonus_fx;
 };

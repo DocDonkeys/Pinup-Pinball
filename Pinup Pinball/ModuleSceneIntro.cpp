@@ -72,6 +72,9 @@ bool ModuleSceneIntro::Start()
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
+	//Create the Flippers CHANGE/FIX: TODO in ModulePhysics
+	//leftFlipper = createFlipper() PSEUDOCDE! 
+	//rightFlipper = createFlipper() PSEUDOCDE! 
 	return ret;
 }
 
