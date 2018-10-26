@@ -239,7 +239,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 }
 
 flipper ModulePhysics::CreateFlipper(int posX, int posY,int att_diameter, int flipper_chain[], int chain_size,
-									 const SDL_Rect flipper_rect)
+									 SDL_Rect flipper_rect, int lowerAngle, int upperAngle)
 {
 	flipper f;
 	
@@ -248,23 +248,8 @@ flipper ModulePhysics::CreateFlipper(int posX, int posY,int att_diameter, int fl
 	
 	f.Attacher = CreateAttacherBody(posX,posY,att_diameter);
 	f.Pbody = CreateFlipperPbody(PbodyDefX, PbodyDefY, flipper_chain, chain_size);
-
-	//Create the joint
-	b2RevoluteJointDef jointDef;
-	jointDef.Initialize(f.Attacher, f.Pbody->body, f.Attacher->GetWorldCenter());
-
-	jointDef.collideConnected = false;
-	//SET the limits for the joint (this will limit the angle of the flipper)
-	jointDef.enableLimit = true;
-	jointDef.lowerAngle = -0.25f * b2_pi; // -45 degrees
-	jointDef.upperAngle = 0.00f * b2_pi; // 45 degrees
-
-	//Create the joint
-	f.Joint = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
-
-
-	//ASSIGN THE RECT
 	f.Rect = flipper_rect;
+	f.Joint = CreateFlipperJoint(f,lowerAngle,upperAngle);
 
 	return f;
 }
@@ -325,6 +310,25 @@ PhysBody* ModulePhysics::CreateFlipperPbody(int x, int y, int* points, int size)
 	pbody->width = pbody->height = 0;
 
 	return pbody;
+}
+
+b2RevoluteJoint* ModulePhysics::CreateFlipperJoint(const flipper &f, int lowerAngle, int upperAngle)
+{
+	//Initialize the joint
+	b2RevoluteJointDef jointDef;
+	jointDef.Initialize(f.Attacher, f.Pbody->body, f.Attacher->GetWorldCenter());
+
+	jointDef.collideConnected = false;
+	//SET the limits for the joint (this will limit the angle of the flipper)
+	jointDef.enableLimit = true;
+	jointDef.lowerAngle = lowerAngle * DEGTORAD;
+	jointDef.upperAngle = upperAngle * DEGTORAD;
+
+	//Activate the motor ESSENTIAL STEP for flipper rotation
+	jointDef.enableMotor = true;
+
+	//Create the joint
+	return (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 }
 
 // 

@@ -72,7 +72,7 @@ bool ModuleSceneIntro::Start()
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	//Flipper Chain Change/Fix: we should have all chains ina module or chains.h
+	//Flipper Chain Change/Fix: we should have all chains in a module or chains.h @Dídac
 	int left_flipper[16] = {
 		6, 92,
 		15, 92,
@@ -83,13 +83,11 @@ bool ModuleSceneIntro::Start()
 		1, 101,
 		1, 96,
 	};
+	
 	leftFlipperRect = {0,92,50,26};
 	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f, 
-		 9, left_flipper, 16, leftFlipperRect);
+		 9, left_flipper, 16, leftFlipperRect, -45, 0);
 
-	//Create the Flippers CHANGE/FIX: TODO in ModulePhysics
-	//leftFlipper = createFlipper() PSEUDOCDE! 
-	//rightFlipper = createFlipper() PSEUDOCDE! 
 	return ret;
 }
 

@@ -55,8 +55,9 @@ public:
 	//flipper  CreateFlipper();
 	b2Body* CreateAttacherBody(int x, int y, int diameter);
 	PhysBody* CreateFlipperPbody(int x, int y, int* points, int size);
+	b2RevoluteJoint* CreateFlipperJoint(const flipper &f, int lowerAngle, int upperAngle);
 	flipper CreateFlipper(int posX, int posY, int att_diameter, int flipper_chain[], int chain_size,
-		const SDL_Rect flipper_rect);
+						  SDL_Rect flipper_rect, int lowerAngle, int upperAngle);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
