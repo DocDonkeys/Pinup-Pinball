@@ -238,41 +238,16 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	return pbody;
 }
 
-
-
-//flipper ModulePhysics::CreateFlipper()
-//{
-//	/*flipper f;
-//
-//	f.Attacher = CreateAttacherBody();
-//	f.Pbody = CreateFlipperPbody(x_ - 11, y_ -100, sprite_sheet, 16);
-//	f.Joint;
-//	f.Rect;
-//	
-//	return f;*/
-//}
-
-flipper ModulePhysics::CreateFlipper()
+flipper ModulePhysics::CreateFlipper(int posX, int posY,int att_diameter, int flipper_chain[], int chain_size,
+									 const SDL_Rect flipper_rect)
 {
 	flipper f;
-	//HARDCODED VALUES that will go onto the function vars
-	int x_ = SCREEN_WIDTH / 2.8f + 100;	//CHANGE/FIX we will receive this data
-	int y_ = SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f ;
-	int diameter_ = 9;
-	//Chain for the left flipper
-	int left_flipper[16] = {
-		6, 92,
-		15, 92,
-		47, 112,
-		47, 116,
-		43, 116,
-		5, 107,
-		1, 101,
-		1, 96,
-	};
-
-	f.Attacher = CreateAttacherBody(x_,y_,diameter_);
-	f.Pbody = CreateFlipperPbody(x_ - 11, y_ - 100, left_flipper, 16);
+	
+	int PbodyDefX = posX - (flipper_rect.w / 5);
+	int PbodyDefY = posY - (flipper_rect.y + flipper_rect.h/3);
+	
+	f.Attacher = CreateAttacherBody(posX,posY,att_diameter);
+	f.Pbody = CreateFlipperPbody(PbodyDefX, PbodyDefY, flipper_chain, chain_size);
 
 	//Create the joint
 	b2RevoluteJointDef jointDef;
@@ -289,13 +264,7 @@ flipper ModulePhysics::CreateFlipper()
 
 
 	//ASSIGN THE RECT
-	SDL_Rect l_flipper_rect;
-	l_flipper_rect.h = 27;
-	l_flipper_rect.w = 50;
-	l_flipper_rect.x = 0;
-	l_flipper_rect.y = 92;
-
-	f.Rect = l_flipper_rect;
+	f.Rect = flipper_rect;
 
 	return f;
 }

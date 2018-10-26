@@ -72,7 +72,20 @@ bool ModuleSceneIntro::Start()
 
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
-	leftFlipper = App->physics->CreateFlipper();
+	//Flipper Chain Change/Fix: we should have all chains ina module or chains.h
+	int left_flipper[16] = {
+		6, 92,
+		15, 92,
+		47, 112,
+		47, 116,
+		43, 116,
+		5, 107,
+		1, 101,
+		1, 96,
+	};
+	leftFlipperRect = {0,92,50,26};
+	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f, 
+		 9, left_flipper, 16, leftFlipperRect);
 
 	//Create the Flippers CHANGE/FIX: TODO in ModulePhysics
 	//leftFlipper = createFlipper() PSEUDOCDE! 
@@ -241,6 +254,9 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(spriteSheet, x_, y_ + l_flipper_rect.y,&l_flipper_rect, 1.0f, App->physics->hardcoded_flipper->GetRotation(), 0, -l_flipper_rect.y);
 
+	iPoint coords;
+	leftFlipper.Pbody->GetPosition(coords.x,coords.y);
+	App->renderer->Blit(spriteSheet, coords.x, coords.y + leftFlipper.Rect.y, &leftFlipper.Rect, 1.0f, leftFlipper.Pbody->GetRotation(), 0, -leftFlipper.Rect.y);
 	return UPDATE_CONTINUE;
 }
 

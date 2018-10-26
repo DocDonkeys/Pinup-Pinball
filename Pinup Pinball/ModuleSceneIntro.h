@@ -82,5 +82,8 @@ public:
 	flipper leftFlipper;
 	flipper rightFlipper;
 
+	SDL_Rect leftFlipperRect;
+	SDL_Rect rightlipperRect;
+
 	uint bonus_fx;
 };

@@ -14,6 +14,7 @@
 
 
 struct flipper; // So we don't need to include headers
+struct SDL_Rect; // """""""""""""""""""""""""""""""""
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -54,7 +55,8 @@ public:
 	//flipper  CreateFlipper();
 	b2Body* CreateAttacherBody(int x, int y, int diameter);
 	PhysBody* CreateFlipperPbody(int x, int y, int* points, int size);
-	flipper CreateFlipper(); // void at the moment to test all other functions
+	flipper CreateFlipper(int posX, int posY, int att_diameter, int flipper_chain[], int chain_size,
+		const SDL_Rect flipper_rect);
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
