@@ -252,14 +252,52 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 //	return f;*/
 //}
 
-void ModulePhysics::CreateFlipper()
+flipper ModulePhysics::CreateFlipper()
 {
 	flipper f;
-	int x_ = SCREEN_WIDTH / 2.8f;	//CHANGE/FIX we will receive this data
-	int y_ = SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f  -200;
+	//HARDCODED VALUES that will go onto the function vars
+	int x_ = SCREEN_WIDTH / 2.8f + 100;	//CHANGE/FIX we will receive this data
+	int y_ = SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f ;
 	int diameter_ = 9;
+	//Chain for the left flipper
+	int left_flipper[16] = {
+		6, 92,
+		15, 92,
+		47, 112,
+		47, 116,
+		43, 116,
+		5, 107,
+		1, 101,
+		1, 96,
+	};
 
 	f.Attacher = CreateAttacherBody(x_,y_,diameter_);
+	f.Pbody = CreateFlipperPbody(x_ - 11, y_ - 100, left_flipper, 16);
+
+	//Create the joint
+	b2RevoluteJointDef jointDef;
+	jointDef.Initialize(f.Attacher, f.Pbody->body, f.Attacher->GetWorldCenter());
+
+	jointDef.collideConnected = false;
+	//SET the limits for the joint (this will limit the angle of the flipper)
+	jointDef.enableLimit = true;
+	jointDef.lowerAngle = -0.25f * b2_pi; // -45 degrees
+	jointDef.upperAngle = 0.00f * b2_pi; // 45 degrees
+
+	//Create the joint
+	f.Joint = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
+
+
+	//ASSIGN THE RECT
+	SDL_Rect l_flipper_rect;
+	l_flipper_rect.h = 27;
+	l_flipper_rect.w = 50;
+	l_flipper_rect.x = 0;
+	l_flipper_rect.y = 92;
+
+	f.Rect = l_flipper_rect;
+
+	return f;
 }
 
 b2Body* ModulePhysics::CreateAttacherBody(int x, int y,int diameter)

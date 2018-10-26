@@ -54,7 +54,7 @@ public:
 	//flipper  CreateFlipper();
 	b2Body* CreateAttacherBody(int x, int y, int diameter);
 	PhysBody* CreateFlipperPbody(int x, int y, int* points, int size);
-	void CreateFlipper(); // void at the moment to test all other functions
+	flipper CreateFlipper(); // void at the moment to test all other functions
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
