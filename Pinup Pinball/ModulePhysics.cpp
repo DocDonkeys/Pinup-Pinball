@@ -240,10 +240,46 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 
 
 
-flipper* ModulePhysics::CreateFlipper()
+//flipper ModulePhysics::CreateFlipper()
+//{
+//	/*flipper f;
+//
+//	f.Attacher = CreateAttacherBody();
+//	f.Pbody = CreateFlipperPbody(x_ - 11, y_ -100, sprite_sheet, 16);
+//	f.Joint;
+//	f.Rect;
+//	
+//	return f;*/
+//}
+
+void ModulePhysics::CreateFlipper()
 {
 	flipper f;
-	return nullptr;
+	int x_ = SCREEN_WIDTH / 2.8f;	//CHANGE/FIX we will receive this data
+	int y_ = SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f  -200;
+	int diameter_ = 9;
+
+	f.Attacher = CreateAttacherBody(x_,y_,diameter_);
+}
+
+b2Body* ModulePhysics::CreateAttacherBody(int x, int y,int diameter)
+{
+	b2Body* flipper_attacher; //body to Ret
+
+	b2BodyDef flipper_attacher_body;
+	flipper_attacher_body.type = b2_staticBody;
+	flipper_attacher_body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	flipper_attacher = world->CreateBody(&flipper_attacher_body);
+
+	b2CircleShape flipper_attacher_shape;
+	flipper_attacher_shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
+
+	b2FixtureDef flipper_attacher_fixture;
+	flipper_attacher_fixture.shape = &flipper_attacher_shape;
+	flipper_attacher->CreateFixture(&flipper_attacher_fixture);
+
+	return flipper_attacher;
 }
 
 PhysBody* ModulePhysics::CreateFlipperPbody(int x, int y, int* points, int size)
