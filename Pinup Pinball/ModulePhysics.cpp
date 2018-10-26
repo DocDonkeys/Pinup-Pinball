@@ -89,12 +89,12 @@ bool ModulePhysics::Start()
 		1, 101,
 		1, 96,
 	};
-	flipper = CreateFlipperPbody(x_ - 11, y_ -100, sprite_sheet, 16);
+	hardcoded_flipper = CreateFlipperPbody(x_ - 11, y_ -100, sprite_sheet, 16);
 
 	//flipper->body->CreateFixture()
 	//Create the joint between the flipper and the flipper attacher
 	b2RevoluteJointDef jointDef;
-	jointDef.Initialize(flipper_attacher, flipper->body, flipper_attacher->GetWorldCenter());
+	jointDef.Initialize(flipper_attacher, hardcoded_flipper->body, flipper_attacher->GetWorldCenter());
 
 	jointDef.collideConnected = false;
 	//SET the limits for the joint (this will limit the angle of the flipper)
@@ -242,7 +242,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 
 flipper* ModulePhysics::CreateFlipper()
 {
-	//flipper f;
+	flipper f;
 	return nullptr;
 }
 

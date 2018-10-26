@@ -230,14 +230,14 @@ update_status ModuleSceneIntro::Update()
 
 	//SUPER F'd UP Blit for left flipper @Dídac   MUST FIX/CHANGE
 	int x_, y_;
-	App->physics->flipper->GetPosition(x_,y_);
+	App->physics->hardcoded_flipper->GetPosition(x_,y_);
 	SDL_Rect l_flipper_rect;
 	l_flipper_rect.h = 27;
 	l_flipper_rect.w = 50;
 	l_flipper_rect.x = 0;
 	l_flipper_rect.y = 92;
 
-	App->renderer->Blit(spriteSheet, x_, y_ + l_flipper_rect.y,&l_flipper_rect, 1.0f, App->physics->flipper->GetRotation(), 0, -l_flipper_rect.y);
+	App->renderer->Blit(spriteSheet, x_, y_ + l_flipper_rect.y,&l_flipper_rect, 1.0f, App->physics->hardcoded_flipper->GetRotation(), 0, -l_flipper_rect.y);
 
 	return UPDATE_CONTINUE;
 }

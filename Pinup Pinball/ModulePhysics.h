@@ -32,6 +32,7 @@ public:
 	Module* listener;
 };
 
+
 // Module --------------------------------------
 class ModulePhysics : public Module, public b2ContactListener
 {
@@ -72,5 +73,5 @@ public:
 
 	//Bodies to try and make a flipper
 	b2Body* flipper_attacher;
-	PhysBody* flipper;
+	PhysBody* hardcoded_flipper;
 };
