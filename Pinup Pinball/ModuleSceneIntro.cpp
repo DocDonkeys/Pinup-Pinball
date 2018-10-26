@@ -88,6 +88,10 @@ bool ModuleSceneIntro::Start()
 	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f, 
 		 9, left_flipper, 16, leftFlipperRect, -45, 0);
 
+	leftFlipperRect = { 0,92,50,26 };
+	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + -60, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f,
+		9, left_flipper, 16, leftFlipperRect, 135, 180);
+
 	return ret;
 }
 
@@ -255,6 +259,9 @@ update_status ModuleSceneIntro::Update()
 	iPoint coords;
 	leftFlipper.Pbody->GetPosition(coords.x,coords.y);
 	App->renderer->Blit(spriteSheet, coords.x, coords.y + leftFlipper.Rect.y, &leftFlipper.Rect, 1.0f, leftFlipper.Pbody->GetRotation(), 0, -leftFlipper.Rect.y);
+
+	rightFlipper.Pbody->GetPosition(coords.x, coords.y);
+	App->renderer->Blit(spriteSheet, coords.x, coords.y + rightFlipper.Rect.y, &rightFlipper.Rect, 1.0f, rightFlipper.Pbody->GetRotation(), 0, -rightFlipper.Rect.y);
 	return UPDATE_CONTINUE;
 }
 
