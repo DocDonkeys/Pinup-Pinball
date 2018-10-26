@@ -56,56 +56,6 @@ bool ModulePhysics::Start()
 	fixture.shape = &shape;
 	big_ball->CreateFixture(&fixture);
 
-	//Creating the Flipper Stuff
-	int x_ = SCREEN_WIDTH / 2.8f;
-	int y_ = SCREEN_HEIGHT -SCREEN_HEIGHT / 11.0f;
-	int diameter_ = 9;
-
-	b2BodyDef flipper_attacher_body;
-	flipper_attacher_body.type = b2_staticBody;
-	flipper_attacher_body.position.Set(PIXEL_TO_METERS(x_), PIXEL_TO_METERS(y_));
-
-	flipper_attacher = world->CreateBody(&flipper_attacher_body);
-
-	b2CircleShape flipper_attacher_shape;
-	flipper_attacher_shape.m_radius = PIXEL_TO_METERS(diameter_) * 0.5f;
-
-	b2FixtureDef flipper_attacher_fixture;
-	flipper_attacher_fixture.shape = &flipper_attacher_shape;
-	flipper_attacher->CreateFixture(&flipper_attacher_fixture);
-
-	//Creating the Flipper Stuff FLIPPER
-	//flipper = CreateRectangle(x_ + 50,y_,100,10);
-
-	//Flipper
-	// Pivot 0, 0
-	int sprite_sheet[16] = {
-		6, 92,
-		15, 92,
-		47, 112,
-		47, 116,
-		43, 116,
-		5, 107,
-		1, 101,
-		1, 96,
-	};
-	hardcoded_flipper = CreateFlipperPbody(x_ - 11, y_ -100, sprite_sheet, 16);
-
-	//flipper->body->CreateFixture()
-	//Create the joint between the flipper and the flipper attacher
-	b2RevoluteJointDef jointDef;
-	jointDef.Initialize(flipper_attacher, hardcoded_flipper->body, flipper_attacher->GetWorldCenter());
-
-	jointDef.collideConnected = false;
-	//SET the limits for the joint (this will limit the angle of the flipper)
-	jointDef.enableLimit = true;
-	jointDef.lowerAngle = -0.25f * b2_pi; // -45 degrees
-	jointDef.upperAngle = 0.00f * b2_pi; // 45 degrees
-
-	//Activate the motor ESSENTIAL STEP
-	jointDef.enableMotor = true;
-
-	flipper_joint = (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 	return true;
 }
 

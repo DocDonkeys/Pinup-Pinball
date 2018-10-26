@@ -73,13 +73,4 @@ private:
 	b2Body* ground;
 	//Vars created by me
 	b2Body* body_clicked;
-
-	
-
-public:
-	b2RevoluteJoint* flipper_joint;
-
-	//Bodies to try and make a flipper
-	b2Body* flipper_attacher;
-	PhysBody* hardcoded_flipper;
 };

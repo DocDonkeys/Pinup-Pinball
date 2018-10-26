@@ -85,11 +85,11 @@ bool ModuleSceneIntro::Start()
 	};
 	
 	leftFlipperRect = {0,92,50,26};
-	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f, 
+	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f -5, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2, 
 		 9, left_flipper, 16, leftFlipperRect, -45, 0);
 
 	leftFlipperRect = { 0,92,50,26 };
-	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + -60, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f,
+	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2,
 		9, left_flipper, 16, leftFlipperRect, 135, 180);
 
 	return ret;
@@ -255,18 +255,8 @@ update_status ModuleSceneIntro::Update()
 	// Draw ramps -------------------------------------------------------------	// CHANGE/FIX: Add conditions so ball can draw after this and not before
 	App->renderer->Blit(ramps, 0, 0, &fullScreenRect);	// @Carles
 
-
-	//SUPER F'd UP Blit for left flipper @Dídac   MUST FIX/CHANGE
-	int x_, y_;
-	App->physics->hardcoded_flipper->GetPosition(x_,y_);
-	SDL_Rect l_flipper_rect;
-	l_flipper_rect.h = 27;
-	l_flipper_rect.w = 50;
-	l_flipper_rect.x = 0;
-	l_flipper_rect.y = 92;
-
-	App->renderer->Blit(spriteSheet, x_, y_ + l_flipper_rect.y,&l_flipper_rect, 1.0f, App->physics->hardcoded_flipper->GetRotation(), 0, -l_flipper_rect.y);
-
+	
+	//Draw the Flippers
 	iPoint coords;
 	leftFlipper.Pbody->GetPosition(coords.x,coords.y);
 	App->renderer->Blit(spriteSheet, coords.x, coords.y + leftFlipper.Rect.y, &leftFlipper.Rect, 1.0f, leftFlipper.Pbody->GetRotation(), 0, -leftFlipper.Rect.y);
