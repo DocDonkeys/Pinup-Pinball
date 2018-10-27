@@ -47,9 +47,9 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateRectangle(int x, int y, int width, int height);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	PhysBody* CreateCircle(int x, int y, int radius, b2BodyType type = b2_dynamicBody);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType type = b2_dynamicBody);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, b2BodyType type = b2_staticBody);
 	PhysBody* CreateChain(int x, int y, int* points, int size, b2BodyType type = b2_dynamicBody);
 
 	//@Dídac
@@ -76,7 +76,7 @@ public:
 private:
 
 	bool debug;
-	b2World* world;
+	b2World* world;	//CHANGE/FIX: Must be public for SceneIntro
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 	//Vars created by me
