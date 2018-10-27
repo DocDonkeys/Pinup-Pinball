@@ -117,6 +117,11 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 10.0f);
 		App->physics->FlipperSetMotorSpeed(leftFlipper, 500.f);
 	}
+	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_IDLE) && leftFlipper.Joint->GetJointAngle() * RADTODEG >= -45)
+	{
+		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 0.0f);
+		App->physics->FlipperSetMotorSpeed(leftFlipper, 0.0f);
+	}
 	//Fix @Dídac
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
@@ -127,6 +132,11 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 10.0f);
 		App->physics->FlipperSetMotorSpeed(rightFlipper, -500.f);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_IDLE) && rightFlipper.Joint->GetJointAngle() * RADTODEG <= 135)
+	{
+		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 0.0f);
+		App->physics->FlipperSetMotorSpeed(rightFlipper, 0.0f);
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
