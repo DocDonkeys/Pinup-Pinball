@@ -123,7 +123,7 @@ bool ModuleSceneIntro::Start()
 	downLeftWallsList.clear();
 	downRightWallsList.clear();*/
 
-	sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody));
+	//sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody));
 
 	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
 	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
