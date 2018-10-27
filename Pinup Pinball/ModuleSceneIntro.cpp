@@ -14,10 +14,12 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	// @Carles
 	fullScreenRect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
-	//Positions
+	//Sprite sheet positions	// CHANGE/FIX: Create a function for this
 	lightRect = { 48, 12, 16, 16 };
-	
-	//Lights	// CHANGE/FIX: Create a function for this
+	ballRect = { 0, 0, 18, 18 };
+	kickerRect = { 82, 24, 6, 34 };
+
+	//Lights (left to right)	// CHANGE/FIX: Create a function for this
 	ushort i = 0;
 	lightPosList[i++] = { 35, 132 };	// Top left
 	lightPosList[i++] = { 60, 132 };
@@ -242,7 +244,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(spriteSheet, x, y, &ballRect, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
 

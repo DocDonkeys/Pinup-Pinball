@@ -87,6 +87,10 @@ public:
 
 	static_element blueOverKicker;
 
+	//Dynamic elements
+	SDL_Rect ballRect;
+	SDL_Rect kickerRect;
+
 	//Rect that covers the full screen
 	SDL_Rect fullScreenRect;	// @Carles
 
