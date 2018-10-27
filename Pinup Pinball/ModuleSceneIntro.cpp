@@ -104,20 +104,15 @@ bool ModuleSceneIntro::Start()
 	
 	leftFlipperRect = {0,62,50,26};
 	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f -5, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2, 
-		 9, left_flipper, 16, leftFlipperRect, -45, 0, LEFT_FLIPPER);
+											  9, left_flipper, 16, leftFlipperRect, -45, 0, LEFT_FLIPPER);
 
 	rightFlipperRect = { 70,62,50,26 };
 	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2,
-		9, right_flipper, 16, rightFlipperRect, 0, 45 , RIGHT_FLIPPER);
+											   9, right_flipper, 16, rightFlipperRect, 0, 45 , RIGHT_FLIPPER);
 
 	//Kicker Creation
-	pinballKicker.attacher = App->physics->CreateAttacherBody(SCREEN_WIDTH - SCREEN_WIDTH/25, SCREEN_HEIGHT -22, 9 );
-	iPoint coords;
-	pinballKicker.attacher->GetPosition();
-	pinballKicker.pbody = App->physics->CreateRectangle(METERS_TO_PIXELS(pinballKicker.attacher->GetPosition().x),
-		METERS_TO_PIXELS(pinballKicker.attacher->GetPosition().y), kickerRect.w, kickerRect.h); // SDL_Rect will go here
-	pinballKicker.joint = App->physics->CreatePrismaticJoint(pinballKicker.attacher, pinballKicker.pbody->body, 0.0f,1.0f,-2.0f,1.0f);
-
+	pinballKicker = App->physics->CreateKicker(SCREEN_WIDTH - SCREEN_WIDTH / 25 + 1, SCREEN_HEIGHT - 21, 9, kickerRect,0.0f,1.0f,-0.43f,1.0f);
+	
 	// DELETE MAP WALLS
 	/*App->physics->world->DestroyBody(outsideWallsList.getLast()->data->body);
 	App->physics->world->DestroyBody(topLeftWallsList.getLast()->data->body);
@@ -296,7 +291,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		int x, y;
 		c->data->GetPosition(x, y);
-		App->renderer->Blit(spriteSheet, x, y, &ballRect, 1.0f, c->data->GetRotation());
+		App->renderer->Blit(spriteSheet, x, y, &ballRect, 1.0f /*c->data->GetRotation()*/);
 		c = c->next;
 	}
 
@@ -326,16 +321,21 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(spriteSheet, (int)tunnelLeft.position.x, (int)tunnelLeft.position.y, &tunnelLeft.rect);
 	App->renderer->Blit(spriteSheet, (int)tunnelRight.position.x, (int)tunnelRight.position.y, &tunnelRight.rect);
+	
+	//Draw the kicker
+	iPoint coords;
+	pinballKicker.pbody->GetPosition(coords.x, coords.y);
+	App->renderer->Blit(spriteSheet, coords.x, coords.y, &pinballKicker.rect);
 
 	App->renderer->Blit(spriteSheet, (int)overLeftKicker.position.x, (int)overLeftKicker.position.y, &overLeftKicker.rect);
 	App->renderer->Blit(spriteSheet, (int)overRightKicker.position.x, (int)overRightKicker.position.y, &overRightKicker.rect);
+
 
 	// Draw ramps -------------------------------------------------------------	// CHANGE/FIX: Add conditions so ball can draw after this and not before
 	App->renderer->Blit(ramps, 0, 0, &fullScreenRect);	// @Carles
 
 	
 	//Draw the Flippers
-	iPoint coords;
 	leftFlipper.Pbody->GetPosition(coords.x,coords.y);
 	App->renderer->Blit(spriteSheet, coords.x + leftFlipper.Rect.x, coords.y + leftFlipper.Rect.y, &leftFlipper.Rect, 1.0f,
 						leftFlipper.Pbody->GetRotation(), -leftFlipper.Rect.x, -leftFlipper.Rect.y);
@@ -343,6 +343,7 @@ update_status ModuleSceneIntro::Update()
 	rightFlipper.Pbody->GetPosition(coords.x, coords.y);
 	App->renderer->Blit(spriteSheet, coords.x + rightFlipper.Rect.x, coords.y + rightFlipper.Rect.y, &rightFlipper.Rect, 1.0f,
 						rightFlipper.Pbody->GetRotation(), -rightFlipper.Rect.x, -rightFlipper.Rect.y);
+	
 	return UPDATE_CONTINUE;
 }
 

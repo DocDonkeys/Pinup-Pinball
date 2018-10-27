@@ -104,7 +104,8 @@ public:
 	//Kicker
 	b2PrismaticJoint* CreatePrismaticJoint(b2Body* bodyA, b2Body* bodyB, float32 world_Axis_x, float32 world_Axis_y,
 										   float32 lower_translation, float32 upper_translation);
-	
+	kicker CreateKicker(int posX, int posY, int att_diameter,SDL_Rect rect, float32 axisX, float32 axisY, 
+						float32 low_translation,float32 upp_translation);
 	//KICKER movement
 	void KickerSetMaxMotorForce(kicker k, float32 MaxForce);
 	void KickerSetMotorSpeed(kicker k, float32 MaxSpeed);
