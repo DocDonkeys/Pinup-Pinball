@@ -181,7 +181,7 @@ flipper ModulePhysics::CreateFlipper(int posX, int posY,int att_diameter, int fl
 		PbodyDef.x = posX - (flipper_rect.w / 5);
 		PbodyDef.y = posY - (flipper_rect.y + flipper_rect.h / 3);
 	}
-	else 
+	else //It's a RIGHT_FLIPPER
 	{
 		PbodyDef.x = posX - (2 * flipper_rect.w + 10);
 		PbodyDef.y = posY - (flipper_rect.y + flipper_rect.h / 3);
@@ -193,6 +193,20 @@ flipper ModulePhysics::CreateFlipper(int posX, int posY,int att_diameter, int fl
 	f.Joint = CreateFlipperJoint(f,lowerAngle,upperAngle);
 
 	return f;
+}
+
+kicker ModulePhysics::CreateKicker(int posX, int posY,int att_diameter, SDL_Rect rect, float32 axisX, float32 axisY,
+								  float32 low_translation, float32 upp_translation)
+{
+	kicker k;
+
+	k.attacher = CreateAttacherBody(posX, posY,att_diameter);
+	k.rect = rect;
+	k.pbody = CreateRectangle(posX,posY,k.rect.w,k.rect.h);
+	k.joint = CreatePrismaticJoint(k.attacher,k.pbody->body,axisX,axisY,low_translation,upp_translation);
+	
+	
+	return k;
 }
 
 b2Body* ModulePhysics::CreateAttacherBody(int x, int y,int diameter)
@@ -289,6 +303,8 @@ b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(b2Body* bodyA, b2Body* bod
 
 	return (b2PrismaticJoint*)world->CreateJoint(&jointDef);
 }
+
+
 
 void ModulePhysics::FlipperSetMaxMotorTorque(flipper &f, float32 MaxTorque)
 {
