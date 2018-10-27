@@ -353,17 +353,60 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-<<<<<<< HEAD
-	if (bodyB != nullptr && bodyB->sensor == true) {
-		p2List_item<PhysBody*>* sensor;
-
-		for (sensor = App->scene_intro->sensorList.getFirst(); sensor != nullptr; sensor = sensor->next) {
-			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9));
+	if (bodyB != nullptr) {
+		if (bodyB->collision <= collision_type::LIGHT_TOP_4) {
+			switch (bodyB->collision) {	// CHANGE/FIX: TURN INTO FUNCTION
+			case collision_type::LIGHT_TOP_LEFT_1:
+				break;
+			case collision_type::LIGHT_TOP_LEFT_2:
+				break;
+			case collision_type::LIGHT_TOP_LEFT_3:
+				break;
+			case collision_type::LIGHT_TOP_LEFT_4:
+				break;
+			case collision_type::LIGHT_TOP_1:
+				break;
+			case collision_type::LIGHT_TOP_2:
+				break;
+			case collision_type::LIGHT_TOP_3:
+				break;
+			case collision_type::LIGHT_TOP_4:
+				break;
+			case collision_type::LIGHT_LEFT:
+				break;
+			case collision_type::LIGHT_RIGHT:
+				break;
+			case collision_type::LIGHT_DOWN_LEFT:
+				break;
+			case collision_type::LIGHT_DOWN_RIGHT:
+				break;
+			default:
+				break;
+			}
+		}
+		else {
+			switch (bodyB->collision) {	// CHANGE/FIX: TURN INTO FUNCTION
+			case collision_type::RAMP_ACTIVATE:
+				break;
+			case collision_type::RAMP_DEACTIVATE:
+				break;
+			case collision_type::LEFT_KICKER:
+				break;
+			case collision_type::TUNNEL_LEFT:
+				break;
+			case collision_type::TUNNEL_RIGHT:
+				break;
+			case collision_type::BUMPER:
+				break;
+			case collision_type::SMALL_BUMPER:
+				break;
+			case collision_type::LOSE_BALL:
+				break;
+			default:
+				break;
+			}
 		}
 	}
-	else if (bodyB->collision == collision_type::LEFT_KICKER) {
-		
-	}
-
+	
 	App->audio->PlayFx(bonus_fx);
 }
