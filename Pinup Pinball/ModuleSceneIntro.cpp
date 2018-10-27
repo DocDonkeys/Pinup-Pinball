@@ -96,8 +96,12 @@ bool ModuleSceneIntro::Start()
 
 
 	//Kicker Creation
-	pinballKicker.attacher = App->physics->CreateAttacherBody(200, 300,9);
-	/*pinballKicker.pbody = App->physics->CreateRectangle();*/ // SDL_Rect will go here
+	pinballKicker.attacher = App->physics->CreateAttacherBody(SCREEN_WIDTH - SCREEN_WIDTH/25, SCREEN_HEIGHT - SCREEN_HEIGHT / 7, 9);
+	iPoint coords;
+	pinballKicker.attacher->GetPosition();
+	pinballKicker.pbody = App->physics->CreateRectangle(METERS_TO_PIXELS(pinballKicker.attacher->GetPosition().x),
+		METERS_TO_PIXELS(pinballKicker.attacher->GetPosition().y), kickerRect.w, kickerRect.h); // SDL_Rect will go here
+	pinballKicker.joint = App->physics->CreatePrismaticJoint(pinballKicker.attacher, pinballKicker.pbody->body);
 
 	walls.add(App->physics->CreateChain(0, 0, mapOutsideWalls, 232, b2_staticBody));
 
@@ -146,6 +150,17 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 0.0f);
 		App->physics->FlipperSetMotorSpeed(rightFlipper, 0.0f);
+	}
+
+	//Kicker control @Dídac
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+	{
+		App->physics->KickerSetMaxMotorForce(pinballKicker, -1.0f);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_IDLE)
+	{
+		App->physics->KickerSetMaxMotorForce(pinballKicker, 50.0f);
+		App->physics->KickerSetMotorSpeed(pinballKicker, -15.0f);
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)

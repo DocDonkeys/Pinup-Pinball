@@ -64,7 +64,12 @@ public:
 	void FlipperSetMotorSpeed(flipper &f, float32 MotorSpeed);
 
 	//Kicker
-	b2PrismaticJoint* CreatePrismaticJoint(kicker k);
+	b2PrismaticJoint* CreatePrismaticJoint(b2Body* bodyA, b2Body* bodyB);
+	
+	//KICKER movement
+	void KickerSetMaxMotorForce(kicker k, float32 MaxForce);
+	void KickerSetMotorSpeed(kicker k, float32 MaxSpeed);
+	
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
