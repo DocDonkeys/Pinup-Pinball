@@ -109,13 +109,13 @@ update_status ModuleSceneIntro::Update()
 	//Fix @Dídac
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
 	{
-		App->physics->FlipperSetMaxMotorTorque(leftFlipper,400.0f);
-		App->physics->FlipperSetMotorSpeed(leftFlipper, -500.f);
+		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 25.0f);
+		App->physics->FlipperSetMotorSpeed(leftFlipper, -25.0f);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_UP))
 	{
 		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(leftFlipper, 500.f);
+		App->physics->FlipperSetMotorSpeed(leftFlipper, 25.0f);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_IDLE) && leftFlipper.Joint->GetJointAngle() * RADTODEG >= -45)
 	{
@@ -125,13 +125,13 @@ update_status ModuleSceneIntro::Update()
 	//Fix @Dídac
 	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
 	{
-		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 400.0f);
-		App->physics->FlipperSetMotorSpeed(rightFlipper, 500.f);
+		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 25.0f);
+		App->physics->FlipperSetMotorSpeed(rightFlipper, 25.0f);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_UP))
 	{
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 10.0f);
-		App->physics->FlipperSetMotorSpeed(rightFlipper, -500.f);
+		App->physics->FlipperSetMotorSpeed(rightFlipper, -25.0f);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_IDLE) && rightFlipper.Joint->GetJointAngle() * RADTODEG <= 135)
 	{
@@ -141,7 +141,7 @@ update_status ModuleSceneIntro::Update()
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9));
 		circles.getLast()->data->listener = this;
 	}
 
