@@ -58,7 +58,13 @@ public:
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
-	p2List<PhysBody*> walls;
+
+	p2List<PhysBody*> outsideWallsList;
+	p2List<PhysBody*> topLeftWallsList;
+	p2List<PhysBody*> downLeftWallsList;
+	p2List<PhysBody*> downRightWallsList;
+
+	p2List<PhysBody*> rampWallsList;
 
 	//Textures
 	SDL_Texture* circle;	// CHANGE/FIX: Old
@@ -92,11 +98,10 @@ public:
 	SDL_Rect ballRect;
 	SDL_Rect kickerRect;
 
-	//Wall coordinates
-	// Pivot 0, 0
-	int mapOutsideWalls[232] = {
-		402, 793,	//402, 793,
-		400, 423,	//404, 423,
+	//Wall coordinates (Pivot 0, 0)
+	int outsideWalls[232] = {
+		402, 793,
+		400, 423,
 		398, 423,
 		397, 438,
 		367, 464,
@@ -211,6 +216,49 @@ public:
 		422, 793,
 		412, 797,
 		403, 794
+	};
+
+	int topLeftWalls[32] = {
+		32, 380,
+		27, 380,
+		27, 151,
+		32, 151,
+		32, 222,
+		40, 241,
+		46, 242,
+		44, 250,
+		62, 293,
+		82, 301,
+		80, 308,
+		68, 305,
+		54, 290,
+		49, 280,
+		34, 281,
+		32, 379
+	};
+
+	int downLeftWalls[18] = {
+	27, 539,
+	32, 539,
+	32, 636,
+	37, 644,
+	144, 731,
+	127, 742,
+	31, 693,
+	27, 688,
+	27, 540
+	};
+
+	int downRightWalls[18] = {
+	368, 539,
+	372, 539,
+	372, 688,
+	369, 692,
+	270, 742,
+	255, 732,
+	360, 648,
+	367, 637,
+	368, 540
 	};
 
 	//Rect that covers the full screen
