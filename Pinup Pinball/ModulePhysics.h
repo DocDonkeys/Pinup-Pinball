@@ -16,6 +16,7 @@
 struct flipper;  // So we don't need to include headers
 struct kicker;   // """""""""""""""""""""""""""""""""
 struct SDL_Rect; // """""""""""""""""""""""""""""""""
+enum flipper_type;
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -58,7 +59,7 @@ public:
 	PhysBody* CreateFlipperPbody(int x, int y, int* points, int size);
 	b2RevoluteJoint* CreateFlipperJoint(const flipper &f, int lowerAngle, int upperAngle);
 	flipper CreateFlipper(int posX, int posY, int att_diameter, int flipper_chain[], int chain_size,
-						  SDL_Rect flipper_rect, int lowerAngle, int upperAngle);
+						  SDL_Rect flipper_rect, int lowerAngle, int upperAngle, flipper_type f_type);
 	//Flipper movement
 	void FlipperSetMaxMotorTorque(flipper &f, float32 MaxTorque);
 	void FlipperSetMotorSpeed(flipper &f, float32 MotorSpeed);

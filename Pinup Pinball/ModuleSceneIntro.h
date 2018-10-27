@@ -19,6 +19,11 @@ struct static_element {	// @Carles
 	}
 };
 
+enum flipper_type
+{
+	LEFT_FLIPPER = 0,
+	RIGHT_FLIPPER,
+};
 
 struct flipper
 {
@@ -272,7 +277,7 @@ public:
 	flipper rightFlipper;
 
 	SDL_Rect leftFlipperRect;
-	SDL_Rect rightlipperRect;
+	SDL_Rect rightFlipperRect;
 
 	//Kicker
 	kicker pinballKicker;
