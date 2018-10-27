@@ -103,7 +103,8 @@ public:
 	static_element tunnelLeft;
 	static_element tunnelRight;
 
-	static_element blueOverKicker;
+	static_element overLeftKicker;
+	static_element overRightKicker;
 
 	//Dynamic elements
 	SDL_Rect ballRect;
@@ -136,8 +137,8 @@ public:
 		72, 430,
 		56, 405,
 		28, 420,
-		25, 436,
-		8, 436,
+		25, 500,
+		3, 500,
 		3, 427,
 		3, 150,
 		8, 137,
