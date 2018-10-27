@@ -136,6 +136,10 @@ bool ModuleSceneIntro::Start()
 
 	//rampWalls.add(App->physics->CreateChain(0, 0, mapRampWalls, ?, b2_staticBody));
 
+	//Bumpers
+	bumperLeftProjection = App->physics->CreateRectangle(10,470,40,20, b2_staticBody,collision_type::LEFT_KICKER, 4.0f);
+	bumperLeftProjection->listener = this;
+	
 	return ret;
 }
 
@@ -349,7 +353,7 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	if (bodyB->sensor == true) {
+	if (bodyB != nullptr && bodyB->sensor == true) {
 		p2List_item<PhysBody*>* sensor;
 
 		for (sensor = App->scene_intro->sensorList.getFirst(); sensor != nullptr; sensor = sensor->next) {
@@ -357,7 +361,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		}
 	}
 	else if (bodyB->collision == collision_type::LEFT_KICKER) {
-
+		
 	}
 
 	App->audio->PlayFx(bonus_fx);

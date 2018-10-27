@@ -85,8 +85,8 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius, b2BodyType = b2_dynamicBody, collision_type = collision_type::NONE);
-	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType = b2_dynamicBody, collision_type = collision_type::NONE);
+	PhysBody* CreateCircle(int x, int y, int radius, b2BodyType = b2_dynamicBody, collision_type = collision_type::NONE, float32 fixture_restitution = 0.0f);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType = b2_dynamicBody, collision_type = collision_type::NONE, float32 fixture_restitution = 0.0f);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, b2BodyType = b2_staticBody, collision_type = collision_type::NONE);
 	PhysBody* CreateChain(int x, int y, int* points, int size, b2BodyType = b2_dynamicBody, collision_type = collision_type::NONE);
 

@@ -38,6 +38,11 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
+	//trying to create a bumper
+	/*PhysBody* pBody;
+
+	pBody = CreateRectangle(200,200,40,20);*/
+
 	return true;
 }
 
@@ -60,7 +65,7 @@ update_status ModulePhysics::PreUpdate()
 	return UPDATE_CONTINUE;
 }
 
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType bodyType, collision_type collision)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType bodyType, collision_type collision, float32 fixture_restitution)
 {
 	b2BodyDef body;
 	body.type = bodyType;
@@ -73,6 +78,8 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType bodyT
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
+	
+	fixture.restitution = fixture_restitution;	//Used when making bumpers
 
 	b->CreateFixture(&fixture);
 
@@ -85,7 +92,7 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType bodyT
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType bodyType, collision_type collision)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType bodyType, collision_type collision, float32 fixture_restitution)
 {
 	b2BodyDef body;
 	body.type = bodyType;
@@ -99,6 +106,8 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2
 	fixture.shape = &box;
 	fixture.density = 1.0f;
 
+	fixture.restitution = fixture_restitution; //Used when making bumpers
+
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
@@ -107,6 +116,8 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 	pbody->collision = collision;
+
+
 
 	return pbody;
 }

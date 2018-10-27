@@ -285,5 +285,11 @@ public:
 	//Kicker
 	kicker pinballKicker;
 
+	//Rectangular Bumpers
+	PhysBody* bumperLeftProjection;
+	
+	//Circular Bumpers
+
+
 	uint bonus_fx;
 };
