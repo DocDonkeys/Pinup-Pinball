@@ -92,6 +92,10 @@ bool ModuleSceneIntro::Start()
 	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2,
 		9, left_flipper, 16, leftFlipperRect, 135, 180);
 
+
+	//Kicker Creation
+	pinballKicker.attacher = App->physics->CreateAttacherBody(200, 300,9);
+	/*pinballKicker.pbody = App->physics->CreateRectangle();*/ // SDL_Rect will go here
 	return ret;
 }
 

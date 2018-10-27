@@ -7,6 +7,7 @@
 class PhysBody;
 struct b2Body;
 struct b2RevoluteJoint;
+struct b2PrismaticJoint;
 
 struct static_element {	// @Carles
 	iPoint position;
@@ -21,13 +22,24 @@ struct static_element {	// @Carles
 
 struct flipper
 {
-	//Bodies of the flipper
+	//Bodies for the flipper
 	b2Body* Attacher;
 	PhysBody* Pbody;
 	//Joint of the flipper elements
 	b2RevoluteJoint* Joint;
 	//Rect for blitting purposes
 	SDL_Rect Rect;
+};
+
+struct kicker
+{
+	//Bodies for the kicker
+	b2Body* attacher;
+	PhysBody* pbody;
+	//Joint of the kicker
+	b2PrismaticJoint* joint;
+	//Rect for blitting purposes
+	SDL_Rect rect;
 };
 
 class ModuleSceneIntro : public Module
@@ -84,6 +96,9 @@ public:
 
 	SDL_Rect leftFlipperRect;
 	SDL_Rect rightlipperRect;
+
+	//Kicker
+	kicker pinballKicker;
 
 	uint bonus_fx;
 };

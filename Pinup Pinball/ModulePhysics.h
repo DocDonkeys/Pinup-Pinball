@@ -13,7 +13,8 @@
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
 
-struct flipper; // So we don't need to include headers
+struct flipper;  // So we don't need to include headers
+struct kicker;   // """""""""""""""""""""""""""""""""
 struct SDL_Rect; // """""""""""""""""""""""""""""""""
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
@@ -62,6 +63,8 @@ public:
 	void FlipperSetMaxMotorTorque(flipper &f, float32 MaxTorque);
 	void FlipperSetMotorSpeed(flipper &f, float32 MotorSpeed);
 
+	//Kicker
+	b2PrismaticJoint* CreatePrismaticJoint(kicker k);
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 

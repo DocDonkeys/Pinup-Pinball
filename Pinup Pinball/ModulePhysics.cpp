@@ -281,6 +281,19 @@ b2RevoluteJoint* ModulePhysics::CreateFlipperJoint(const flipper &f, int lowerAn
 	return (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 }
 
+b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(kicker k)
+{
+	b2PrismaticJointDef jointDef; 
+	b2Vec2 worldAxis(1.0f, 0.0f); 
+	jointDef.Initialize(k.attacher, k.pbody->body, k.attacher->GetWorldCenter(), worldAxis);
+
+	jointDef.enableLimit = true;
+	jointDef.lowerTranslation = -5.0f;
+	jointDef.upperTranslation = 2.5f;
+
+	return (b2PrismaticJoint*)world->CreateJoint(&jointDef);
+}
+
 void ModulePhysics::FlipperSetMaxMotorTorque(flipper &f, float32 MaxTorque)
 {
 	f.Joint->SetMaxMotorTorque(MaxTorque);
