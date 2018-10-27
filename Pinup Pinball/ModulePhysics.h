@@ -12,11 +12,11 @@
 #define METERS_TO_PIXELS(m) ((int) floor(PIXELS_PER_METER * m))
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
-
 struct flipper;  // So we don't need to include headers
 struct kicker;   // """""""""""""""""""""""""""""""""
 struct SDL_Rect; // """""""""""""""""""""""""""""""""
 enum flipper_type;
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -34,7 +34,6 @@ public:
 	b2Body* body;
 	Module* listener;
 };
-
 
 // Module --------------------------------------
 class ModulePhysics : public Module, public b2ContactListener

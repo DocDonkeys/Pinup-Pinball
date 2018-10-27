@@ -90,8 +90,6 @@ bool ModuleSceneIntro::Start()
 		1, 66,
 	};
 
-
-	// Pivot 0, 0
 	int right_flipper[16] = {
 		105, 61,
 		72, 82,
@@ -110,7 +108,6 @@ bool ModuleSceneIntro::Start()
 	rightFlipperRect = { 70,62,50,26 };
 	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2,
 		9, right_flipper, 16, rightFlipperRect, 0, 45 , RIGHT_FLIPPER);
-
 
 	//Kicker Creation
 	pinballKicker.attacher = App->physics->CreateAttacherBody(SCREEN_WIDTH - SCREEN_WIDTH/25, SCREEN_HEIGHT - SCREEN_HEIGHT / 7, 9);
