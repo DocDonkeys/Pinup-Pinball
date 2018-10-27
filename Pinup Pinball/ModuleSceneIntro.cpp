@@ -103,7 +103,12 @@ bool ModuleSceneIntro::Start()
 		METERS_TO_PIXELS(pinballKicker.attacher->GetPosition().y), kickerRect.w, kickerRect.h); // SDL_Rect will go here
 	pinballKicker.joint = App->physics->CreatePrismaticJoint(pinballKicker.attacher, pinballKicker.pbody->body);
 
-	walls.add(App->physics->CreateChain(0, 0, mapOutsideWalls, 232, b2_staticBody));
+	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 232, b2_staticBody));
+	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
+	downLeftWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
+	downRightWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
+
+	//rampWalls.add(App->physics->CreateChain(0, 0, mapRampWalls, ?, b2_staticBody));
 
 	return ret;
 }
