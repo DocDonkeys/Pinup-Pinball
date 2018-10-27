@@ -99,7 +99,8 @@ public:
 	void FlipperSetMotorSpeed(flipper &f, float32 MotorSpeed);
 
 	//Kicker
-	b2PrismaticJoint* CreatePrismaticJoint(b2Body* bodyA, b2Body* bodyB);
+	b2PrismaticJoint* CreatePrismaticJoint(b2Body* bodyA, b2Body* bodyB, float32 world_Axis_x, float32 world_Axis_y,
+										   float32 lower_translation, float32 upper_translation);
 	
 	//KICKER movement
 	void KickerSetMaxMotorForce(kicker k, float32 MaxForce);

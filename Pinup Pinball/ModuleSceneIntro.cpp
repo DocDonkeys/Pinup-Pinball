@@ -111,12 +111,12 @@ bool ModuleSceneIntro::Start()
 		9, right_flipper, 16, rightFlipperRect, 0, 45 , RIGHT_FLIPPER);
 
 	//Kicker Creation
-	pinballKicker.attacher = App->physics->CreateAttacherBody(SCREEN_WIDTH - SCREEN_WIDTH/25, SCREEN_HEIGHT - SCREEN_HEIGHT / 7, 9);
+	pinballKicker.attacher = App->physics->CreateAttacherBody(SCREEN_WIDTH - SCREEN_WIDTH/25, SCREEN_HEIGHT -22, 9 );
 	iPoint coords;
 	pinballKicker.attacher->GetPosition();
 	pinballKicker.pbody = App->physics->CreateRectangle(METERS_TO_PIXELS(pinballKicker.attacher->GetPosition().x),
 		METERS_TO_PIXELS(pinballKicker.attacher->GetPosition().y), kickerRect.w, kickerRect.h); // SDL_Rect will go here
-	pinballKicker.joint = App->physics->CreatePrismaticJoint(pinballKicker.attacher, pinballKicker.pbody->body);
+	pinballKicker.joint = App->physics->CreatePrismaticJoint(pinballKicker.attacher, pinballKicker.pbody->body, 0.0f,1.0f,-2.0f,1.0f);
 
 	// DELETE MAP WALLS
 	/*App->physics->world->DestroyBody(outsideWallsList.getLast()->data->body);
@@ -195,7 +195,7 @@ update_status ModuleSceneIntro::Update()
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_IDLE)
 	{
-		App->physics->KickerSetMaxMotorForce(pinballKicker, 50.0f);
+		App->physics->KickerSetMaxMotorForce(pinballKicker, (pinballKicker.pbody->body->GetPosition().y) + 5.0f);
 		App->physics->KickerSetMotorSpeed(pinballKicker, -15.0f);
 	}
 
