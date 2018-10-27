@@ -64,12 +64,15 @@ public:
 	p2List<PhysBody*> boxes;
 	p2List<PhysBody*> ricks;
 
+	p2List<PhysBody*> smallTopWallsList;
+
 	p2List<PhysBody*> outsideWallsList;
 	p2List<PhysBody*> topLeftWallsList;
 	p2List<PhysBody*> downLeftWallsList;
 	p2List<PhysBody*> downRightWallsList;
-
 	p2List<PhysBody*> rampWallsList;
+
+	p2List<PhysBody*> sensorList;
 
 	//Textures
 	SDL_Texture* circle;	// CHANGE/FIX: Old
@@ -107,7 +110,7 @@ public:
 	SDL_Rect kickerRect;
 
 	//Wall coordinates (Pivot 0, 0)
-	int outsideWalls[232] = {
+	int outsideWalls[231] = {
 		402, 793,
 		400, 423,
 		398, 423,
@@ -221,9 +224,8 @@ public:
 		412, 380,
 		420, 392,
 		422, 416,
-		422, 793,
-		412, 797,
-		403, 794
+		422, 1500,
+		403, 1500
 	};
 
 	int topLeftWalls[32] = {

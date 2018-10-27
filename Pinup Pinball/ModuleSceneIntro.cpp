@@ -127,10 +127,14 @@ bool ModuleSceneIntro::Start()
 	downLeftWallsList.clear();
 	downRightWallsList.clear();*/
 
-	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 232, b2_staticBody));
+	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
 	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
 	downLeftWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
 	downRightWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
+
+	smallTopWallsList.add(App->physics->CreateRectangle(55, 165, 3, 23, b2_staticBody));
+	smallTopWallsList.add(App->physics->CreateRectangle(80, 165, 4, 23, b2_staticBody));
+	smallTopWallsList.add(App->physics->CreateRectangle(105, 165, 4, 23, b2_staticBody));
 
 	//rampWalls.add(App->physics->CreateChain(0, 0, mapRampWalls, ?, b2_staticBody));
 
@@ -141,6 +145,8 @@ bool ModuleSceneIntro::Start()
 bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
+
+	//CHANGE/FIX: CLEAR ALL LISTS
 
 	return true;
 }
