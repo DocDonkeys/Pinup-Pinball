@@ -123,7 +123,7 @@ bool ModuleSceneIntro::Start()
 	downLeftWallsList.clear();
 	downRightWallsList.clear();*/
 
-	//sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody));
+	sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody, collision_type::LIGHT_TOP_1));
 
 	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
 	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
@@ -353,6 +353,7 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
+<<<<<<< HEAD
 	if (bodyB != nullptr && bodyB->sensor == true) {
 		p2List_item<PhysBody*>* sensor;
 
