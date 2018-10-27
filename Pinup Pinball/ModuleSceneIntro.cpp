@@ -98,6 +98,9 @@ bool ModuleSceneIntro::Start()
 	//Kicker Creation
 	pinballKicker.attacher = App->physics->CreateAttacherBody(200, 300,9);
 	/*pinballKicker.pbody = App->physics->CreateRectangle();*/ // SDL_Rect will go here
+
+	walls.add(App->physics->CreateChain(0, 0, mapOutsideWalls, 232, b2_staticBody));
+
 	return ret;
 }
 
