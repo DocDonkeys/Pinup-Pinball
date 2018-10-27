@@ -92,6 +92,9 @@ public:
 	static_element arrowMiddle;
 	static_element arrowRight;
 
+	static_element tunnelLeft;
+	static_element tunnelRight;
+
 	static_element blueOverKicker;
 
 	//Dynamic elements
@@ -119,7 +122,7 @@ public:
 		3, 519,
 		32, 498,
 		31, 462,
-		42, 455,
+		45, 452,
 		32, 423,
 		55, 411,
 		72, 430,

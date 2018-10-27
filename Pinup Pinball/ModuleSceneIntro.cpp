@@ -50,6 +50,9 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	arrowMiddle.create({ 320, 200 }, { 17, 31, 14, 26 });
 	arrowRight.create({ 354, 210 }, { 32, 30, 20, 27 });
 
+	tunnelLeft.create({ 29, 407 }, { 3, 94, 43, 46 });
+	tunnelRight.create({ 397, 279 }, { 78, 94, 32, 85 });
+
 	blueOverKicker.create({ 405, 796 }, { 89, 44, 15, 13 });
 }
 
@@ -76,21 +79,21 @@ bool ModuleSceneIntro::Start()
 
 	//Flipper Chain Change/Fix: we should have all chains in a module or chains.h @Dídac
 	int left_flipper[16] = {
-		6, 92,
-		15, 92,
-		47, 112,
-		47, 116,
-		43, 116,
-		5, 107,
-		1, 101,
-		1, 96,
+		6, 62,
+		15, 62,
+		47, 82,
+		47, 86,
+		43, 86,
+		5, 77,
+		1, 71,
+		1, 66,
 	};
 	
-	leftFlipperRect = {0,92,50,26};
+	leftFlipperRect = {0,62,50,26};
 	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f -5, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2, 
 		 9, left_flipper, 16, leftFlipperRect, -45, 0);
 
-	leftFlipperRect = { 0,92,50,26 };
+	leftFlipperRect = { 0,62,50,26 };
 	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2,
 		9, left_flipper, 16, leftFlipperRect, 135, 180);
 
@@ -102,6 +105,16 @@ bool ModuleSceneIntro::Start()
 	pinballKicker.pbody = App->physics->CreateRectangle(METERS_TO_PIXELS(pinballKicker.attacher->GetPosition().x),
 		METERS_TO_PIXELS(pinballKicker.attacher->GetPosition().y), kickerRect.w, kickerRect.h); // SDL_Rect will go here
 	pinballKicker.joint = App->physics->CreatePrismaticJoint(pinballKicker.attacher, pinballKicker.pbody->body);
+
+	// DELETE MAP WALLS
+	/*App->physics->world->DestroyBody(outsideWallsList.getLast()->data->body);
+	App->physics->world->DestroyBody(topLeftWallsList.getLast()->data->body);
+	App->physics->world->DestroyBody(downLeftWallsList.getLast()->data->body);
+	App->physics->world->DestroyBody(downRightWallsList.getLast()->data->body);
+	outsideWallsList.clear();
+	topLeftWallsList.clear();
+	downLeftWallsList.clear();
+	downRightWallsList.clear();*/
 
 	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 232, b2_staticBody));
 	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
@@ -177,6 +190,7 @@ update_status ModuleSceneIntro::Update()
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+		boxes.getLast()->data->listener = this;
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
@@ -223,7 +237,7 @@ update_status ModuleSceneIntro::Update()
 	// Draw map -----------------------------------------------------------------	// @Carles
 	App->renderer->Blit(map, 0, 0, &fullScreenRect);
 
-	// Draw static map elements -------------------------------------------------	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
+	// Draw UNDER-ball static elements	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
 	ushort i = 0;
 
 	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
@@ -241,9 +255,6 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(spriteSheet, (int)missingBumper.position.x, (int)missingBumper.position.y, &missingBumper.rect);
 
-	App->renderer->Blit(spriteSheet, (int)greenLeftLight.position.x, (int)greenLeftLight.position.y, &greenLeftLight.rect);
-	App->renderer->Blit(spriteSheet, (int)greenRightLight.position.x, (int)greenRightLight.position.y, &greenRightLight.rect);
-
 	App->renderer->Blit(spriteSheet, (int)pegLeft.position.x, (int)pegLeft.position.y, &pegLeft.rect);
 	App->renderer->Blit(spriteSheet, (int)pegMiddle.position.x, (int)pegMiddle.position.y, &pegMiddle.rect);
 	App->renderer->Blit(spriteSheet, (int)pegRight.position.x, (int)pegRight.position.y, &pegRight.rect);
@@ -251,8 +262,6 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(spriteSheet, (int)arrowLeft.position.x, (int)arrowLeft.position.y, &arrowLeft.rect);
 	App->renderer->Blit(spriteSheet, (int)arrowMiddle.position.x, (int)arrowMiddle.position.y, &arrowMiddle.rect);
 	App->renderer->Blit(spriteSheet, (int)arrowRight.position.x, (int)arrowRight.position.y, &arrowRight.rect);
-
-	App->renderer->Blit(spriteSheet, (int)blueOverKicker.position.x, (int)blueOverKicker.position.y, &blueOverKicker.rect);
 
 	// Prepare for raycast ------------------------------------------------------
 
@@ -290,6 +299,15 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(rick, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
 	}
+
+	// Draw OVER-ball static elements	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
+	App->renderer->Blit(spriteSheet, (int)greenLeftLight.position.x, (int)greenLeftLight.position.y, &greenLeftLight.rect);
+	App->renderer->Blit(spriteSheet, (int)greenRightLight.position.x, (int)greenRightLight.position.y, &greenRightLight.rect);
+
+	App->renderer->Blit(spriteSheet, (int)tunnelLeft.position.x, (int)tunnelLeft.position.y, &tunnelLeft.rect);
+	App->renderer->Blit(spriteSheet, (int)tunnelRight.position.x, (int)tunnelRight.position.y, &tunnelRight.rect);
+
+	App->renderer->Blit(spriteSheet, (int)blueOverKicker.position.x, (int)blueOverKicker.position.y, &blueOverKicker.rect);
 
 	// Draw ramps -------------------------------------------------------------	// CHANGE/FIX: Add conditions so ball can draw after this and not before
 	App->renderer->Blit(ramps, 0, 0, &fullScreenRect);	// @Carles
