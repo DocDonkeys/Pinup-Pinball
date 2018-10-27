@@ -281,15 +281,19 @@ b2RevoluteJoint* ModulePhysics::CreateFlipperJoint(const flipper &f, int lowerAn
 	return (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 }
 
-b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(kicker k)
+b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(b2Body* bodyA, b2Body* bodyB)
 {
-	b2PrismaticJointDef jointDef; 
-	b2Vec2 worldAxis(1.0f, 0.0f); 
-	jointDef.Initialize(k.attacher, k.pbody->body, k.attacher->GetWorldCenter(), worldAxis);
+	b2PrismaticJointDef jointDef;
+	b2Vec2 worldAxis(0.0f, 1.0f);
+	jointDef.Initialize(bodyA, bodyB, bodyA->GetWorldCenter(), worldAxis);
 
 	jointDef.enableLimit = true;
-	jointDef.lowerTranslation = -5.0f;
-	jointDef.upperTranslation = 2.5f;
+	jointDef.lowerTranslation = 0.0f;
+	jointDef.upperTranslation = 1.0f;
+
+	jointDef.enableMotor = true;
+	jointDef.maxMotorForce = 1.0f;
+	jointDef.motorSpeed = 0.0f;
 
 	return (b2PrismaticJoint*)world->CreateJoint(&jointDef);
 }
@@ -302,6 +306,16 @@ void ModulePhysics::FlipperSetMaxMotorTorque(flipper &f, float32 MaxTorque)
 void ModulePhysics::FlipperSetMotorSpeed(flipper &f, float32 MotorSpeed)
 {
 	f.Joint->SetMotorSpeed(MotorSpeed);
+}
+
+void ModulePhysics::KickerSetMaxMotorForce(kicker k, float32 MaxForce)
+{
+	k.joint->SetMaxMotorForce(MaxForce);
+}
+
+void ModulePhysics::KickerSetMotorSpeed(kicker k, float32 MaxSpeed)
+{
+	k.joint->SetMotorSpeed(MaxSpeed);
 }
 // 
 update_status ModulePhysics::PostUpdate()
