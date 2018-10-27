@@ -189,15 +189,24 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, b2Body
 }
 
 flipper ModulePhysics::CreateFlipper(int posX, int posY,int att_diameter, int flipper_chain[], int chain_size,
-									 SDL_Rect flipper_rect, int lowerAngle, int upperAngle)
+									 SDL_Rect flipper_rect, int lowerAngle, int upperAngle, flipper_type f_type)
 {
 	flipper f;
+	iPoint PbodyDef;
 	
-	int PbodyDefX = posX - (flipper_rect.w / 5);
-	int PbodyDefY = posY - (flipper_rect.y + flipper_rect.h/3);
+	if (f_type == LEFT_FLIPPER)
+	{
+		PbodyDef.x = posX - (flipper_rect.w / 5);
+		PbodyDef.y = posY - (flipper_rect.y + flipper_rect.h / 3);
+	}
+	else 
+	{
+		PbodyDef.x = posX - (2 * flipper_rect.w + 10);
+		PbodyDef.y = posY - (flipper_rect.y + flipper_rect.h / 3);
+	}
 	
 	f.Attacher = CreateAttacherBody(posX,posY,att_diameter);
-	f.Pbody = CreateFlipperPbody(PbodyDefX, PbodyDefY, flipper_chain, chain_size);
+	f.Pbody = CreateFlipperPbody(PbodyDef.x, PbodyDef.y, flipper_chain, chain_size);
 	f.Rect = flipper_rect;
 	f.Joint = CreateFlipperJoint(f,lowerAngle,upperAngle);
 

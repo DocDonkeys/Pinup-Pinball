@@ -75,6 +75,7 @@ bool ModuleSceneIntro::Start()
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
 	//Flipper Chain Change/Fix: we should have all chains in a module or chains.h @Dídac
+	// Pivot 0, 0
 	int left_flipper[16] = {
 		6, 92,
 		15, 92,
@@ -85,14 +86,27 @@ bool ModuleSceneIntro::Start()
 		1, 101,
 		1, 96,
 	};
+
+
+	// Pivot 0, 0
+	int right_flipper[16] = {
+		105, 91,
+		72, 112,
+		71, 115,
+		75, 117,
+		115, 108,
+		119, 102,
+		119, 96,
+		113, 91
+	};
 	
 	leftFlipperRect = {0,92,50,26};
 	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f -5, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2, 
-		 9, left_flipper, 16, leftFlipperRect, -45, 0);
+		 9, left_flipper, 16, leftFlipperRect, -45, 0, LEFT_FLIPPER);
 
-	leftFlipperRect = { 0,92,50,26 };
+	rightFlipperRect = { 70,92,50,26 };
 	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2,
-		9, left_flipper, 16, leftFlipperRect, 135, 180);
+		9, right_flipper, 16, rightFlipperRect, 0, 45 , RIGHT_FLIPPER);
 
 
 	//Kicker Creation
@@ -151,7 +165,7 @@ update_status ModuleSceneIntro::Update()
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 10.0f);
 		App->physics->FlipperSetMotorSpeed(rightFlipper, -25.0f);
 	}
-	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_IDLE) && rightFlipper.Joint->GetJointAngle() * RADTODEG <= 135)
+	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_IDLE) && rightFlipper.Joint->GetJointAngle() * RADTODEG <= 0)
 	{
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 0.0f);
 		App->physics->FlipperSetMotorSpeed(rightFlipper, 0.0f);
@@ -298,10 +312,12 @@ update_status ModuleSceneIntro::Update()
 	//Draw the Flippers
 	iPoint coords;
 	leftFlipper.Pbody->GetPosition(coords.x,coords.y);
-	App->renderer->Blit(spriteSheet, coords.x, coords.y + leftFlipper.Rect.y, &leftFlipper.Rect, 1.0f, leftFlipper.Pbody->GetRotation(), 0, -leftFlipper.Rect.y);
+	App->renderer->Blit(spriteSheet, coords.x + leftFlipper.Rect.x, coords.y + leftFlipper.Rect.y, &leftFlipper.Rect, 1.0f,
+						leftFlipper.Pbody->GetRotation(), -leftFlipper.Rect.x, -leftFlipper.Rect.y);
 
 	rightFlipper.Pbody->GetPosition(coords.x, coords.y);
-	App->renderer->Blit(spriteSheet, coords.x, coords.y + rightFlipper.Rect.y, &rightFlipper.Rect, 1.0f, rightFlipper.Pbody->GetRotation(), 0, -rightFlipper.Rect.y);
+	App->renderer->Blit(spriteSheet, coords.x + rightFlipper.Rect.x, coords.y + rightFlipper.Rect.y, &rightFlipper.Rect, 1.0f,
+						rightFlipper.Pbody->GetRotation(), -rightFlipper.Rect.x, -rightFlipper.Rect.y);
 	return UPDATE_CONTINUE;
 }
 
