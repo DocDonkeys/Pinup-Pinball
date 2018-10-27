@@ -17,6 +17,38 @@ struct kicker;   // """""""""""""""""""""""""""""""""
 struct SDL_Rect; // """""""""""""""""""""""""""""""""
 enum flipper_type;
 
+enum class collision_type {	//@Carles
+	NONE = -1,
+	LIGHT,
+	RAMP_ACTIVATE,
+	RAMP_DEACTIVATE,
+	LEFT_KICKER,
+	TUNNEL_LEFT,
+	TUNNEL_RIGHT,
+	BUMPER,
+	SMALL_BUMPER
+};
+
+enum class light_sensor {	//@Carles
+	NONE = -1,
+
+	TOP_LEFT_1,
+	TOP_LEFT_2,
+	TOP_LEFT_3,
+	TOP_LEFT_4,
+
+	TOP_1,
+	TOP_2,
+	TOP_3,
+	TOP_4,
+
+	LEFT,
+	RIGHT,
+
+	DOWN_LEFT,
+	DOWN_RIGHT
+};
+
 // Small class to return to other modules to track position and rotation of physics bodies
 class PhysBody
 {
@@ -28,6 +60,9 @@ public:
 	float GetRotation() const;
 	bool Contains(int x, int y) const;
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
+
+	bool sensor = false;
+	collision_type collision = collision_type::NONE;
 
 public:
 	int width, height;

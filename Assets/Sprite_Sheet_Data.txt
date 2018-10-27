@@ -12,6 +12,7 @@ Left Arrow: 0x31/16x26
 Middle Arrow: 17x31/14x26
 Right Arrow: 32x30/20x27
 Kicker: 82x24/6x34
+Over Left Kicker: 25x146/36x33
 Blue on Kicker: 89x44/15x13
 Tunnel Left: 3x94/43x46
 Tunnel Right: 78x94/32x85

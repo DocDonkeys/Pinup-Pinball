@@ -53,7 +53,8 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	tunnelLeft.create({ 29, 407 }, { 3, 94, 43, 46 });
 	tunnelRight.create({ 397, 279 }, { 78, 94, 32, 85 });
 
-	blueOverKicker.create({ 405, 796 }, { 89, 44, 15, 13 });
+	overLeftKicker.create({ 0, 428 }, { 25, 146, 36, 33 });
+	overRightKicker.create({ 405, 796 }, { 89, 44, 15, 13 });
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -324,7 +325,8 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(spriteSheet, (int)tunnelLeft.position.x, (int)tunnelLeft.position.y, &tunnelLeft.rect);
 	App->renderer->Blit(spriteSheet, (int)tunnelRight.position.x, (int)tunnelRight.position.y, &tunnelRight.rect);
 
-	App->renderer->Blit(spriteSheet, (int)blueOverKicker.position.x, (int)blueOverKicker.position.y, &blueOverKicker.rect);
+	App->renderer->Blit(spriteSheet, (int)overLeftKicker.position.x, (int)overLeftKicker.position.y, &overLeftKicker.rect);
+	App->renderer->Blit(spriteSheet, (int)overRightKicker.position.x, (int)overRightKicker.position.y, &overRightKicker.rect);
 
 	// Draw ramps -------------------------------------------------------------	// CHANGE/FIX: Add conditions so ball can draw after this and not before
 	App->renderer->Blit(ramps, 0, 0, &fullScreenRect);	// @Carles
