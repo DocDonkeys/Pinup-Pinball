@@ -19,34 +19,37 @@ enum flipper_type;
 
 enum class collision_type {	//@Carles
 	NONE = -1,
-	LIGHT,
+
+	LIGHT_TOP_LEFT_1,
+	LIGHT_TOP_LEFT_2,
+	LIGHT_TOP_LEFT_3,
+	LIGHT_TOP_LEFT_4,
+
+	LIGHT_TOP_1,
+	LIGHT_TOP_2,
+	LIGHT_TOP_3,
+	LIGHT_TOP_4,
+
+	LIGHT_LEFT,
+	LIGHT_RIGHT,
+
+	LIGHT_DOWN_LEFT,
+	LIGHT_DOWN_RIGHT,
+
 	RAMP_ACTIVATE,
 	RAMP_DEACTIVATE,
+
 	LEFT_KICKER,
+
 	TUNNEL_LEFT,
 	TUNNEL_RIGHT,
+
 	BUMPER,
-	SMALL_BUMPER
-};
+	SMALL_BUMPER,
 
-enum class light_sensor {	//@Carles
-	NONE = -1,
+	LOSE_BALL,
 
-	TOP_LEFT_1,
-	TOP_LEFT_2,
-	TOP_LEFT_3,
-	TOP_LEFT_4,
-
-	TOP_1,
-	TOP_2,
-	TOP_3,
-	TOP_4,
-
-	LEFT,
-	RIGHT,
-
-	DOWN_LEFT,
-	DOWN_RIGHT
+	MAX_COLLISIONS
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
@@ -82,10 +85,10 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius, b2BodyType type = b2_dynamicBody);
-	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType type = b2_dynamicBody);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, b2BodyType type = b2_staticBody);
-	PhysBody* CreateChain(int x, int y, int* points, int size, b2BodyType type = b2_dynamicBody);
+	PhysBody* CreateCircle(int x, int y, int radius, b2BodyType = b2_dynamicBody, collision_type = collision_type::NONE);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType = b2_dynamicBody, collision_type = collision_type::NONE);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, b2BodyType = b2_staticBody, collision_type = collision_type::NONE);
+	PhysBody* CreateChain(int x, int y, int* points, int size, b2BodyType = b2_dynamicBody, collision_type = collision_type::NONE);
 
 	//@Dídac
 	//flipper  CreateFlipper();

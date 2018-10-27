@@ -128,6 +128,8 @@ bool ModuleSceneIntro::Start()
 	downLeftWallsList.clear();
 	downRightWallsList.clear();*/
 
+	sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody));
+
 	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
 	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
 	downLeftWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
@@ -346,5 +348,16 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
+	if (bodyB->sensor == true) {
+		p2List_item<PhysBody*>* sensor;
+
+		for (sensor = App->scene_intro->sensorList.getFirst(); sensor != nullptr; sensor = sensor->next) {
+			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9));
+		}
+	}
+	else if (bodyB->collision == collision_type::LEFT_KICKER) {
+
+	}
+
 	App->audio->PlayFx(bonus_fx);
 }
