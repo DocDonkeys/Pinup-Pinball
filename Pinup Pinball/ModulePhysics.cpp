@@ -272,19 +272,20 @@ b2RevoluteJoint* ModulePhysics::CreateFlipperJoint(const flipper &f, int lowerAn
 	return (b2RevoluteJoint*)world->CreateJoint(&jointDef);
 }
 
-b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(b2Body* bodyA, b2Body* bodyB)
+b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(b2Body* bodyA, b2Body* bodyB, float32 world_Axis_x,float32 world_Axis_y,
+													  float32 lower_translation, float32 upper_translation)
 {
 	b2PrismaticJointDef jointDef;
-	b2Vec2 worldAxis(0.0f, 1.0f);
+	b2Vec2 worldAxis(world_Axis_x, world_Axis_y);
 	jointDef.Initialize(bodyA, bodyB, bodyA->GetWorldCenter(), worldAxis);
 
 	jointDef.enableLimit = true;
-	jointDef.lowerTranslation = 0.0f;
-	jointDef.upperTranslation = 1.0f;
+	jointDef.lowerTranslation = lower_translation;
+	jointDef.upperTranslation = upper_translation;
 
 	jointDef.enableMotor = true;
-	jointDef.maxMotorForce = 1.0f;
-	jointDef.motorSpeed = 0.0f;
+	jointDef.maxMotorForce = 0.0f;	//Initialize always on 0
+	jointDef.motorSpeed = 0.0f;     //Initialize always on 0
 
 	return (b2PrismaticJoint*)world->CreateJoint(&jointDef);
 }
