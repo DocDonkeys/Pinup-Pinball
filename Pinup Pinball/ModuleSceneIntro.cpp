@@ -160,6 +160,8 @@ bool ModuleSceneIntro::Start()
 
 	sensorList.add(App->physics->CreateRectangleSensor(199, 812, 64, 8, b2_staticBody, collision_type::LOSE_BALL));
 
+	bumper_hugger_left = App->physics->CreateChain(0, 0, left_bumper_h, 28, b2_staticBody);
+	bumper_hugger_right = App->physics->CreateChain(0, 0, right_bumper_h, 28, b2_staticBody);
 	//Adding Bumpers
 	bumpersList.add(App->physics->CreateChain(0, 0, left_bumper, 8, b2_staticBody, collision_type::BUMPER_LEFT, 1.75f));
 	bumpersList.add(App->physics->CreateChain(0, 0, right_bumper, 8, b2_staticBody, collision_type::BUMPER_RIGHT, 1.75f));
@@ -170,10 +172,7 @@ bool ModuleSceneIntro::Start()
 	bumpersList.add(App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));
 	bumpersList.add(App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));
 
-	/*for (p2List_item<PhysBody*>* current = bumpersList.getFirst(); current != nullptr; current = current->next)
-	{
-		current->data->listener = this;
-	}*/
+
 
 	//Adding Pegs
 	pegsList.add(App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f));
