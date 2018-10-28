@@ -45,6 +45,7 @@ enum class collision_type {	//@Carles
 
 	RAMP_LEFT_FINISH,
 	RAMP_RIGHT_FINISH,
+	THIRD_RAMP,
 
 	LEFT_KICKER,
 

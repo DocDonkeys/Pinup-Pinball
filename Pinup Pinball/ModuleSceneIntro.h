@@ -8,6 +8,7 @@ class PhysBody;
 struct b2Body;
 struct b2RevoluteJoint;
 struct b2PrismaticJoint;
+enum class collision_type;
 
 struct sensor_flags {	// @Carles
 	bool lightsTopLeft[4];
@@ -19,6 +20,7 @@ struct sensor_flags {	// @Carles
 
 	bool activatedRamps;
 	bool rampDone[2];
+	bool rampEventDone[2];
 	bool thirdRamp;
 
 	bool tunnels[2];
@@ -38,6 +40,7 @@ struct sensor_flags {	// @Carles
 
 		for (int i = 0; i < 2; i++) {
 			rampDone[i] = false;
+			rampEventDone[i] = false;
 			lightsMiddle[i] = false;
 			lightsDown[i] = false;
 			tunnels[i] = false;
@@ -58,6 +61,18 @@ struct static_element {	// @Carles
 		this->position = position;
 		this->rect = rect;
 	}
+};
+
+struct score_rewards {	// @Carles
+	ushort leftKicker = 5;
+	ushort topLeftLight = 3;
+	ushort bumper = 5;
+	ushort smallBumper = 44;
+	ushort tunnel = 33;
+	ushort pegScore = 9;
+	ushort buttonLight = 11;
+	ushort enterRamp = 444;
+	ushort thirdRamp = 100000;
 };
 
 enum flipper_type
@@ -100,10 +115,13 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:	//@Carles
-	void checkThirdRamp();
-	void checkMultiplier();
-	void checkRampEventStart();
-	void checkRampEventEnd();
+
+	// Sensor logic events
+	void CheckThirdRamp();
+	void CheckMultiplier();
+	void CheckRampEventStart();
+	void CheckRampEventEnd();
+	void RestorePegs(collision_type collType);
 
 	void CreateRamps();
 	void DeleteRamps();
@@ -119,6 +137,7 @@ public:
 	p2List<PhysBody*> rampWallsList;
 
 	p2List<PhysBody*> bumpersList;
+
 	p2List<PhysBody*> pegsList;
 
 	// Sensors
@@ -156,9 +175,13 @@ public:
 	SDL_Rect ballRect;
 	SDL_Rect kickerRect;
 
+	//Score
+	score_rewards scoreRewards;
+
 	//Flags
 	bool mustCreateRamps = false;
 	bool mustDeleteRamps = false;
+	bool mustRestorePegs = false;
 
 	//Wall coordinates (Pivot 0, 0)
 	int outsideWalls[231] = {
