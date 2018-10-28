@@ -77,6 +77,28 @@ OVER LEFT KICKER:
 BLUE ABOVE KICKER:
 405x796/15x13
 
+SENSORS:
+HORIZONTAL RED BUTTON:
+Size: 13x2
+Positions: 185x226/209x229/234x229/259x226
+
+VERTICAL RED BUTTON:
+Size: 3x14
+Positions: 34x473/363x473
+
+VERTICAL GRAY SENSOR:
+Size: 7x19
+Positions:
+Top: 40x156/64x156/90x156/114x156
+Down: 41x596/351x596
+
+TUNNEL SENSOR:
+Left: 39x421/18x4
+Right: 418x305/4x18
+
+LOSE BALL SENSOR:
+168x812/64x8
+
 LOGIC:
 3 Starting balls
 "Pegs" collide with ball, then change to wasted (they are saveguard)

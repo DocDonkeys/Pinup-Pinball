@@ -9,6 +9,43 @@ struct b2Body;
 struct b2RevoluteJoint;
 struct b2PrismaticJoint;
 
+struct sensor_flags {	// @Carles
+	bool lightsTopLeft[4];
+	bool lightsTop[4];
+
+	bool lightsMiddle[2];
+
+	bool lightsDown[2];
+
+	bool activateRamp;
+
+	bool tunnels[2];
+
+	bool arrows[3];
+
+	bool pegs[3];
+
+	sensor_flags() {
+		for (int i = 0; i < 4; i++) {
+			lightsTopLeft[i] = false;
+			lightsTop[i] = false;
+		}
+
+		activateRamp = false;
+
+		for (int i = 0; i < 2; i++) {
+			lightsMiddle[i] = false;
+			lightsDown[i] = false;
+			tunnels[i] = false;
+		}
+
+		for (int i = 0; i < 3; i++) {
+			arrows[i] = false;
+			pegs[i] = false;
+		}
+	}
+};
+
 struct static_element {	// @Carles
 	iPoint position;
 	SDL_Rect rect;
@@ -72,7 +109,9 @@ public:
 	p2List<PhysBody*> downRightWallsList;
 	p2List<PhysBody*> rampWallsList;
 
+	// Sensors
 	p2List<PhysBody*> sensorList;
+	sensor_flags sensorFlags;
 
 	//Textures
 	SDL_Texture* circle;	// CHANGE/FIX: Old
@@ -92,16 +131,11 @@ public:
 	static_element greenLeftLight;
 	static_element greenRightLight;
 
-	static_element pegLeft;
-	static_element pegMiddle;
-	static_element pegRight;
+	static_element pegs[3];
 
-	static_element arrowLeft;
-	static_element arrowMiddle;
-	static_element arrowRight;
+	static_element arrows[3];
 
-	static_element tunnelLeft;
-	static_element tunnelRight;
+	static_element tunnels[2];
 
 	static_element overLeftKicker;
 	static_element overRightKicker;

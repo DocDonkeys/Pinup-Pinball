@@ -22,8 +22,8 @@ enum class collision_type {	//@Carles
 
 	LIGHT_TOP_LEFT_1,
 	LIGHT_TOP_LEFT_2,
-	LIGHT_TOP_LEFT_3,
-	LIGHT_TOP_LEFT_4,
+	LIGHT_TOP_LEFT_3,	// FIX/CHANGE: Disable on ramp map
+	LIGHT_TOP_LEFT_4,	// FIX/CHANGE: Disable on ramp map
 
 	LIGHT_TOP_1,
 	LIGHT_TOP_2,
@@ -36,16 +36,24 @@ enum class collision_type {	//@Carles
 	LIGHT_DOWN_LEFT,
 	LIGHT_DOWN_RIGHT,
 
+	ARROW_LEFT,
+	ARROW_MIDDLE,
+	ARROW_RIGHT,
+
 	RAMP_ACTIVATE,
 	RAMP_DEACTIVATE,
 
 	LEFT_KICKER,
 
 	TUNNEL_LEFT,
-	TUNNEL_RIGHT,
+	TUNNEL_RIGHT,	// FIX/CHANGE: Disable on ramp map
 
 	BUMPER,
 	SMALL_BUMPER,
+
+	PEG_LEFT,
+	PEG_MIDDLE,
+	PEG_RIGHT,
 
 	LOSE_BALL,
 
@@ -64,6 +72,7 @@ public:
 	bool Contains(int x, int y) const;
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
 
+	bool mustDestroy = false;
 	bool sensor = false;
 	collision_type collision = collision_type::NONE;
 
@@ -113,10 +122,13 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
+public:
+
+	b2World* world;	// IMPROVE: Add functions to physics instead of using world on other modules
+
 private:
 
 	bool debug;
-	b2World* world;	//CHANGE/FIX: Must be public for SceneIntro
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 	//Vars created by me

@@ -39,19 +39,19 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 
 	//Static elements	// CHANGE/FIX: Create a function for this
 	missingBumper.create({ 389, 142 }, { 20, 0, 27, 29 });
-	greenLeftLight.create({ 47, 427 }, { 49, 0, 5, 5 });
+	greenLeftLight.create({ 47, 425 }, { 49, 0, 5, 5 });
 	greenRightLight.create({ 407, 304 }, { 55, 0, 5, 5 });
 
-	pegLeft.create({ 20, 515 }, { 62, 0, 10, 10 });
-	pegMiddle.create({ 195, 759 }, { 73, 0, 10, 10 });
-	pegRight.create({ 370, 515 }, { 84, 0, 10, 10 });
+	pegs[0].create({ 20, 515 }, { 62, 0, 10, 10 });
+	pegs[1].create({ 195, 759 }, { 73, 0, 10, 10 });
+	pegs[2].create({ 370, 515 }, { 84, 0, 10, 10 });
 
-	arrowLeft.create({ 149, 231 }, { 0, 31, 16, 26 });
-	arrowMiddle.create({ 320, 200 }, { 17, 31, 14, 26 });
-	arrowRight.create({ 354, 210 }, { 32, 30, 20, 27 });
+	arrows[0].create({ 149, 231 }, { 0, 31, 16, 26 });
+	arrows[1].create({ 320, 200 }, { 17, 31, 14, 26 });
+	arrows[2].create({ 354, 210 }, { 32, 30, 20, 27 });
 
-	tunnelLeft.create({ 29, 407 }, { 3, 94, 43, 46 });
-	tunnelRight.create({ 397, 279 }, { 78, 94, 32, 85 });
+	tunnels[0].create({ 29, 407 }, { 3, 94, 43, 46 });
+	tunnels[1].create({ 397, 279 }, { 78, 94, 32, 85 });
 
 	overLeftKicker.create({ 0, 428 }, { 25, 146, 36, 33 });
 	overRightKicker.create({ 405, 796 }, { 89, 44, 15, 13 });
@@ -122,13 +122,12 @@ bool ModuleSceneIntro::Start()
 	topLeftWallsList.clear();
 	downLeftWallsList.clear();
 	downRightWallsList.clear();*/
+	// ALSO DISABLE SOME SENSORS
 
-	sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody, collision_type::LIGHT_TOP_1));
-
-	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
-	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
+	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));	// FIX/CHANGE: Disable on ramp map
+	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));		// FIX/CHANGE: Disable on ramp map
 	downLeftWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
-	downRightWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
+	downRightWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));	// FIX/CHANGE: Disable on ramp map
 
 	smallTopWallsList.add(App->physics->CreateRectangle(55, 165, 3, 23, b2_staticBody));
 	smallTopWallsList.add(App->physics->CreateRectangle(80, 165, 4, 23, b2_staticBody));
@@ -136,8 +135,33 @@ bool ModuleSceneIntro::Start()
 
 	//rampWalls.add(App->physics->CreateChain(0, 0, mapRampWalls, ?, b2_staticBody));
 
+	//Sensors
+	sensorList.add(App->physics->CreateRectangleSensor(43, 166, 7, 19, b2_staticBody, collision_type::LIGHT_TOP_LEFT_1));
+	sensorList.add(App->physics->CreateRectangleSensor(67, 166, 7, 19, b2_staticBody, collision_type::LIGHT_TOP_LEFT_2));
+	sensorList.add(App->physics->CreateRectangleSensor(93, 166, 7, 19, b2_staticBody, collision_type::LIGHT_TOP_LEFT_3));
+	sensorList.add(App->physics->CreateRectangleSensor(117, 166, 7, 19, b2_staticBody, collision_type::LIGHT_TOP_LEFT_4));
+
+	sensorList.add(App->physics->CreateRectangleSensor(190, 228, 13, 2, b2_staticBody, collision_type::LIGHT_TOP_1));
+	sensorList.add(App->physics->CreateRectangleSensor(214, 231, 13, 2, b2_staticBody, collision_type::LIGHT_TOP_2));
+	sensorList.add(App->physics->CreateRectangleSensor(2349, 231, 13, 2, b2_staticBody, collision_type::LIGHT_TOP_3));
+	sensorList.add(App->physics->CreateRectangleSensor(264, 228, 13, 2, b2_staticBody, collision_type::LIGHT_TOP_4));
+
+	sensorList.add(App->physics->CreateRectangleSensor(36, 480, 3, 14, b2_staticBody, collision_type::LIGHT_LEFT));
+	sensorList.add(App->physics->CreateRectangleSensor(364, 480, 3, 14, b2_staticBody, collision_type::LIGHT_RIGHT));
+
+	sensorList.add(App->physics->CreateRectangleSensor(45, 606, 7, 19, b2_staticBody, collision_type::LIGHT_DOWN_LEFT));
+	sensorList.add(App->physics->CreateRectangleSensor(355, 606, 7, 19, b2_staticBody, collision_type::LIGHT_DOWN_RIGHT));
+
+	/*sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody, collision_type::RAMP_ACTIVATE));
+	sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody, collision_type::RAMP_DEACTIVATE));*/
+
+	sensorList.add(App->physics->CreateRectangleSensor(48, 422, 18, 4, b2_staticBody, collision_type::TUNNEL_LEFT));
+	sensorList.add(App->physics->CreateRectangleSensor(420, 315, 4, 18, b2_staticBody, collision_type::TUNNEL_RIGHT));
+
+	sensorList.add(App->physics->CreateRectangleSensor(199, 812, 64, 8, b2_staticBody, collision_type::LOSE_BALL));
+
 	//Bumpers
-	bumperLeftProjection = App->physics->CreateRectangle(10,470,40,20, b2_staticBody,collision_type::LEFT_KICKER, 4.0f);
+	bumperLeftProjection = App->physics->CreateRectangle(10, 470, 40, 20, b2_staticBody,collision_type::LEFT_KICKER, 4.0f);
 	bumperLeftProjection->listener = this;
 	
 	return ret;
@@ -257,30 +281,38 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(map, 0, 0, &fullScreenRect);
 
 	// Draw UNDER-ball static elements	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
-	ushort i = 0;
 
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
-	App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);	i++;
+	for (int i = 0; i < 4; i++) {
+		if (sensorFlags.lightsTopLeft[i] == true) {
+			App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);
+		}
+		if (sensorFlags.lightsTop[i] == true) {
+			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 4].x, (int)lightPosList[i + 4].y, &lightRect);
+		}
+	}
+
+	for (int i = 0; i < 2; i++) {
+		if (sensorFlags.lightsMiddle[i] == true) {
+			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 8].x, (int)lightPosList[i + 8].y, &lightRect);
+		}
+		if (sensorFlags.lightsDown[i] == true) {
+			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 10].x, (int)lightPosList[i + 10].y, &lightRect);
+		}
+	}
 
 	App->renderer->Blit(spriteSheet, (int)missingBumper.position.x, (int)missingBumper.position.y, &missingBumper.rect);
 
-	App->renderer->Blit(spriteSheet, (int)pegLeft.position.x, (int)pegLeft.position.y, &pegLeft.rect);
-	App->renderer->Blit(spriteSheet, (int)pegMiddle.position.x, (int)pegMiddle.position.y, &pegMiddle.rect);
-	App->renderer->Blit(spriteSheet, (int)pegRight.position.x, (int)pegRight.position.y, &pegRight.rect);
-
-	App->renderer->Blit(spriteSheet, (int)arrowLeft.position.x, (int)arrowLeft.position.y, &arrowLeft.rect);
-	App->renderer->Blit(spriteSheet, (int)arrowMiddle.position.x, (int)arrowMiddle.position.y, &arrowMiddle.rect);
-	App->renderer->Blit(spriteSheet, (int)arrowRight.position.x, (int)arrowRight.position.y, &arrowRight.rect);
+	for (int i = 0; i < 3; i++) {
+		if (sensorFlags.lightsDown[i] == true) {
+			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 10].x, (int)lightPosList[i + 10].y, &lightRect);
+		}
+		if (sensorFlags.pegs[i] == true) {
+			App->renderer->Blit(spriteSheet, (int)pegs[i].position.x, (int)pegs[i].position.y, &pegs[i].rect);
+		}
+		if (sensorFlags.arrows[i] == true) {
+			App->renderer->Blit(spriteSheet, (int)arrows[i].position.x, (int)arrows[i].position.y, &arrows[i].rect);
+		}
+	}
 
 	// Prepare for raycast ------------------------------------------------------
 
@@ -293,9 +325,16 @@ update_status ModuleSceneIntro::Update()
 
 	while(c != NULL)
 	{
-		int x, y;
-		c->data->GetPosition(x, y);
-		App->renderer->Blit(spriteSheet, x, y, &ballRect, 1.0f /*c->data->GetRotation()*/);
+		if (c->data->mustDestroy == true) {
+			c->data->mustDestroy = false;
+			App->physics->world->DestroyBody(c->data->body);
+		}
+		else {
+			int x, y;
+			c->data->GetPosition(x, y);
+			App->renderer->Blit(spriteSheet, x, y, &ballRect, 1.0f /*c->data->GetRotation()*/);
+		}
+		
 		c = c->next;
 	}
 
@@ -320,12 +359,16 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// Draw OVER-ball static elements	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
-	App->renderer->Blit(spriteSheet, (int)greenLeftLight.position.x, (int)greenLeftLight.position.y, &greenLeftLight.rect);
-	App->renderer->Blit(spriteSheet, (int)greenRightLight.position.x, (int)greenRightLight.position.y, &greenRightLight.rect);
-
-	App->renderer->Blit(spriteSheet, (int)tunnelLeft.position.x, (int)tunnelLeft.position.y, &tunnelLeft.rect);
-	App->renderer->Blit(spriteSheet, (int)tunnelRight.position.x, (int)tunnelRight.position.y, &tunnelRight.rect);
+	App->renderer->Blit(spriteSheet, (int)tunnels[0].position.x, (int)tunnels[0].position.y, &tunnels[0].rect);
+	App->renderer->Blit(spriteSheet, (int)tunnels[1].position.x, (int)tunnels[1].position.y, &tunnels[1].rect);
 	
+	if (sensorFlags.tunnels[0] == true) {
+		App->renderer->Blit(spriteSheet, (int)greenRightLight.position.x, (int)greenRightLight.position.y, &greenRightLight.rect);
+	}
+	if (sensorFlags.tunnels[1] == true) {
+		App->renderer->Blit(spriteSheet, (int)greenLeftLight.position.x, (int)greenLeftLight.position.y, &greenLeftLight.rect);
+	}
+
 	//Draw the kicker
 	iPoint coords;
 	pinballKicker.pbody->GetPosition(coords.x, coords.y);
@@ -354,31 +397,43 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	if (bodyB != nullptr) {
-		if (bodyB->collision <= collision_type::LIGHT_TOP_4) {
+		if (bodyB->collision <= collision_type::LIGHT_DOWN_RIGHT) {
 			switch (bodyB->collision) {	// CHANGE/FIX: TURN INTO FUNCTION
 			case collision_type::LIGHT_TOP_LEFT_1:
+				sensorFlags.lightsTopLeft[0] = true;
 				break;
 			case collision_type::LIGHT_TOP_LEFT_2:
+				sensorFlags.lightsTopLeft[1] = true;
 				break;
 			case collision_type::LIGHT_TOP_LEFT_3:
+				sensorFlags.lightsTopLeft[2] = true;
 				break;
 			case collision_type::LIGHT_TOP_LEFT_4:
+				sensorFlags.lightsTopLeft[3] = true;
 				break;
 			case collision_type::LIGHT_TOP_1:
+				sensorFlags.lightsTop[0] = true;
 				break;
 			case collision_type::LIGHT_TOP_2:
+				sensorFlags.lightsTop[1] = true;
 				break;
 			case collision_type::LIGHT_TOP_3:
+				sensorFlags.lightsTop[2] = true;
 				break;
 			case collision_type::LIGHT_TOP_4:
+				sensorFlags.lightsTop[3] = true;
 				break;
 			case collision_type::LIGHT_LEFT:
+				sensorFlags.lightsMiddle[0] = true;
 				break;
 			case collision_type::LIGHT_RIGHT:
+				sensorFlags.lightsMiddle[1] = true;
 				break;
 			case collision_type::LIGHT_DOWN_LEFT:
+				sensorFlags.lightsDown[0] = true;
 				break;
 			case collision_type::LIGHT_DOWN_RIGHT:
+				sensorFlags.lightsDown[1] = true;
 				break;
 			default:
 				break;
@@ -393,14 +448,26 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			case collision_type::LEFT_KICKER:
 				break;
 			case collision_type::TUNNEL_LEFT:
+				sensorFlags.tunnels[0] = true;
 				break;
 			case collision_type::TUNNEL_RIGHT:
+				sensorFlags.tunnels[1] = true;
 				break;
 			case collision_type::BUMPER:
 				break;
 			case collision_type::SMALL_BUMPER:
 				break;
+			case collision_type::PEG_LEFT:
+				sensorFlags.pegs[0] = true;
+				break;
+			case collision_type::PEG_MIDDLE:
+				sensorFlags.pegs[1] = true;
+				break;
+			case collision_type::PEG_RIGHT:
+				sensorFlags.pegs[2] = true;
+				break;
 			case collision_type::LOSE_BALL:
+				bodyA->mustDestroy = true;
 				break;
 			default:
 				break;

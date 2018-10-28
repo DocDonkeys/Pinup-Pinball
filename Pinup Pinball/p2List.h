@@ -214,5 +214,25 @@ public:
 
 		return (NULL);
 	}
+
+	/**
+	* returns the data on index (nullptr if not found)
+	*/
+	p2List_item<tdata>* findIndex(int index)
+	{
+		p2List_item<tdata>* tmp = start;
+		int i = 0;
+
+		while (tmp != NULL)
+		{
+			if (i = index)
+				return(tmp);
+
+			i++;
+			tmp = tmp->next;
+		}
+
+		return nullptr;
+	}
 };
 #endif /*__p2List_H__*/
