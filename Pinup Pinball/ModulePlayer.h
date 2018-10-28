@@ -22,6 +22,8 @@ public:
 	uint32 hiScore;
 	uint multiplier;
 
+	ushort remainingBalls;
+
 	int debug_font = -1;
 
 	//Chars

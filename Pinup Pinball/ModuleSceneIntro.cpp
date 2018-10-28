@@ -87,6 +87,7 @@ bool ModuleSceneIntro::Start()
 	game_over_fx = App->audio->LoadFx("pinball/audio/game_over.wav");
 	lat_light_light_up_fx = App->audio->LoadFx("pinball/audio/lat_light_light_up.wav");
 	light_lights_up_fx = App->audio->LoadFx("pinball/audio/light_lights_up.wav");
+	left_kicker_fx = App->audio->LoadFx("pinball/audio/left_kicker.wav");
 	//Flipper Chain Change/Fix: we should have all chains in a module or chains.h @Dídac
 	// Pivot 0, 0
 	int left_flipper[16] = {
@@ -664,6 +665,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				break;
 			case collision_type::LEFT_KICKER:
 				App->player->AddScore(scoreRewards.leftKicker);
+				App->audio->PlayFx(left_kicker_fx);
 				break;
 			case collision_type::TUNNEL_LEFT:
 				bodyA->mustDestroy = true;

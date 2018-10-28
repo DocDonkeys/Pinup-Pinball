@@ -22,6 +22,7 @@ bool ModulePlayer::Start()
 
 	score = 0;
 	multiplier = 1;
+	remainingBalls = 3;
 
 	debug_font = App->fonts->Load("pinball/fonts/blue_font.png", "! @,_./0123456789$;<&?abcdefghijklmnopqrstuvwxyz", 1);
 	return true;
@@ -63,6 +64,16 @@ void ModulePlayer::AddScore(uint scoreToAdd)
 void ModulePlayer::IncreaseMultiplier()
 {
 	multiplier++;
+}
+
+void ModulePlayer::AddBall()
+{
+	remainingBalls++;
+}
+
+void ModulePlayer::LoseBall()
+{
+	remainingBalls--;
 }
 
 
