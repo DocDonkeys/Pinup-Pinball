@@ -17,7 +17,7 @@ struct sensor_flags {	// @Carles
 
 	bool lightsDown[2];
 
-	bool activateRamp;
+	bool activatedRamps;
 	bool rampDone[2];
 
 	bool tunnels[2];
@@ -32,7 +32,7 @@ struct sensor_flags {	// @Carles
 			lightsTop[i] = false;
 		}
 
-		activateRamp = false;
+		activatedRamps = false;
 
 		for (int i = 0; i < 2; i++) {
 			rampDone[i] = false;
@@ -97,6 +97,10 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
+public:	//@Carles
+	void CreateRamps();
+	void DeleteRamps();
+
 public:
 	//PhysBodies
 	p2List<PhysBody*> circles;
@@ -109,7 +113,9 @@ public:
 	p2List<PhysBody*> topLeftWallsList;
 	p2List<PhysBody*> downLeftWallsList;
 	p2List<PhysBody*> downRightWallsList;
-	p2List<PhysBody*> rampWallsList;
+
+	p2List<PhysBody*> leftRampWallsList;
+	p2List<PhysBody*> rightRampWallsList;
 
 	// Sensors
 	p2List<PhysBody*> sensorList;
@@ -145,6 +151,10 @@ public:
 	//Dynamic elements
 	SDL_Rect ballRect;
 	SDL_Rect kickerRect;
+
+	//Flags
+	bool mustCreateRamps = false;
+	bool mustDeleteRamps = false;
 
 	//Wall coordinates (Pivot 0, 0)
 	int outsideWalls[231] = {
@@ -306,6 +316,51 @@ public:
 	360, 648,
 	367, 637,
 	368, 540
+	};
+
+	int leftRampWalls[52] = {
+	42, 548,
+	70, 530,
+	71, 169,
+	79, 154,
+	90, 147,
+	116, 142,
+	117, 130,
+	112, 121,
+	47, 114,
+	50, 92,
+	122, 102,
+	135, 109,
+	141, 120,
+	144, 137,
+	163, 134,
+	207, 126,
+	245, 125,
+	279, 126,
+	278, 155,
+	226, 151,
+	180, 154,
+	95, 170,
+	92, 534,
+	87, 546,
+	78, 555,
+	55, 566
+	};
+
+	int rightRampWalls[26] = {
+	366, 585,
+	406, 564,
+	412, 556,
+	415, 213,
+	410, 202,
+	398, 192,
+	224, 160,
+	185, 162,
+	189, 190,
+	224, 184,
+	391, 213,
+	393, 544,
+	348, 572
 	};
 
 	//Rect that covers the full screen

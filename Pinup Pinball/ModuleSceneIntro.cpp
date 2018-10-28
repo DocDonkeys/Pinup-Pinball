@@ -124,16 +124,14 @@ bool ModuleSceneIntro::Start()
 	downRightWallsList.clear();*/
 	// ALSO DISABLE SOME SENSORS
 
-	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));	// FIX/CHANGE: Disable on ramp map
-	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));		// FIX/CHANGE: Disable on ramp map
+	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
+	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
 	downLeftWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
-	downRightWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));	// FIX/CHANGE: Disable on ramp map
+	downRightWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
 
 	smallTopWallsList.add(App->physics->CreateRectangle(55, 165, 3, 23, b2_staticBody));
 	smallTopWallsList.add(App->physics->CreateRectangle(80, 165, 4, 23, b2_staticBody));
 	smallTopWallsList.add(App->physics->CreateRectangle(105, 165, 4, 23, b2_staticBody));
-
-	//rampWalls.add(App->physics->CreateChain(0, 0, mapRampWalls, ?, b2_staticBody));
 
 	//Sensors
 	sensorList.add(App->physics->CreateRectangleSensor(43, 166, 7, 19, b2_staticBody, collision_type::LIGHT_TOP_LEFT_1));
@@ -152,8 +150,16 @@ bool ModuleSceneIntro::Start()
 	sensorList.add(App->physics->CreateRectangleSensor(45, 606, 7, 19, b2_staticBody, collision_type::LIGHT_DOWN_LEFT));
 	sensorList.add(App->physics->CreateRectangleSensor(355, 606, 7, 19, b2_staticBody, collision_type::LIGHT_DOWN_RIGHT));
 
-	/*sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody, collision_type::RAMP_ACTIVATE));
-	sensorList.add(App->physics->CreateRectangleSensor(300, 300, 50, 50, b2_staticBody, collision_type::RAMP_DEACTIVATE));*/
+	sensorList.add(App->physics->CreateRectangleSensor(91, 108, 6, 15, b2_staticBody, collision_type::RAMP_ACTIVATE));
+	sensorList.add(App->physics->CreateRectangleSensor(178, 143, 6, 15, b2_staticBody, collision_type::RAMP_ACTIVATE));
+	sensorList.add(App->physics->CreateRectangleSensor(262, 180, 6, 16, b2_staticBody, collision_type::RAMP_ACTIVATE));
+
+	sensorList.add(App->physics->CreateRectangleSensor(157, 210, 25, 5, b2_staticBody, collision_type::RAMP_DEACTIVATE));
+	sensorList.add(App->physics->CreateRectangleSensor(315, 164, 30, 5, b2_staticBody, collision_type::RAMP_DEACTIVATE));
+	sensorList.add(App->physics->CreateRectangleSensor(392, 172, 30, 5, b2_staticBody, collision_type::RAMP_DEACTIVATE));
+
+	sensorList.add(App->physics->CreateRectangleSensor(50, 556, 12, 10, b2_staticBody, collision_type::RAMP_LEFT_FINISH));
+	sensorList.add(App->physics->CreateRectangleSensor(355, 580, 12, 10, b2_staticBody, collision_type::RAMP_RIGHT_FINISH));
 
 	sensorList.add(App->physics->CreateRectangleSensor(48, 422, 18, 4, b2_staticBody, collision_type::TUNNEL_LEFT));
 	sensorList.add(App->physics->CreateRectangleSensor(420, 315, 4, 18, b2_staticBody, collision_type::TUNNEL_RIGHT));
@@ -292,6 +298,16 @@ update_status ModuleSceneIntro::Update()
 		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
 	}
 
+	// Ramp logic
+	if (mustCreateRamps == true) {
+		CreateRamps();
+		mustCreateRamps = false;
+	}
+	else if (mustDeleteRamps == true) {
+		DeleteRamps();
+		mustDeleteRamps = false;
+	}
+
 	// Draw map -----------------------------------------------------------------	// @Carles
 	App->renderer->Blit(map, 0, 0, &fullScreenRect);
 
@@ -415,13 +431,19 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB->collision <= collision_type::LIGHT_DOWN_RIGHT) {
 			switch (bodyB->collision) {	// CHANGE/FIX: TURN INTO FUNCTION
 			case collision_type::LIGHT_TOP_LEFT_1:
-				sensorFlags.lightsTopLeft[0] = true;
+				if (sensorFlags.activatedRamps == false) {
+					sensorFlags.lightsTopLeft[0] = true;
+				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_2:
-				sensorFlags.lightsTopLeft[1] = true;
+				if (sensorFlags.activatedRamps == false) {
+					sensorFlags.lightsTopLeft[1] = true;
+				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_3:
-				sensorFlags.lightsTopLeft[2] = true;
+				if (sensorFlags.activatedRamps == false) {
+					sensorFlags.lightsTopLeft[2] = true;
+				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_4:
 				sensorFlags.lightsTopLeft[3] = true;
@@ -457,8 +479,30 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		else {
 			switch (bodyB->collision) {	// CHANGE/FIX: TURN INTO FUNCTION
 			case collision_type::RAMP_ACTIVATE:
+				if (sensorFlags.activatedRamps == false) {
+					mustCreateRamps = true;
+					sensorFlags.activatedRamps = true;
+				};
 				break;
 			case collision_type::RAMP_DEACTIVATE:
+				if (sensorFlags.activatedRamps == true) {
+					mustDeleteRamps = true;
+					sensorFlags.activatedRamps = false;
+				}
+				break;
+			case collision_type::RAMP_LEFT_FINISH:
+				sensorFlags.arrows[0] = false;
+				if (sensorFlags.activatedRamps == true) {
+					mustDeleteRamps = true;
+					sensorFlags.activatedRamps = false;
+				}
+				break;
+			case collision_type::RAMP_RIGHT_FINISH:
+				sensorFlags.arrows[1] = false;
+				if (sensorFlags.activatedRamps == true) {
+					mustDeleteRamps = true;
+					sensorFlags.activatedRamps = false;
+				}
 				break;
 			case collision_type::LEFT_KICKER:
 				break;
@@ -496,4 +540,37 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 	
 	App->audio->PlayFx(bonus_fx);
+}
+
+void ModuleSceneIntro::CreateRamps() {	//@Carles
+	App->physics->world->DestroyBody(outsideWallsList.getLast()->data->body);
+	App->physics->world->DestroyBody(topLeftWallsList.getLast()->data->body);
+	App->physics->world->DestroyBody(downLeftWallsList.getLast()->data->body);
+	App->physics->world->DestroyBody(downRightWallsList.getLast()->data->body);
+	outsideWallsList.clear();
+	topLeftWallsList.clear();
+	downLeftWallsList.clear();
+	downRightWallsList.clear();
+	
+	for (p2List_item<PhysBody*>* tmp = smallTopWallsList.getFirst(); tmp != nullptr; tmp = tmp->next)
+		App->physics->world->DestroyBody(tmp->data->body);
+	
+	//smallTopWallsList.clear();
+
+	leftRampWallsList.add(App->physics->CreateChain(0, 0, leftRampWalls, 52, b2_staticBody));
+	rightRampWallsList.add(App->physics->CreateChain(0, 0, rightRampWalls, 26, b2_staticBody));
+}
+
+void ModuleSceneIntro::DeleteRamps() {	//@Carles
+	App->physics->world->DestroyBody(leftRampWallsList.getLast()->data->body);
+	App->physics->world->DestroyBody(rightRampWallsList.getLast()->data->body);
+
+	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
+	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
+	downLeftWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
+	downRightWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
+
+	smallTopWallsList.add(App->physics->CreateRectangle(55, 165, 3, 23, b2_staticBody));
+	smallTopWallsList.add(App->physics->CreateRectangle(80, 165, 4, 23, b2_staticBody));
+	smallTopWallsList.add(App->physics->CreateRectangle(105, 165, 4, 23, b2_staticBody));
 }
