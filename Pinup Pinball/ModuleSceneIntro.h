@@ -108,14 +108,8 @@ public:
 	p2List<PhysBody*> ricks;
 
 	p2List<PhysBody*> smallTopWallsList;
-
-	p2List<PhysBody*> outsideWallsList;
-	p2List<PhysBody*> topLeftWallsList;
-	p2List<PhysBody*> downLeftWallsList;
-	p2List<PhysBody*> downRightWallsList;
-
-	p2List<PhysBody*> leftRampWallsList;
-	p2List<PhysBody*> rightRampWallsList;
+	p2List<PhysBody*> generalWallsList;
+	p2List<PhysBody*> rampWallsList;
 
 	p2List<PhysBody*> bumpersList;
 	p2List<PhysBody*> pegsList;

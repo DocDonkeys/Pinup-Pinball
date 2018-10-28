@@ -124,10 +124,10 @@ bool ModuleSceneIntro::Start()
 	downRightWallsList.clear();*/
 	// ALSO DISABLE SOME SENSORS
 
-	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
-	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
-	downLeftWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
-	downRightWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
 
 	smallTopWallsList.add(App->physics->CreateRectangle(55, 165, 3, 23, b2_staticBody));
 	smallTopWallsList.add(App->physics->CreateRectangle(80, 165, 4, 23, b2_staticBody));
@@ -174,17 +174,14 @@ bool ModuleSceneIntro::Start()
 
 	bumpersList.add(App->physics->CreateRectangle(10, 470, 40, 20, b2_staticBody, collision_type::LEFT_KICKER, 4.0f));
 
-	bumpersList.add(App->physics->CreateCircle(61, 212, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));
-	bumpersList.add(App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));
-	bumpersList.add(App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));
-
-
+	bumpersList.add(App->physics->CreateCircle(61, 212, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Red Left
+	bumpersList.add(App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Blue Right
+	bumpersList.add(App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Red Middle
 
 	//Adding Pegs
 	pegsList.add(App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f));
 	pegsList.add(App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f));
 	pegsList.add(App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f));
-	
 	
 	return ret;
 }
@@ -447,7 +444,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_4:
-				sensorFlags.lightsTopLeft[3] = true;
+				if (sensorFlags.activatedRamps == false) {
+					sensorFlags.lightsTopLeft[3] = true;
+				}
 				break;
 			case collision_type::LIGHT_TOP_1:
 				sensorFlags.lightsTop[0] = true;
@@ -544,34 +543,44 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 }
 
 void ModuleSceneIntro::CreateRamps() {	//@Carles
-	App->physics->world->DestroyBody(outsideWallsList.getLast()->data->body);
-	App->physics->world->DestroyBody(topLeftWallsList.getLast()->data->body);
-	App->physics->world->DestroyBody(downLeftWallsList.getLast()->data->body);
-	App->physics->world->DestroyBody(downRightWallsList.getLast()->data->body);
-	outsideWallsList.clear();
-	topLeftWallsList.clear();
-	downLeftWallsList.clear();
-	downRightWallsList.clear();
-	
-	for (p2List_item<PhysBody*>* tmp = smallTopWallsList.getFirst(); tmp != nullptr; tmp = tmp->next)
+	for (p2List_item<PhysBody*>* tmp = generalWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
 		App->physics->world->DestroyBody(tmp->data->body);
+	}
+	generalWallsList.clear();
 	
+	uint i = 0;
+	for (p2List_item<PhysBody*>* tmp = bumpersList.getLast(); i < 2; i++) {
+		App->physics->world->DestroyBody(tmp->data->body);
+		tmp = tmp->prev;
+		bumpersList.del(tmp->next);
+	}
+
+	for (p2List_item<PhysBody*>* tmp = smallTopWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
+		App->physics->world->DestroyBody(tmp->data->body);
+	}
+	smallTopWallsList.clear();
+
 	//smallTopWallsList.clear();
 
-	leftRampWallsList.add(App->physics->CreateChain(0, 0, leftRampWalls, 52, b2_staticBody));
-	rightRampWallsList.add(App->physics->CreateChain(0, 0, rightRampWalls, 26, b2_staticBody));
+	rampWallsList.add(App->physics->CreateChain(0, 0, leftRampWalls, 52, b2_staticBody));
+	rampWallsList.add(App->physics->CreateChain(0, 0, rightRampWalls, 26, b2_staticBody));
 }
 
 void ModuleSceneIntro::DeleteRamps() {	//@Carles
-	App->physics->world->DestroyBody(leftRampWallsList.getLast()->data->body);
-	App->physics->world->DestroyBody(rightRampWallsList.getLast()->data->body);
+	for (p2List_item<PhysBody*>* tmp = rampWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
+		App->physics->world->DestroyBody(tmp->data->body);
+	}
+	rampWallsList.clear();
 
-	outsideWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
-	topLeftWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
-	downLeftWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
-	downRightWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
 
 	smallTopWallsList.add(App->physics->CreateRectangle(55, 165, 3, 23, b2_staticBody));
 	smallTopWallsList.add(App->physics->CreateRectangle(80, 165, 4, 23, b2_staticBody));
 	smallTopWallsList.add(App->physics->CreateRectangle(105, 165, 4, 23, b2_staticBody));
+
+	bumpersList.add(App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Blue Right
+	bumpersList.add(App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Red Middle
 }
