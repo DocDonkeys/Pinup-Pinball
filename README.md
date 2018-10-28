@@ -1,5 +1,5 @@
 ﻿# Pinup-Pinball
-Tribute game of Pinup Pinball developed by [Carles Homs](https://github.com/ch0m5) and [Dídac Romero](https://github.com/didacromero) using the SDL and Box 2D libraries.
+Tribute game of [Pinup Pinball](http://www.pin-ball.org/file.php?f=1248) developed by [Carles Homs](https://github.com/ch0m5) and [Dídac Romero](https://github.com/didacromero) using the SDL and Box 2D libraries.
 
 ## Installation
 No previous installations is required to play the game, just download and execute the .exe file *Pinup Pinball* from releases.
