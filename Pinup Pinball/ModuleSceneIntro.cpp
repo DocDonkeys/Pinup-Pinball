@@ -327,12 +327,9 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(spriteSheet, (int)missingBumper.position.x, (int)missingBumper.position.y, &missingBumper.rect);
 	}
 
-	if (sensorFlags.lightsMiddle[0] == true && sensorFlags.lightsMiddle[1] == true) {
-		if (sensorFlags.rampDone[0] == false) {
-			App->renderer->Blit(spriteSheet, (int)arrows[0].position.x, (int)arrows[0].position.y, &arrows[0].rect);
-		}
-		if (sensorFlags.rampDone[1] == false) {
-			App->renderer->Blit(spriteSheet, (int)arrows[1].position.x, (int)arrows[1].position.y, &arrows[1].rect);
+	for (i = 0; i < 3; i++) {
+		if (sensorFlags.arrows[i] == true) {
+			App->renderer->Blit(spriteSheet, (int)arrows[i].position.x, (int)arrows[i].position.y, &arrows[i].rect);
 		}
 	}
 
@@ -503,7 +500,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			case collision_type::LIGHT_TOP_1:
 				sensorFlags.lightsTop[0] = true;
 				App->audio->PlayFx(light_lights_up_fx);
-				checkThirdRamp();
+				checkMultiplier();
 				break;
 			case collision_type::LIGHT_TOP_2:
 				sensorFlags.lightsTop[1] = true;
@@ -523,20 +520,33 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			case collision_type::LIGHT_LEFT:
 				sensorFlags.lightsMiddle[0] = true;
 				App->audio->PlayFx(lat_light_light_up_fx);
-				checkMultiplier();
+				checkRampEventStart();
 				break;
 			case collision_type::LIGHT_RIGHT:
 				sensorFlags.lightsMiddle[1] = true;
 				App->audio->PlayFx(lat_light_light_up_fx);
+				checkRampEventStart();
 				break;
 			case collision_type::LIGHT_DOWN_LEFT:
 				if (sensorFlags.rampDone[0] == true) {
-					sensorFlags.lightsDown[0] = true;
+					if (sensorFlags.lightsDown[0] == false) {
+						sensorFlags.lightsDown[0] = true;
+					}
+					else {
+						//Add score per light and 2 pegs, restore pegs	//CHANGE/FIX
+						sensorFlags.lightsDown[0] = false;
+					}
 				}
 				break;
 			case collision_type::LIGHT_DOWN_RIGHT:
 				if (sensorFlags.rampDone[1] == true) {
-					sensorFlags.lightsDown[1] = true;
+					if (sensorFlags.lightsDown[1] == false) {
+						sensorFlags.lightsDown[1] = true;
+					}
+					else {
+						//Add score per light and 2 pegs, restore pegs	//CHANGE/FIX
+						sensorFlags.lightsDown[1] = false;
+					}
 				}
 				break;
 			default:
@@ -558,20 +568,26 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				}
 				break;
 			case collision_type::RAMP_LEFT_FINISH:
-				sensorFlags.arrows[0] = false;
+				if (sensorFlags.arrows[1] == true) {
+					sensorFlags.arrows[1] = false;
+					sensorFlags.rampDone[0] = true;
+					checkRampEventEnd();
+				}
 				if (sensorFlags.activatedRamps == true) {
 					mustDeleteRamps = true;
 					sensorFlags.activatedRamps = false;
 				}
-				sensorFlags.rampDone[0] = true;
 				break;
 			case collision_type::RAMP_RIGHT_FINISH:
-				sensorFlags.arrows[1] = false;
+				if (sensorFlags.arrows[0] == true) {
+					sensorFlags.arrows[0] = false;
+					sensorFlags.rampDone[1] = true;
+					checkRampEventEnd();
+				}
 				if (sensorFlags.activatedRamps == true) {
 					mustDeleteRamps = true;
 					sensorFlags.activatedRamps = false;
 				}
-				sensorFlags.rampDone[1] = true;
 				break;
 			case collision_type::LEFT_KICKER:
 				break;
@@ -615,7 +631,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 void ModuleSceneIntro::checkMultiplier()	//@Carles
 {
-	if (sensorFlags.lightsTop[0] && sensorFlags.lightsTop[1] && sensorFlags.lightsTop[2] && sensorFlags.lightsTop[3]) {
+	if (sensorFlags.lightsTop[0] == true && sensorFlags.lightsTop[1] == true && sensorFlags.lightsTop[2] == true && sensorFlags.lightsTop[3] == true) {
 		//multiplier++;	//CHANGE/FIX: Add multiplier
 
 		for (int i = 0; i < 4; i++) {
@@ -626,12 +642,36 @@ void ModuleSceneIntro::checkMultiplier()	//@Carles
 
 void ModuleSceneIntro::checkThirdRamp()	//@Carles
 {
-	if (sensorFlags.lightsTopLeft[0] && sensorFlags.lightsTopLeft[1] && sensorFlags.lightsTopLeft[2] && sensorFlags.lightsTopLeft[3]) {
+	if (sensorFlags.lightsTopLeft[0] == true && sensorFlags.lightsTopLeft[1] == true && sensorFlags.lightsTopLeft[2] == true && sensorFlags.lightsTopLeft[3] == true) {
 		sensorFlags.thirdRamp = true;
 
 		for (int i = 0; i < 4; i++) {
 			sensorFlags.lightsTopLeft[i] = false;
 		}
+	}
+}
+
+void ModuleSceneIntro::checkRampEventStart()	//@Carles
+{
+	if (sensorFlags.lightsMiddle[0] == true && sensorFlags.lightsMiddle[1] == true && sensorFlags.arrows[1] == false && sensorFlags.arrows[2] == false) {
+		for (int i = 0; i < 2; i++) {
+			sensorFlags.arrows[i] = true;
+		}
+	}
+}
+
+void ModuleSceneIntro::checkRampEventEnd()	//@Carles
+{
+	if (sensorFlags.rampDone[0] == true && sensorFlags.rampDone[1] == true) {
+		//do event	//CHANGE/FIX
+
+		for (int i = 0; i < 2; i++) {
+			sensorFlags.lightsMiddle[i] = false;
+			sensorFlags.rampDone[i] = false;
+		}
+
+		sensorFlags.arrows[0] = false;
+		sensorFlags.arrows[1] = false;
 	}
 }
 

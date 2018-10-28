@@ -102,6 +102,8 @@ public:
 public:	//@Carles
 	void checkThirdRamp();
 	void checkMultiplier();
+	void checkRampEventStart();
+	void checkRampEventEnd();
 
 	void CreateRamps();
 	void DeleteRamps();
