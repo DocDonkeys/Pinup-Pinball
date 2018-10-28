@@ -151,6 +151,10 @@ public:	//@Carles
 	void KickerLogic();
 	void OverBallElements();
 
+	// CleanUp
+	void CleanBodies();
+	void CleanTextures();
+
 public:
 	//PhysBodies
 	p2List<PhysBody*> circles;

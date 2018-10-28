@@ -44,39 +44,8 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
-	//PhysBodies
-	circles.clear();
-	smallTopWallsList.clear();
-	generalWallsList.clear();
-	rampWallsList.clear();
-	bumpersList.clear();
-	pegsList.clear();
-
-	if (topRightBumper != nullptr) {
-		delete topRightBumper;
-		topRightBumper = nullptr;
-	}
-
-	// Sensors
-	sensorList.clear();
-
-	//Textures
-	App->textures->Unload(map);
-	App->textures->Unload(ramps);
-	App->textures->Unload(spriteSheet);
-
-	//CleanChain Bumpers
-	if (bumperHuggerLeft != nullptr)
-	{
-		delete bumperHuggerLeft;
-		bumperHuggerLeft = nullptr;
-	}
-
-	if (bumperHuggerRight != nullptr)
-	{
-		delete bumperHuggerRight;
-		bumperHuggerRight = nullptr;
-	}
+	CleanBodies();
+	CleanTextures();
 
 	return true;
 }
@@ -881,4 +850,43 @@ void ModuleSceneIntro::OverBallElements()
 	}
 
 	App->renderer->Blit(ramps, 0, 0, &fullScreenRect);
+}
+
+void ModuleSceneIntro::CleanBodies()
+{
+	//PhysBodies
+	circles.clear();
+	smallTopWallsList.clear();
+	generalWallsList.clear();
+	rampWallsList.clear();
+	bumpersList.clear();
+	pegsList.clear();
+
+	if (topRightBumper != nullptr) {
+		delete topRightBumper;
+		topRightBumper = nullptr;
+	}
+
+	// Sensors
+	sensorList.clear();
+
+	//CleanChain Bumpers
+	if (bumperHuggerLeft != nullptr)
+	{
+		delete bumperHuggerLeft;
+		bumperHuggerLeft = nullptr;
+	}
+
+	if (bumperHuggerRight != nullptr)
+	{
+		delete bumperHuggerRight;
+		bumperHuggerRight = nullptr;
+	}
+}
+
+void ModuleSceneIntro::CleanTextures()
+{
+	App->textures->Unload(map);
+	App->textures->Unload(ramps);
+	App->textures->Unload(spriteSheet);
 }
