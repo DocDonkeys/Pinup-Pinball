@@ -302,7 +302,6 @@ void ModuleSceneIntro::checkOtherCollisions(PhysBody* bodyA, PhysBody* bodyB)
 		App->player->LoseBall();
 		if (App->player->GetBalls() <= 0) {
 			//Lose game fx //DidacAlert
-			RestartGame();
 		}
 		else {
 			App->audio->PlayFx(ball_lost_fx);
@@ -628,8 +627,9 @@ void ModuleSceneIntro::PlayerInput() {
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->player->GetBalls() <= 0) {
-		mustCreateBall = true;
+		RestartGame();
 		App->player->ResetPlayer();
+		mustCreateBall = true;
 	}
 }
 
@@ -648,7 +648,7 @@ void ModuleSceneIntro::TopRightBumperLogic()
 		topRightBumper->mustDestroy = false;
 		App->physics->GetWorld()->DestroyBody(topRightBumper->body);
 		delete topRightBumper;
-		topRightBumper == nullptr;
+		topRightBumper = nullptr;
 	}
 	if (mustCreateTopRightBumper == true) {
 		topRightBumper = App->physics->CreateCircle(400, 153, 11, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);
@@ -920,6 +920,10 @@ void ModuleSceneIntro::CreateStartBall()
 
 void ModuleSceneIntro::RestartGame()
 {
+	if (topRightBumper == nullptr) {
+		mustCreateTopRightBumper = true;
+	}
+
 	for (int i = 0; i < 4; i++) {
 		sensorFlags.lightsTopLeft[i] = false;
 		sensorFlags.lightsTop[i] = false;
@@ -939,9 +943,5 @@ void ModuleSceneIntro::RestartGame()
 	for (int i = 0; i < 3; i++) {
 		sensorFlags.arrows[i] = false;
 		sensorFlags.pegs[i] = false;
-	}
-
-	if (bumperTopRedLeft == nullptr) {
-		mustCreateTopRightBumper = true;
 	}
 }
