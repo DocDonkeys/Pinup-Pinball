@@ -109,6 +109,9 @@ public:
 	p2List<PhysBody*> downRightWallsList;
 	p2List<PhysBody*> rampWallsList;
 
+	p2List<PhysBody*> bumpersList;
+	p2List<PhysBody*> pegsList;
+
 	// Sensors
 	p2List<PhysBody*> sensorList;
 	sensor_flags sensorFlags;

@@ -160,25 +160,27 @@ bool ModuleSceneIntro::Start()
 
 	sensorList.add(App->physics->CreateRectangleSensor(199, 812, 64, 8, b2_staticBody, collision_type::LOSE_BALL));
 
-	//Bumpers
-	bumperLeftProjection = App->physics->CreateRectangle(10, 470, 40, 20, b2_staticBody,collision_type::LEFT_KICKER, 4.0f);
-	bumperLeftProjection->listener = this;
+	//Adding Bumpers
+	bumpersList.add(App->physics->CreateChain(0, 0, left_bumper, 8, b2_staticBody, collision_type::BUMPER_LEFT, 1.75f));
+	bumpersList.add(App->physics->CreateChain(0, 0, right_bumper, 8, b2_staticBody, collision_type::BUMPER_RIGHT, 1.75f));
 
-	//bumperCRampBlocker = App->physics->CreateCircle(400,153, 11,b2_staticBody,collision_type::NONE,0.5f);
-	bumperTopRedLeft = App->physics->CreateCircle(61, 212, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);
-	bumperDownRedCenter = App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);
-	bumperTopBlueRight = App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);
+	bumpersList.add(App->physics->CreateRectangle(10, 470, 40, 20, b2_staticBody, collision_type::LEFT_KICKER, 4.0f));
 
-	bumperBigLeft = App->physics->CreateChain(0, 0, left_bumper, 8, b2_staticBody, collision_type::BUMPER_LEFT, 1.75f);
-	bumper_hugger_left = App->physics->CreateChain(0, 0, left_bumper_h, 28, b2_staticBody);
+	bumpersList.add(App->physics->CreateCircle(61, 212, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));
+	bumpersList.add(App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));
+	bumpersList.add(App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));
 
-	bumperBigRight = App->physics->CreateChain(0, 0, right_bumper, 8, b2_staticBody, collision_type::BUMPER_RIGHT, 1.75f);
-	bumper_hugger_right = App->physics->CreateChain(0, 0, right_bumper_h, 28, b2_staticBody);
+	/*for (p2List_item<PhysBody*>* current = bumpersList.getFirst(); current != nullptr; current = current->next)
+	{
+		current->data->listener = this;
+	}*/
 
-	leftPeg = App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f);
-	rightPeg = App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f);
-	centerPeg = App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f);
-
+	//Adding Pegs
+	pegsList.add(App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f));
+	pegsList.add(App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f));
+	pegsList.add(App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f));
+	
+	
 	return ret;
 }
 
