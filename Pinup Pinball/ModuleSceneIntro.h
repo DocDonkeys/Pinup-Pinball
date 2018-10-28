@@ -220,4 +220,10 @@ public:
 	uint lat_light_light_up_fx;
 	uint light_lights_up_fx;
 	uint left_kicker_fx;
+	uint tunnel_in_out_fx;
+	uint ramp_entrance_fx;
+	uint ramp_exit_fx;
+	uint top_left_bumper_fx;
+	uint peg_consumed_fx;
+	
 };

@@ -81,6 +81,11 @@ bool ModuleSceneIntro::Start()
 	lat_light_light_up_fx = App->audio->LoadFx("pinball/audio/lat_light_light_up.wav");
 	light_lights_up_fx = App->audio->LoadFx("pinball/audio/light_lights_up.wav");
 	left_kicker_fx = App->audio->LoadFx("pinball/audio/left_kicker.wav");
+	tunnel_in_out_fx = App->audio->LoadFx("pinball/audio/tunnel_in_out.wav");
+	ramp_entrance_fx = App->audio->LoadFx("pinball/audio/ramp_entrance.wav");
+	ramp_exit_fx = App->audio->LoadFx("pinball/audio/ramp_exit.wav");
+	top_left_bumper_fx = App->audio->LoadFx("pinball/audio/top_left_bumpers.wav");
+	peg_consumed_fx = App->audio->LoadFx("pinball/audio/peg_consumed.wav");
 	//Flipper Chain Change/Fix: we should have all chains in a module or chains.h @Dídac
 	// Pivot 0, 0
 	int left_flipper[16] = {
@@ -544,6 +549,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					mustCreateRamps = true;
 					sensorFlags.activatedRamps = true;
 					App->player->AddScore(scoreRewards.enterRamp);
+					App->audio->PlayFx(ramp_entrance_fx);
 				};
 				break;
 			case collision_type::RAMP_DEACTIVATE:
@@ -564,6 +570,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					mustDeleteRamps = true;
 					sensorFlags.activatedRamps = false;
 				}
+				App->audio->PlayFx(ramp_exit_fx);
 				break;
 			case collision_type::RAMP_RIGHT_FINISH:
 				sensorFlags.rampDone[1] = true;
@@ -577,6 +584,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					mustDeleteRamps = true;
 					sensorFlags.activatedRamps = false;
 				}
+				App->audio->PlayFx(ramp_exit_fx);
 				break;
 			case collision_type::THIRD_RAMP:
 				sensorFlags.thirdRamp = false;
@@ -593,12 +601,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				sensorFlags.tunnels[0] = true;
 				tunnelTimer = SDL_GetTicks();
 				App->player->AddScore(scoreRewards.tunnel);
+				App->audio->PlayFx(tunnel_in_out_fx);
 				break;
 			case collision_type::TUNNEL_RIGHT:
 				bodyA->mustDestroy = true;
 				sensorFlags.tunnels[1] = true;
 				tunnelTimer = SDL_GetTicks();
 				App->player->AddScore(scoreRewards.tunnel);
+				App->audio->PlayFx(tunnel_in_out_fx);
 				break;
 			case collision_type::BUMPER_LEFT:
 				App->audio->PlayFx(big_bumper_left_fx);
@@ -610,18 +620,22 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				break;
 			case collision_type::SMALL_BUMPER:
 				App->player->AddScore(scoreRewards.smallBumper);
+				App->audio->PlayFx(top_left_bumper_fx);
 				break;
 			case collision_type::PEG_LEFT:
 				sensorFlags.pegs[0] = true;
 				bodyB->mustDestroy = true;
+				App->audio->PlayFx(peg_consumed_fx);
 				break;
 			case collision_type::PEG_MIDDLE:
 				sensorFlags.pegs[1] = true;
 				bodyB->mustDestroy = true;
+				App->audio->PlayFx(peg_consumed_fx);
 				break;
 			case collision_type::PEG_RIGHT:
 				sensorFlags.pegs[2] = true;
 				bodyB->mustDestroy = true;
+				App->audio->PlayFx(peg_consumed_fx);
 				break;
 			case collision_type::LOSE_BALL:
 				bodyA->mustDestroy = true;
