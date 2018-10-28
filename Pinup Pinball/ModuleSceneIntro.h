@@ -122,6 +122,7 @@ public:	//@Carles
 	void CheckRampEventStart();
 	void CheckRampEventEnd();
 	void RestorePegs(collision_type collType);
+	void TeleportBall(collision_type collType);
 
 	void CreateRamps();
 	void DeleteRamps();
@@ -159,8 +160,7 @@ public:
 	//Static elements
 	static_element missingBumper;
 
-	static_element greenLeftLight;
-	static_element greenRightLight;
+	static_element greenLight[2];
 
 	static_element pegs[3];
 
@@ -179,9 +179,12 @@ public:
 	score_rewards scoreRewards;
 
 	//Flags
-	bool mustCreateRamps = false;
+	bool mustCreateRamps = false;	//CHANGE/FIX
 	bool mustDeleteRamps = false;
 	bool mustRestorePegs = false;
+
+	//Tunnel
+	int tunnelTimer = 0;
 
 	//Wall coordinates (Pivot 0, 0)
 	int outsideWalls[231] = {

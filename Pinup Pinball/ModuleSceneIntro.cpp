@@ -10,7 +10,7 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = map = ramps = spriteSheet = NULL;
+	circle = box = rick = map = ramps = spriteSheet = nullptr;
 
 	// @Carles
 	fullScreenRect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
@@ -40,8 +40,8 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 
 	//Static elements	// CHANGE/FIX: Create a function for this
 	missingBumper.create({ 389, 142 }, { 20, 0, 27, 29 });
-	greenLeftLight.create({ 47, 425 }, { 49, 0, 5, 5 });
-	greenRightLight.create({ 407, 304 }, { 55, 0, 5, 5 });
+	greenLight[0].create({ 47, 425 }, { 49, 0, 5, 5 });
+	greenLight[1].create({ 407, 304 }, { 55, 0, 5, 5 });
 
 	pegs[0].create({ 20, 515 }, { 62, 0, 10, 10 });
 	pegs[1].create({ 195, 759 }, { 73, 0, 10, 10 });
@@ -321,6 +321,18 @@ update_status ModuleSceneIntro::Update()
 		mustDeleteRamps = false;
 	}
 
+	// Tunnel teleport
+	if (sensorFlags.tunnels[0] == true && tunnelTimer < SDL_GetTicks() - 2000) {
+		
+		TeleportBall(collision_type::TUNNEL_RIGHT);
+		sensorFlags.tunnels[0] = false;
+	}
+	else if (sensorFlags.tunnels[1] == true && tunnelTimer < SDL_GetTicks() - 2000) {
+
+		TeleportBall(collision_type::TUNNEL_LEFT);
+		sensorFlags.tunnels[1] = false;
+	}
+
 	// Draw map -----------------------------------------------------------------	// @Carles
 	App->renderer->Blit(map, 0, 0, &fullScreenRect);
 
@@ -402,10 +414,10 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(spriteSheet, (int)tunnels[1].position.x, (int)tunnels[1].position.y, &tunnels[1].rect);
 
 		if (sensorFlags.tunnels[0] == true) {
-			App->renderer->Blit(spriteSheet, (int)greenRightLight.position.x, (int)greenRightLight.position.y, &greenRightLight.rect);
+			App->renderer->Blit(spriteSheet, (int)greenLight[1].position.x, (int)greenLight[1].position.y, &greenLight[1].rect);
 		}
 		if (sensorFlags.tunnels[1] == true) {
-			App->renderer->Blit(spriteSheet, (int)greenLeftLight.position.x, (int)greenLeftLight.position.y, &greenLeftLight.rect);
+			App->renderer->Blit(spriteSheet, (int)greenLight[0].position.x, (int)greenLight[0].position.y, &greenLight[0].rect);
 		}
 
 		App->renderer->Blit(ramps, 0, 0, &fullScreenRect);
@@ -470,10 +482,10 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(spriteSheet, (int)tunnels[1].position.x, (int)tunnels[1].position.y, &tunnels[1].rect);
 
 		if (sensorFlags.tunnels[0] == true) {
-			App->renderer->Blit(spriteSheet, (int)greenRightLight.position.x, (int)greenRightLight.position.y, &greenRightLight.rect);
+			App->renderer->Blit(spriteSheet, (int)greenLight[1].position.x, (int)greenLight[1].position.y, &greenLight[1].rect);
 		}
 		if (sensorFlags.tunnels[1] == true) {
-			App->renderer->Blit(spriteSheet, (int)greenLeftLight.position.x, (int)greenLeftLight.position.y, &greenLeftLight.rect);
+			App->renderer->Blit(spriteSheet, (int)greenLight[0].position.x, (int)greenLight[0].position.y, &greenLight[0].rect);
 		}
 
 		App->renderer->Blit(ramps, 0, 0, &fullScreenRect);
@@ -641,11 +653,15 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				App->player->AddScore(scoreRewards.leftKicker);
 				break;
 			case collision_type::TUNNEL_LEFT:
+				bodyA->mustDestroy = true;
 				sensorFlags.tunnels[0] = true;
+				tunnelTimer = SDL_GetTicks();
 				App->player->AddScore(scoreRewards.tunnel);
 				break;
 			case collision_type::TUNNEL_RIGHT:
+				bodyA->mustDestroy = true;
 				sensorFlags.tunnels[1] = true;
+				tunnelTimer = SDL_GetTicks();
 				App->player->AddScore(scoreRewards.tunnel);
 				break;
 			case collision_type::BUMPER_LEFT:
@@ -750,6 +766,24 @@ void ModuleSceneIntro::RestorePegs(collision_type collType)
 	}
 
 	mustRestorePegs = true;
+}
+
+void ModuleSceneIntro::TeleportBall(collision_type collType)
+{
+	// DOOM vector: b2Vec2 leftTunnelSpeed(3, 3);
+
+	if (collType == collision_type::TUNNEL_LEFT) {
+		circles.add(App->physics->CreateCircle(55, 439, 9));
+		b2Vec2 leftTunnelSpeed(4.0f, 4.0f);
+		circles.getLast()->data->body->SetLinearVelocity(leftTunnelSpeed);
+	}
+	if (collType == collision_type::TUNNEL_RIGHT) {
+		circles.add(App->physics->CreateCircle(408, 303, 9));
+		b2Vec2 rightTunnelSpeed(-5.0f, -4.0f);
+		circles.getLast()->data->body->SetLinearVelocity(rightTunnelSpeed);
+	}
+	
+	circles.getLast()->data->listener = this;
 }
 
 void ModuleSceneIntro::CreateRamps()	//@Carles
