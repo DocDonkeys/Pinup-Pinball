@@ -705,6 +705,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			case collision_type::LOSE_BALL:
 				bodyA->mustDestroy = true;
 				RestorePegs(collision_type::LOSE_BALL);
+				App->player->LoseBall();
 				App->audio->PlayFx(ball_lost_fx);
 				break;
 			default:
@@ -757,7 +758,7 @@ void ModuleSceneIntro::CheckRampEventStart()	//@Carles
 void ModuleSceneIntro::CheckRampEventEnd()	//@Carles
 {
 	if (sensorFlags.rampEventDone[0] == true && sensorFlags.rampEventDone[1] == true) {
-		//do event	//CHANGE/FIX
+		App->player->AddBall();
 
 		for (int i = 0; i < 2; i++) {
 			sensorFlags.lightsMiddle[i] = false;
