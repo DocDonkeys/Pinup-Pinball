@@ -130,8 +130,6 @@ public:	//@Carles
 public:
 	//PhysBodies
 	p2List<PhysBody*> circles;
-	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
 
 	p2List<PhysBody*> smallTopWallsList;
 	p2List<PhysBody*> generalWallsList;
