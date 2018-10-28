@@ -143,7 +143,7 @@ bool ModuleSceneIntro::Start()
 
 	sensorList.add(App->physics->CreateRectangleSensor(190, 228, 13, 2, b2_staticBody, collision_type::LIGHT_TOP_1));
 	sensorList.add(App->physics->CreateRectangleSensor(214, 231, 13, 2, b2_staticBody, collision_type::LIGHT_TOP_2));
-	sensorList.add(App->physics->CreateRectangleSensor(2349, 231, 13, 2, b2_staticBody, collision_type::LIGHT_TOP_3));
+	sensorList.add(App->physics->CreateRectangleSensor(239, 231, 13, 2, b2_staticBody, collision_type::LIGHT_TOP_3));
 	sensorList.add(App->physics->CreateRectangleSensor(264, 228, 13, 2, b2_staticBody, collision_type::LIGHT_TOP_4));
 
 	sensorList.add(App->physics->CreateRectangleSensor(36, 480, 3, 14, b2_staticBody, collision_type::LIGHT_LEFT));
