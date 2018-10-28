@@ -886,7 +886,10 @@ void ModuleSceneIntro::CleanBodies()
 	bumpersList.clear();
 	pegsList.clear();
 
-	topRightBumper = nullptr;
+	if (topRightBumper != nullptr) {
+		delete topRightBumper;
+		topRightBumper = nullptr;
+	}
 
 	// Sensors
 	sensorList.clear();
