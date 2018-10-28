@@ -10,8 +10,6 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = map = ramps = spriteSheet = nullptr;
-
 	// @Carles
 	fullScreenRect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
 
@@ -117,22 +115,12 @@ bool ModuleSceneIntro::Start()
 
 	//Kicker Creation
 	pinballKicker = App->physics->CreateKicker(SCREEN_WIDTH - SCREEN_WIDTH / 25 + 1, SCREEN_HEIGHT - 21, 9, kickerRect,0.0f,1.0f,-0.43f,1.0f);
-	
-	// DELETE MAP WALLS
-	/*App->physics->world->DestroyBody(outsideWallsList.getLast()->data->body);
-	App->physics->world->DestroyBody(topLeftWallsList.getLast()->data->body);
-	App->physics->world->DestroyBody(downLeftWallsList.getLast()->data->body);
-	App->physics->world->DestroyBody(downRightWallsList.getLast()->data->body);
-	outsideWallsList.clear();
-	topLeftWallsList.clear();
-	downLeftWallsList.clear();
-	downRightWallsList.clear();*/
-	// ALSO DISABLE SOME SENSORS
 
-	generalWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
-	generalWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
-	generalWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
-	generalWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
+	//Walls
+	generalWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.outsideWalls, 231, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.topLeftWalls, 32, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.downLeftWalls, 18, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.downRightWalls, 18, b2_staticBody));
 
 	smallTopWallsList.add(App->physics->CreateRectangle(55, 165, 3, 23, b2_staticBody));
 	smallTopWallsList.add(App->physics->CreateRectangle(80, 165, 4, 23, b2_staticBody));
@@ -170,12 +158,12 @@ bool ModuleSceneIntro::Start()
 
 	sensorList.add(App->physics->CreateRectangleSensor(199, 812, 64, 8, b2_staticBody, collision_type::LOSE_BALL));
 
-	bumper_hugger_left = App->physics->CreateChain(0, 0, left_bumper_h, 28, b2_staticBody);
-	bumper_hugger_right = App->physics->CreateChain(0, 0, right_bumper_h, 28, b2_staticBody);
+	bumper_hugger_left = App->physics->CreateChain(0, 0, wallCoordinates.leftBumperHugger, 28, b2_staticBody);
+	bumper_hugger_right = App->physics->CreateChain(0, 0, wallCoordinates.rightBumperHugger, 28, b2_staticBody);
 
 	//Adding Bumpers
-	bumpersList.add(App->physics->CreateChain(0, 0, left_bumper, 8, b2_staticBody, collision_type::BUMPER_LEFT, 1.75f));
-	bumpersList.add(App->physics->CreateChain(0, 0, right_bumper, 8, b2_staticBody, collision_type::BUMPER_RIGHT, 1.75f));
+	bumpersList.add(App->physics->CreateChain(0, 0, bumperCoordinates.leftBumper, 8, b2_staticBody, collision_type::BUMPER_LEFT, 1.75f));
+	bumpersList.add(App->physics->CreateChain(0, 0, bumperCoordinates.rightBumper, 8, b2_staticBody, collision_type::BUMPER_RIGHT, 1.75f));
 
 	bumpersList.add(App->physics->CreateRectangle(10, 470, 40, 20, b2_staticBody, collision_type::LEFT_KICKER, 4.0f));
 
@@ -276,12 +264,12 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	// Tunnel teleport
-	if (sensorFlags.tunnels[0] == true && tunnelTimer < SDL_GetTicks() - 2000) {
+	if (sensorFlags.tunnels[0] == true && tunnelTimer < SDL_GetTicks() - tunnelTime) {
 		
 		TeleportBall(collision_type::TUNNEL_RIGHT);
 		sensorFlags.tunnels[0] = false;
 	}
-	else if (sensorFlags.tunnels[1] == true && tunnelTimer < SDL_GetTicks() - 2000) {
+	else if (sensorFlags.tunnels[1] == true && tunnelTimer < SDL_GetTicks() - tunnelTime) {
 
 		TeleportBall(collision_type::TUNNEL_LEFT);
 		sensorFlags.tunnels[1] = false;
@@ -760,8 +748,8 @@ void ModuleSceneIntro::CreateRamps()	//@Carles
 	sensorList.add(App->physics->CreateRectangleSensor(50, 556, 12, 10, b2_staticBody, collision_type::RAMP_LEFT_FINISH));
 	sensorList.add(App->physics->CreateRectangleSensor(355, 580, 12, 10, b2_staticBody, collision_type::RAMP_RIGHT_FINISH));
 
-	rampWallsList.add(App->physics->CreateChain(0, 0, leftRampWalls, 52, b2_staticBody));
-	rampWallsList.add(App->physics->CreateChain(0, 0, rightRampWalls, 26, b2_staticBody));
+	rampWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.leftRampWalls, 52, b2_staticBody));
+	rampWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.rightRampWalls, 26, b2_staticBody));
 }
 
 void ModuleSceneIntro::DeleteRamps()	//@Carles
@@ -778,10 +766,10 @@ void ModuleSceneIntro::DeleteRamps()	//@Carles
 		sensorList.del(tmp->next);
 	}
 
-	generalWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
-	generalWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));
-	generalWallsList.add(App->physics->CreateChain(0, 0, downLeftWalls, 18, b2_staticBody));
-	generalWallsList.add(App->physics->CreateChain(0, 0, downRightWalls, 18, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.outsideWalls, 231, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.topLeftWalls, 32, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.downLeftWalls, 18, b2_staticBody));
+	generalWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.downRightWalls, 18, b2_staticBody));
 
 	smallTopWallsList.add(App->physics->CreateRectangle(55, 165, 3, 23, b2_staticBody));
 	smallTopWallsList.add(App->physics->CreateRectangle(80, 165, 4, 23, b2_staticBody));

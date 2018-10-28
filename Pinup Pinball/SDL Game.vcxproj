@@ -71,6 +71,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="ChainCoordinates.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="ModuleFont.h" />
     <ClInclude Include="ModulePhysics.h" />

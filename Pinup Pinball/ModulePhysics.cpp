@@ -483,7 +483,6 @@ update_status ModulePhysics::PostUpdate()
 	return UPDATE_CONTINUE;
 }
 
-
 // Called before quitting
 bool ModulePhysics::CleanUp()
 {
