@@ -135,6 +135,10 @@ public:	//@Carles
 
 	// Update Cycle
 	void UnderBallElements();
+	void TopRightBumperLogic();
+	void ArrowsLogic();
+	void LightsLogic();
+	void PegsLogic();
 	void FlipperLogic();
 	void KickerLogic();
 	void RampsLogic();

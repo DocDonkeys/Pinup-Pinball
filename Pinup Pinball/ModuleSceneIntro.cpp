@@ -656,10 +656,14 @@ void ModuleSceneIntro::AllocBumpers()
 void ModuleSceneIntro::UnderBallElements()
 {
 	App->renderer->Blit(map, 0, 0, &fullScreenRect);
+	TopRightBumperLogic();
+	ArrowsLogic();
+	LightsLogic();
+	PegsLogic();
+}
 
-	int i = 0;
-	p2List_item<PhysBody*>* tmpBody;
-
+void ModuleSceneIntro::TopRightBumperLogic()
+{
 	if (topRightBumper != nullptr && topRightBumper->mustDestroy == true) {
 		topRightBumper->mustDestroy = false;
 		App->physics->GetWorld()->DestroyBody(topRightBumper->body);
@@ -674,14 +678,20 @@ void ModuleSceneIntro::UnderBallElements()
 	if (sensorFlags.thirdRamp == true) {
 		App->renderer->Blit(spriteSheet, (int)missingBumper.position.x, (int)missingBumper.position.y, &missingBumper.rect);
 	}
+}
 
-	for (i = 0; i < 3; i++) {
+void ModuleSceneIntro::ArrowsLogic()
+{
+	for (int i = 0; i < 3; i++) {
 		if (sensorFlags.arrows[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)arrows[i].position.x, (int)arrows[i].position.y, &arrows[i].rect);
 		}
 	}
+}
 
-	for (i = 0; i < 4; i++) {
+void ModuleSceneIntro::LightsLogic()
+{
+	for (int i = 0; i < 4; i++) {
 		if (sensorFlags.lightsTopLeft[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);
 		}
@@ -690,7 +700,7 @@ void ModuleSceneIntro::UnderBallElements()
 		}
 	}
 
-	for (i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; i++) {
 		if (sensorFlags.lightsMiddle[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 8].x, (int)lightPosList[i + 8].y, &lightRect);
 		}
@@ -699,7 +709,7 @@ void ModuleSceneIntro::UnderBallElements()
 		}
 	}
 
-	for (i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++) {
 		if (sensorFlags.lightsDown[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 10].x, (int)lightPosList[i + 10].y, &lightRect);
 		}
@@ -707,6 +717,11 @@ void ModuleSceneIntro::UnderBallElements()
 			App->renderer->Blit(spriteSheet, (int)pegs[i].position.x, (int)pegs[i].position.y, &pegs[i].rect);
 		}
 	}
+}
+
+void ModuleSceneIntro::PegsLogic()
+{
+	p2List_item<PhysBody*>* tmpBody;
 
 	for (p2List_item<PhysBody*>* currentPeg = pegsList.getFirst(); currentPeg != nullptr; currentPeg = tmpBody) {
 		if (currentPeg->data->mustDestroy == true) {
@@ -735,7 +750,7 @@ void ModuleSceneIntro::UnderBallElements()
 
 		mustRestorePegs = false;
 
-		for (i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++)
 			sensorFlags.pegs[i] = false;
 	}
 }
