@@ -46,6 +46,7 @@ bool ModuleSceneIntro::Start()
 	ramp_exit_fx = App->audio->LoadFx("pinball/audio/ramp_exit.wav");
 	top_left_bumper_fx = App->audio->LoadFx("pinball/audio/top_left_bumpers.wav");
 	peg_consumed_fx = App->audio->LoadFx("pinball/audio/peg_consumed.wav");
+	kicker_used_fx = App->audio->LoadFx("pinball/audio/kicker_used.wav");
 	//Flipper Chain Change/Fix: we should have all chains in a module or chains.h @Dídac
 	// Pivot 0, 0
 	int left_flipper[16] = {
@@ -789,6 +790,11 @@ void ModuleSceneIntro::KickerLogic()
 	{
 		App->physics->KickerSetMaxMotorForce(pinballKicker, (pinballKicker.pbody->body->GetPosition().y) + 5.0f);
 		App->physics->KickerSetMotorSpeed(pinballKicker, -15.0f);
+		
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	{
+		App->audio->PlayFx(kicker_used_fx);
 	}
 
 	if (App->physics->GetDebug() == true) {

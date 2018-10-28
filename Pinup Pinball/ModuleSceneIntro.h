@@ -241,5 +241,6 @@ public:
 	uint ramp_exit_fx;
 	uint top_left_bumper_fx;
 	uint peg_consumed_fx;
+	uint kicker_used_fx;
 	
 };
