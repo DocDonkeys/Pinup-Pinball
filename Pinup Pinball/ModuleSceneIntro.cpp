@@ -121,33 +121,19 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(ramps);
 	App->textures->Unload(spriteSheet);
 
-	//Rectangular Bumpers
-	PhysBody* bumperLeftProjection = nullptr;	// DídacAlert
 
-	//Circular Bumpers
-	PhysBody* bumperCRampBlocker = nullptr;		// DídacAlert
-	PhysBody* bumperTopRedLeft = nullptr;
-	PhysBody* bumperDownRedCenter = nullptr;
-	PhysBody* bumperTopBlueRight = nullptr;
+	//CleanChain Bumpers
+	if (bumperHuggerLeft != nullptr)
+	{
+		delete bumperHuggerLeft;
+		bumperHuggerLeft = nullptr;
+	}
 
-	//Chain Bumpers
-	PhysBody* bumperBigLeft = nullptr;			// DídacAlert
-	PhysBody* bumperHuggerLeft = nullptr;
-
-	PhysBody* bumperBigRight = nullptr;		// DídacAlert
-	PhysBody* bumperHuggerRight = nullptr;
-
-	//SFX
-	uint ball_collision_fx;		// DídacAlert
-	uint ball_lost_fx;
-	uint big_bumper_left_fx;
-	uint big_bumper_right_fx;
-	uint flipper_top_fx;
-	uint flipper_bottom_fx;
-	uint game_over_fx;
-	uint lat_light_light_up_fx;
-	uint light_lights_up_fx;
-	uint left_kicker_fx;
+	if (bumperHuggerRight != nullptr)
+	{
+		delete bumperHuggerRight;
+		bumperHuggerRight = nullptr;
+	}
 
 	return true;
 }
