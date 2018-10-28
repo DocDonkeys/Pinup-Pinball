@@ -18,6 +18,6 @@ public:
 
 public:
 	uint score;
-	uint hiscore;
+	uint hiScore;
 	uint multiplier;
 };

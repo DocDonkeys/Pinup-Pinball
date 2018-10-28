@@ -454,6 +454,19 @@ public:
 	PhysBody* rightPeg;
 	PhysBody* centerPeg;
 
+
+	//Score given by each element
+	uint scoreLeftKicker;
+	uint scoreTopLeftLights;
+	uint scoreBigBumpers;
+	uint scoreSmallTopBumpers;
+	uint scoreTunnel;
+	uint scoreDownSideLights;
+	uint scoreLigthsWithButtons;
+	uint scoreEnterRamp;
+
+
+
 	//SFX
 	uint ball_collision_fx;
 	uint ball_lost_fx;

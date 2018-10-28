@@ -190,6 +190,16 @@ bool ModuleSceneIntro::Start()
 	pegsList.add(App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f));
 	pegsList.add(App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f));
 	
+
+	// Assigning scores to their vars
+	scoreLeftKicker = 5;
+	scoreTopLeftLights = 3;
+	scoreBigBumpers = 5;
+	scoreSmallTopBumpers = 44;
+	scoreTunnel = 33;
+	scoreDownSideLights = 9;
+	scoreLigthsWithButtons = 11;
+	scoreEnterRamp = 444;
 	return ret;
 }
 
@@ -478,55 +488,66 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				if (sensorFlags.activatedRamps == false) {
 					sensorFlags.lightsTopLeft[0] = true;
 					checkThirdRamp();
+					App->player->AddScore(scoreTopLeftLights);
 				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_2:
 				if (sensorFlags.activatedRamps == false) {
 					sensorFlags.lightsTopLeft[1] = true;
 					checkThirdRamp();
+					App->player->AddScore(scoreTopLeftLights);
 				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_3:
 				if (sensorFlags.activatedRamps == false) {
 					sensorFlags.lightsTopLeft[2] = true;
 					checkThirdRamp();
+					App->player->AddScore(scoreTopLeftLights);
 				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_4:
 				if (sensorFlags.activatedRamps == false) {
 					sensorFlags.lightsTopLeft[3] = true;
 					checkThirdRamp();
+					App->player->AddScore(scoreTopLeftLights);
 				}
 				break;
 			case collision_type::LIGHT_TOP_1:
 				sensorFlags.lightsTop[0] = true;
 				App->audio->PlayFx(light_lights_up_fx);
+				App->player->AddScore(scoreLigthsWithButtons);
 				checkMultiplier();
 				break;
 			case collision_type::LIGHT_TOP_2:
 				sensorFlags.lightsTop[1] = true;
 				App->audio->PlayFx(light_lights_up_fx);
+				App->player->AddScore(scoreLigthsWithButtons);
 				checkMultiplier();
 				break;
 			case collision_type::LIGHT_TOP_3:
 				sensorFlags.lightsTop[2] = true;
 				App->audio->PlayFx(light_lights_up_fx);
+				App->player->AddScore(scoreLigthsWithButtons);
 				checkMultiplier();
 				break;
 			case collision_type::LIGHT_TOP_4:
 				sensorFlags.lightsTop[3] = true;
 				App->audio->PlayFx(light_lights_up_fx);
+				App->player->AddScore(scoreLigthsWithButtons);
 				checkMultiplier();
 				break;
 			case collision_type::LIGHT_LEFT:
 				sensorFlags.lightsMiddle[0] = true;
 				App->audio->PlayFx(lat_light_light_up_fx);
 				checkRampEventStart();
+
+				App->player->AddScore(scoreLigthsWithButtons);
 				break;
 			case collision_type::LIGHT_RIGHT:
 				sensorFlags.lightsMiddle[1] = true;
 				App->audio->PlayFx(lat_light_light_up_fx);
 				checkRampEventStart();
+				App->player->AddScore(scoreLigthsWithButtons);
 				break;
 			case collision_type::LIGHT_DOWN_LEFT:
 				if (sensorFlags.rampDone[0] == true) {
@@ -536,6 +557,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					else {
 						//Add score per light and 2 pegs, restore pegs	//CHANGE/FIX
 						sensorFlags.lightsDown[0] = false;
+						App->player->AddScore(scoreDownSideLights);
 					}
 				}
 				break;
@@ -547,6 +569,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					else {
 						//Add score per light and 2 pegs, restore pegs	//CHANGE/FIX
 						sensorFlags.lightsDown[1] = false;
+						App->player->AddScore(scoreDownSideLights);
 					}
 				}
 				break;
@@ -560,6 +583,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				if (sensorFlags.activatedRamps == false) {
 					mustCreateRamps = true;
 					sensorFlags.activatedRamps = true;
+					App->player->AddScore(scoreEnterRamp);
 				};
 				break;
 			case collision_type::RAMP_DEACTIVATE:
@@ -591,20 +615,26 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				}
 				break;
 			case collision_type::LEFT_KICKER:
+				App->player->AddScore(scoreLeftKicker);
 				break;
 			case collision_type::TUNNEL_LEFT:
 				sensorFlags.tunnels[0] = true;
+				App->player->AddScore(scoreTunnel);
 				break;
 			case collision_type::TUNNEL_RIGHT:
 				sensorFlags.tunnels[1] = true;
+				App->player->AddScore(scoreTunnel);
 				break;
 			case collision_type::BUMPER_LEFT:
 				App->audio->PlayFx(big_bumper_left_fx);
+				App->player->AddScore(scoreBigBumpers);
 				break;
 			case collision_type::BUMPER_RIGHT:
 				App->audio->PlayFx(big_bumper_right_fx);
+				App->player->AddScore(scoreBigBumpers);
 				break;
 			case collision_type::SMALL_BUMPER:
+				App->player->AddScore(scoreSmallTopBumpers);
 				break;
 			case collision_type::PEG_LEFT:
 				sensorFlags.pegs[0] = true;
