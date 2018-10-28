@@ -19,6 +19,15 @@ public:
 	void AddBall();
 	void LoseBall();
 
+	ushort GetBalls() const {
+		return remainingBalls;
+	}
+	void ResetPlayer() {
+		score = 0;
+		multiplier = 1;
+		remainingBalls = 3;
+	}
+
 public:
 	uint32 score;
 	uint32 hiScore;
