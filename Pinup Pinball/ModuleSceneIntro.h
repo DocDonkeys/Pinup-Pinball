@@ -121,8 +121,24 @@ public:	//@Carles
 	void RestorePegs(collision_type collType);
 	void TeleportBall(collision_type collType);
 
+	// Create/Delete Ramps
 	void CreateRamps();
 	void DeleteRamps();
+	
+	// Starting Allocations
+	void AllocStaticElements();
+	void AllocWalls();
+	void AllocSensors();
+	void AllocBumpers();
+
+	// Update Cycle
+	void UnderBallElements();
+	void FlipperLogic();
+	void KickerLogic();
+	void RampsLogic();
+	void TunnelsLogic();
+	void DynamicElements();
+	void OverBallElements();
 
 public:
 	//PhysBodies
@@ -166,7 +182,7 @@ public:
 	score_rewards scoreRewards;
 
 	//Flags
-	bool mustCreateRamps = false;	//CHANGE/FIX
+	bool mustCreateRamps = false;
 	bool mustDeleteRamps = false;
 	bool mustCreateTopRightBumper = false;
 	bool mustRestorePegs = false;
@@ -202,10 +218,10 @@ public:
 
 	//Chain Bumpers
 	PhysBody* bumperBigLeft = nullptr;
-	PhysBody* bumper_hugger_left = nullptr;
+	PhysBody* bumperHuggerLeft = nullptr;
 
 	PhysBody* bumperBigRight = nullptr;
-	PhysBody* bumper_hugger_right = nullptr;
+	PhysBody* bumperHuggerRight = nullptr;
 
 	bumper_coordinates bumperCoordinates;
 
