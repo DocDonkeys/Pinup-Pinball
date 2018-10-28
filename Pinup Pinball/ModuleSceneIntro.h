@@ -18,6 +18,7 @@ struct sensor_flags {	// @Carles
 	bool lightsDown[2];
 
 	bool activateRamp;
+	bool rampDone[2];
 
 	bool tunnels[2];
 
@@ -34,6 +35,7 @@ struct sensor_flags {	// @Carles
 		activateRamp = false;
 
 		for (int i = 0; i < 2; i++) {
+			rampDone[i] = false;
 			lightsMiddle[i] = false;
 			lightsDown[i] = false;
 			tunnels[i] = false;
