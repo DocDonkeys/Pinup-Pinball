@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModulePlayer.h"
 #include "ModuleInput.h"
+#include "ModuleFont.h"
 
 //MUST REMOVE THIS MAKE A FUNCTION
 #include "ModulePhysics.h"
@@ -21,6 +22,8 @@ bool ModulePlayer::Start()
 
 	score = 0;
 	multiplier = 1;
+
+	debug_font = App->fonts->Load("pinball/fonts/blue_font.png", "! @,_./0123456789$;<&?abcdefghijklmnopqrstuvwxyz", 1);
 	return true;
 }
 
@@ -28,7 +31,7 @@ bool ModulePlayer::Start()
 bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
-
+	App->fonts->UnLoad(debug_font);
 	return true;
 }
 
@@ -39,6 +42,14 @@ update_status ModulePlayer::Update()
 	{
 		hiScore = score;
 	}
+	//Print Score
+	App->fonts->BlitText(50, 60, debug_font, "score:");
+	sprintf_s(score_number, 8, "%7d", score);
+	App->fonts->BlitText(110, 60, debug_font, score_number);
+	//Ptint Hi Score
+	App->fonts->BlitText(50, 80, debug_font, "hi-score:");
+	sprintf_s(hiScore_number, 8, "%7d", hiScore);
+	App->fonts->BlitText(110, 80, debug_font, hiScore_number);
 
 	return UPDATE_CONTINUE;
 }
