@@ -16,6 +16,8 @@ public:
 
 	void AddScore(uint scoreToAdd);
 	void IncreaseMultiplier();
+	void AddBall();
+	void LoseBall();
 
 public:
 	uint32 score;

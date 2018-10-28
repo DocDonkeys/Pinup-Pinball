@@ -47,7 +47,7 @@ update_status ModulePlayer::Update()
 	App->fonts->BlitText(50, 60, debug_font, "score:");
 	sprintf_s(score_number, 8, "%7d", score);
 	App->fonts->BlitText(110, 60, debug_font, score_number);
-	//Ptint Hi Score
+	//Print Hi Score
 	App->fonts->BlitText(50, 80, debug_font, "hi-score:");
 	sprintf_s(hiScore_number, 8, "%7d", hiScore);
 	App->fonts->BlitText(110, 80, debug_font, hiScore_number);
