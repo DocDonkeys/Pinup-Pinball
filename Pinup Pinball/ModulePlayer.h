@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "p2Point.h"
 
+#include "Box2D/Box2D/Common/b2Settings.h"
 class ModulePlayer : public Module
 {
 public:
@@ -17,7 +18,16 @@ public:
 	void IncreaseMultiplier();
 
 public:
-	uint score;
-	uint hiScore;
+	uint32 score;
+	uint32 hiScore;
 	uint multiplier;
+
+	int debug_font = -1;
+
+	//Chars
+	char score_number[8];
+	char score_text[7];
+
+	char hiScore_number[8];
+	char hiScore_text[8];
 };
