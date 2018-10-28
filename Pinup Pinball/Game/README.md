@@ -55,8 +55,10 @@ feature'`
   - Role: Code
   - Github: [DidacRomero](https://github.com/DidacRomero)
 
+- Repository: https://github.com/DocDonkeys/Pinup-Pinball
+
 ![Team Photo](https://raw.githubusercontent.com/DocDonkeys/Pinup-Pinball/master/Wiki%20Material/Logo_%26_Team/Team_Photo.jpeg)
-*From left to right: Xavi Marín, Dídac Romero, Carles Homs, Andrés Saladrigas*
+*Dídac Romero & Carles Homs*
  ---
 ## License & Copyright 
 
