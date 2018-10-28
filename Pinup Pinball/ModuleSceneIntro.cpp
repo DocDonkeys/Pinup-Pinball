@@ -38,6 +38,7 @@ bool ModuleSceneIntro::Start()
 
 	CreateStartBall();
 
+	App->audio->PlayFx(kicker_reloading_fx);
 	return ret;
 }
 
@@ -108,6 +109,7 @@ void ModuleSceneIntro::checkLightCollisions(PhysBody* bodyA, PhysBody* bodyB)
 			sensorFlags.lightsTopLeft[0] = true;
 			App->player->AddScore(scoreRewards.topLeftLight);
 			CheckThirdRamp();
+			App->audio->PlayFx(light_lights_up_fx);
 		}
 		break;
 	case collision_type::LIGHT_TOP_LEFT_2:
@@ -115,6 +117,7 @@ void ModuleSceneIntro::checkLightCollisions(PhysBody* bodyA, PhysBody* bodyB)
 			sensorFlags.lightsTopLeft[1] = true;
 			App->player->AddScore(scoreRewards.topLeftLight);
 			CheckThirdRamp();
+			App->audio->PlayFx(light_lights_up_fx);
 		}
 		break;
 	case collision_type::LIGHT_TOP_LEFT_3:
@@ -122,6 +125,7 @@ void ModuleSceneIntro::checkLightCollisions(PhysBody* bodyA, PhysBody* bodyB)
 			sensorFlags.lightsTopLeft[2] = true;
 			App->player->AddScore(scoreRewards.topLeftLight);
 			CheckThirdRamp();
+			App->audio->PlayFx(light_lights_up_fx);
 		}
 		break;
 	case collision_type::LIGHT_TOP_LEFT_4:
@@ -129,6 +133,7 @@ void ModuleSceneIntro::checkLightCollisions(PhysBody* bodyA, PhysBody* bodyB)
 			sensorFlags.lightsTopLeft[3] = true;
 			App->player->AddScore(scoreRewards.topLeftLight);
 			CheckThirdRamp();
+			App->audio->PlayFx(light_lights_up_fx);
 		}
 		break;
 	case collision_type::LIGHT_TOP_1:
@@ -301,7 +306,7 @@ void ModuleSceneIntro::checkOtherCollisions(PhysBody* bodyA, PhysBody* bodyB)
 		RestorePegs(collision_type::LOSE_BALL);
 		App->player->LoseBall();
 		if (App->player->GetBalls() <= 0) {
-			//Lose game fx //DidacAlert
+			App->audio->PlayFx(game_over_fx);
 		}
 		else {
 			App->audio->PlayFx(ball_lost_fx);
@@ -526,6 +531,8 @@ void ModuleSceneIntro::AllocSoundsFx()
 	top_left_bumper_fx = App->audio->LoadFx("pinball/audio/top_left_bumpers.wav");
 	peg_consumed_fx = App->audio->LoadFx("pinball/audio/peg_consumed.wav");
 	kicker_used_fx = App->audio->LoadFx("pinball/audio/kicker_used.wav");
+	game_over_fx = App->audio->LoadFx("pinball/audio/game_over.wav");
+	kicker_reloading_fx = App->audio->LoadFx("pinball/audio/kicker_reloading_ball.wav");
 }
 
 void ModuleSceneIntro::AllocFlippers()
@@ -630,6 +637,7 @@ void ModuleSceneIntro::PlayerInput() {
 		RestartGame();
 		App->player->ResetPlayer();
 		mustCreateBall = true;
+		App->audio->PlayFx(kicker_reloading_fx);
 	}
 }
 
@@ -816,6 +824,10 @@ void ModuleSceneIntro::DynamicElements()
 	{
 		if (c->data->mustDestroy == true) {
 			c->data->mustDestroy = false;
+			if (c->data->body == App->physics->GetBodyClicked())
+			{
+				App->physics->DestroyMouseJoint();
+			}
 			App->physics->GetWorld()->DestroyBody(c->data->body);
 			tmpBody = c;
 			c = c->next;

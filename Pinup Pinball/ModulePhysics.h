@@ -127,6 +127,10 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
+	//Get the body clicked of the mouse_joint
+	b2Body* GetBodyClicked();
+	void DestroyMouseJoint();
+
 public:
 	b2World* GetWorld() const {
 		return world;

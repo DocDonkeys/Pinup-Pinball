@@ -255,7 +255,6 @@ public:
 	uint big_bumper_right_fx;
 	uint flipper_top_fx;
 	uint flipper_bottom_fx;
-	uint game_over_fx;
 	uint lat_light_light_up_fx;
 	uint light_lights_up_fx;
 	uint left_kicker_fx;
@@ -265,5 +264,8 @@ public:
 	uint top_left_bumper_fx;
 	uint peg_consumed_fx;
 	uint kicker_used_fx;
+	uint game_over_fx;
+	uint kicker_reloading_fx;
+
 	
 };

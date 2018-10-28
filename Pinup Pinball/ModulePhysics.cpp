@@ -315,8 +315,6 @@ b2PrismaticJoint* ModulePhysics::CreatePrismaticJoint(b2Body* bodyA, b2Body* bod
 	jointDef.upperTranslation = upper_translation;
 
 	jointDef.enableMotor = true;
-	jointDef.maxMotorForce = 0.0f;	//Initialize always on 0
-	jointDef.motorSpeed = 0.0f;     //Initialize always on 0
 
 	return (b2PrismaticJoint*)world->CreateJoint(&jointDef);
 }
@@ -351,7 +349,7 @@ update_status ModulePhysics::PostUpdate()
 	if(!debug)
 		return UPDATE_CONTINUE;
 
-	
+	b2Vec2 mouse_position(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
 	for(b2Body* b = world->GetBodyList(); b; b = b->GetNext())
@@ -421,18 +419,13 @@ update_status ModulePhysics::PostUpdate()
 				}
 				break;
 			}
-
-			
-			PhysBody* bodyAux = (PhysBody*)f->GetBody()->GetUserData();
 			
 			// TODO 1: If mouse button 1 is pressed ...
 			// test if the current body contains mouse position
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN 
-				&& bodyAux !=nullptr
-				&& bodyAux->Contains(App->input->GetMouseX(), App->input->GetMouseY()) )
+			if(App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && body_clicked == nullptr)
 			{
-				body_clicked = bodyAux->body;
-				break;
+				if(f->GetShape()->TestPoint(b->GetTransform(), mouse_position) == true)
+					body_clicked = b;
 			}
 		}
 	}
@@ -458,7 +451,7 @@ update_status ModulePhysics::PostUpdate()
 	// TODO 3: If the player keeps pressing the mouse button, update
 	// target position and draw a red line between both anchor points
 
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && body_clicked != nullptr)
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && body_clicked != nullptr && mouse_joint!= nullptr)
 		{
 			//The mouse Joint previously created (def) is in the world JointList
 			
@@ -475,9 +468,7 @@ update_status ModulePhysics::PostUpdate()
 	// TODO 4: If the player releases the mouse button, destroy the joint
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && mouse_joint != nullptr)
 			{
-				world->DestroyJoint(mouse_joint);
-				mouse_joint = nullptr;
-				body_clicked = nullptr;
+			DestroyMouseJoint();
 			}
 
 	return UPDATE_CONTINUE;
@@ -566,4 +557,19 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+}
+
+b2Body* ModulePhysics::GetBodyClicked()
+{
+	return body_clicked;
+}
+
+void ModulePhysics::DestroyMouseJoint()
+{
+	if (mouse_joint != nullptr)
+	{
+		world->DestroyJoint(mouse_joint);
+		mouse_joint = nullptr;
+		body_clicked = nullptr;
+	}
 }
