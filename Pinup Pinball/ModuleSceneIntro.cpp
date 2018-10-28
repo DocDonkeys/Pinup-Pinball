@@ -154,9 +154,9 @@ bool ModuleSceneIntro::Start()
 	sensorList.add(App->physics->CreateRectangleSensor(178, 143, 6, 15, b2_staticBody, collision_type::RAMP_ACTIVATE));
 	sensorList.add(App->physics->CreateRectangleSensor(262, 180, 6, 16, b2_staticBody, collision_type::RAMP_ACTIVATE));
 
-	sensorList.add(App->physics->CreateRectangleSensor(157, 210, 25, 5, b2_staticBody, collision_type::RAMP_DEACTIVATE));
-	sensorList.add(App->physics->CreateRectangleSensor(315, 164, 30, 5, b2_staticBody, collision_type::RAMP_DEACTIVATE));
-	sensorList.add(App->physics->CreateRectangleSensor(392, 172, 30, 5, b2_staticBody, collision_type::RAMP_DEACTIVATE));
+	sensorList.add(App->physics->CreateRectangleSensor(60, 105, 6, 15, b2_staticBody, collision_type::RAMP_DEACTIVATE));
+	sensorList.add(App->physics->CreateRectangleSensor(210, 175, 6, 16, b2_staticBody, collision_type::RAMP_DEACTIVATE));
+	sensorList.add(App->physics->CreateRectangleSensor(250, 143, 6, 15, b2_staticBody, collision_type::RAMP_DEACTIVATE));
 
 	sensorList.add(App->physics->CreateRectangleSensor(50, 556, 12, 10, b2_staticBody, collision_type::RAMP_LEFT_FINISH));
 	sensorList.add(App->physics->CreateRectangleSensor(355, 580, 12, 10, b2_staticBody, collision_type::RAMP_RIGHT_FINISH));
@@ -168,6 +168,7 @@ bool ModuleSceneIntro::Start()
 
 	bumper_hugger_left = App->physics->CreateChain(0, 0, left_bumper_h, 28, b2_staticBody);
 	bumper_hugger_right = App->physics->CreateChain(0, 0, right_bumper_h, 28, b2_staticBody);
+
 	//Adding Bumpers
 	bumpersList.add(App->physics->CreateChain(0, 0, left_bumper, 8, b2_staticBody, collision_type::BUMPER_LEFT, 1.75f));
 	bumpersList.add(App->physics->CreateChain(0, 0, right_bumper, 8, b2_staticBody, collision_type::BUMPER_RIGHT, 1.75f));
@@ -309,9 +310,12 @@ update_status ModuleSceneIntro::Update()
 	// Draw map -----------------------------------------------------------------	// @Carles
 	App->renderer->Blit(map, 0, 0, &fullScreenRect);
 
-	// Draw UNDER-ball static elements	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
+	// UNDER-ball static elements: Draw and deletions	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
 
-	for (int i = 0; i < 4; i++) {
+	int i = 0;
+	p2List_item<PhysBody*>* tmpBody;
+
+	for (i = 0; i < 4; i++) {
 		if (sensorFlags.lightsTopLeft[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);
 		}
@@ -320,7 +324,7 @@ update_status ModuleSceneIntro::Update()
 		}
 	}
 
-	for (int i = 0; i < 2; i++) {
+	for (i = 0; i < 2; i++) {
 		if (sensorFlags.lightsMiddle[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 8].x, (int)lightPosList[i + 8].y, &lightRect);
 		}
@@ -331,15 +335,29 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(spriteSheet, (int)missingBumper.position.x, (int)missingBumper.position.y, &missingBumper.rect);
 
-	for (int i = 0; i < 3; i++) {
+	for (i = 0; i < 3; i++) {
 		if (sensorFlags.lightsDown[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 10].x, (int)lightPosList[i + 10].y, &lightRect);
 		}
 		if (sensorFlags.pegs[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)pegs[i].position.x, (int)pegs[i].position.y, &pegs[i].rect);
 		}
-		if (sensorFlags.arrows[i] == true) {
-			App->renderer->Blit(spriteSheet, (int)arrows[i].position.x, (int)arrows[i].position.y, &arrows[i].rect);
+	}
+
+	if (sensorFlags.arrows[i] == true) {
+		App->renderer->Blit(spriteSheet, (int)arrows[i].position.x, (int)arrows[i].position.y, &arrows[i].rect);
+	}
+
+	for (p2List_item<PhysBody*>* currentPeg = pegsList.getFirst(); currentPeg != nullptr; currentPeg = tmpBody) {
+		if (currentPeg->data->mustDestroy == true) {
+			currentPeg->data->mustDestroy = false;
+			App->physics->world->DestroyBody(currentPeg->data->body);
+
+			tmpBody = currentPeg->next;
+			pegsList.del(currentPeg);
+		}
+		else {
+			tmpBody = currentPeg->next;
 		}
 	}
 
@@ -357,14 +375,16 @@ update_status ModuleSceneIntro::Update()
 		if (c->data->mustDestroy == true) {
 			c->data->mustDestroy = false;
 			App->physics->world->DestroyBody(c->data->body);
+			tmpBody = c;
+			c = c->next;
+			circles.del(tmpBody);
 		}
 		else {
 			int x, y;
 			c->data->GetPosition(x, y);
 			App->renderer->Blit(spriteSheet, x, y, &ballRect, 1.0f /*c->data->GetRotation()*/);
+			c = c->next;
 		}
-		
-		c = c->next;
 	}
 
 	c = boxes.getFirst();
@@ -496,6 +516,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					mustDeleteRamps = true;
 					sensorFlags.activatedRamps = false;
 				}
+				sensorFlags.rampDone[0] = true;
 				break;
 			case collision_type::RAMP_RIGHT_FINISH:
 				sensorFlags.arrows[1] = false;
@@ -503,6 +524,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 					mustDeleteRamps = true;
 					sensorFlags.activatedRamps = false;
 				}
+				sensorFlags.rampDone[1] = true;
 				break;
 			case collision_type::LEFT_KICKER:
 				break;
