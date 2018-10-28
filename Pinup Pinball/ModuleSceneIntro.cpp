@@ -76,8 +76,16 @@ bool ModuleSceneIntro::Start()
 	ramps = App->textures->Load("pinball/sprites/ramps.png");
 	spriteSheet = App->textures->Load("pinball/sprites/sprite_sheet.png");
 
-	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
+	ball_collision_fx = App->audio->LoadFx("pinball/audio/ball_collision.wav");
+	ball_lost_fx = App->audio->LoadFx("pinball/audio/ball_lost.wav");
+	big_bumper_left_fx = App->audio->LoadFx("pinball/audio/big_bumper_left.wav");
+	big_bumper_right_fx = App->audio->LoadFx("pinball/audio/big_bumper_right.wav");
+	flipper_top_fx = App->audio->LoadFx("pinball/audio/flipper_top.wav");
+	flipper_bottom_fx = App->audio->LoadFx("pinball/audio/flipper_bottom.wav");
+	game_over_fx = App->audio->LoadFx("pinball/audio/game_over.wav");
+	lat_light_light_up_fx = App->audio->LoadFx("pinball/audio/lat_light_light_up.wav");
+	light_lights_up_fx = App->audio->LoadFx("pinball/audio/light_lights_up.wav");
 	//Flipper Chain Change/Fix: we should have all chains in a module or chains.h @Dídac
 	// Pivot 0, 0
 	int left_flipper[16] = {
@@ -205,11 +213,13 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 25.0f);
 		App->physics->FlipperSetMotorSpeed(leftFlipper, -25.0f);
+		App->audio->PlayFx(flipper_top_fx);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_UP))
 	{
 		App->physics->FlipperSetMaxMotorTorque(leftFlipper, 10.0f);
 		App->physics->FlipperSetMotorSpeed(leftFlipper, 25.0f);
+		App->audio->PlayFx(flipper_bottom_fx);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_IDLE) && leftFlipper.Joint->GetJointAngle() * RADTODEG >= -45)
 	{
@@ -221,11 +231,13 @@ update_status ModuleSceneIntro::Update()
 	{
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 25.0f);
 		App->physics->FlipperSetMotorSpeed(rightFlipper, 25.0f);
+		App->audio->PlayFx(flipper_top_fx);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_UP))
 	{
 		App->physics->FlipperSetMaxMotorTorque(rightFlipper, 10.0f);
 		App->physics->FlipperSetMotorSpeed(rightFlipper, -25.0f);
+		App->audio->PlayFx(flipper_bottom_fx);
 	}
 	else if (App->input->GetKey(SDL_SCANCODE_RIGHT) == (KEY_IDLE) && rightFlipper.Joint->GetJointAngle() * RADTODEG <= 0)
 	{
@@ -470,21 +482,27 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				break;
 			case collision_type::LIGHT_TOP_1:
 				sensorFlags.lightsTop[0] = true;
+				App->audio->PlayFx(light_lights_up_fx);
 				break;
 			case collision_type::LIGHT_TOP_2:
 				sensorFlags.lightsTop[1] = true;
+				App->audio->PlayFx(light_lights_up_fx);
 				break;
 			case collision_type::LIGHT_TOP_3:
 				sensorFlags.lightsTop[2] = true;
+				App->audio->PlayFx(light_lights_up_fx);
 				break;
 			case collision_type::LIGHT_TOP_4:
 				sensorFlags.lightsTop[3] = true;
+				App->audio->PlayFx(light_lights_up_fx);
 				break;
 			case collision_type::LIGHT_LEFT:
 				sensorFlags.lightsMiddle[0] = true;
+				App->audio->PlayFx(lat_light_light_up_fx);
 				break;
 			case collision_type::LIGHT_RIGHT:
 				sensorFlags.lightsMiddle[1] = true;
+				App->audio->PlayFx(lat_light_light_up_fx);
 				break;
 			case collision_type::LIGHT_DOWN_LEFT:
 				sensorFlags.lightsDown[0] = true;
@@ -535,8 +553,10 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				sensorFlags.tunnels[1] = true;
 				break;
 			case collision_type::BUMPER_LEFT:
+				App->audio->PlayFx(big_bumper_left_fx);
 				break;
 			case collision_type::BUMPER_RIGHT:
+				App->audio->PlayFx(big_bumper_right_fx);
 				break;
 			case collision_type::SMALL_BUMPER:
 				break;
@@ -554,14 +574,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				break;
 			case collision_type::LOSE_BALL:
 				bodyA->mustDestroy = true;
+				App->audio->PlayFx(ball_lost_fx);
 				break;
 			default:
 				break;
 			}
 		}
+			App->audio->PlayFx(ball_collision_fx);
 	}
-	
-	App->audio->PlayFx(bonus_fx);
 }
 
 void ModuleSceneIntro::CreateRamps() {	//@Carles
