@@ -27,69 +27,14 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	map = App->textures->Load("pinball/sprites/map.png");	//CHANGE/FIX
-	ramps = App->textures->Load("pinball/sprites/ramps.png");
-	spriteSheet = App->textures->Load("pinball/sprites/sprite_sheet.png");
-
-	ball_collision_fx = App->audio->LoadFx("pinball/audio/ball_collision.wav");	//CHANGE/FIX
-	ball_lost_fx = App->audio->LoadFx("pinball/audio/ball_lost.wav");
-	big_bumper_left_fx = App->audio->LoadFx("pinball/audio/big_bumper_left.wav");
-	big_bumper_right_fx = App->audio->LoadFx("pinball/audio/big_bumper_right.wav");
-	flipper_top_fx = App->audio->LoadFx("pinball/audio/flipper_top.wav");
-	flipper_bottom_fx = App->audio->LoadFx("pinball/audio/flipper_bottom.wav");
-	game_over_fx = App->audio->LoadFx("pinball/audio/game_over.wav");
-	lat_light_light_up_fx = App->audio->LoadFx("pinball/audio/lat_light_light_up.wav");
-	light_lights_up_fx = App->audio->LoadFx("pinball/audio/light_lights_up.wav");
-	left_kicker_fx = App->audio->LoadFx("pinball/audio/left_kicker.wav");
-	tunnel_in_out_fx = App->audio->LoadFx("pinball/audio/tunnel_in_out.wav");
-	ramp_entrance_fx = App->audio->LoadFx("pinball/audio/ramp_entrance.wav");
-	ramp_exit_fx = App->audio->LoadFx("pinball/audio/ramp_exit.wav");
-	top_left_bumper_fx = App->audio->LoadFx("pinball/audio/top_left_bumpers.wav");
-	peg_consumed_fx = App->audio->LoadFx("pinball/audio/peg_consumed.wav");
-	kicker_used_fx = App->audio->LoadFx("pinball/audio/kicker_used.wav");
-	//Flipper Chain Change/Fix: we should have all chains in a module or chains.h @Dídac
-	// Pivot 0, 0
-	int left_flipper[16] = {
-		6, 62,
-		15, 62,
-		47, 82,
-		47, 86,
-		43, 86,
-		5, 77,
-		1, 71,
-		1, 66,
-	};
-
-	int right_flipper[16] = {
-		105, 61,
-		72, 82,
-		71, 85,
-		75, 87,
-		115, 78,
-		119, 72,
-		119, 66,
-		113, 61
-	};
-	
-	leftFlipperRect = {0,62,50,26};
-	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f -5, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2, 
-											  9, left_flipper, 16, leftFlipperRect, -45, 0, LEFT_FLIPPER);
-
-	rightFlipperRect = { 70,62,50,26 };
-	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f -2,
-											   9, right_flipper, 16, rightFlipperRect, 0, 45 , RIGHT_FLIPPER);
-
-	//Kicker Creation
-	pinballKicker = App->physics->CreateKicker(SCREEN_WIDTH - SCREEN_WIDTH / 25 + 1, SCREEN_HEIGHT - 21, 9, kickerRect,0.0f,1.0f,-0.43f,1.0f);
-
+	AllocTextures();
+	AllocSoundsFx();
+	AllocFlippers();
+	AllocKicker();
 	AllocWalls();
 	AllocSensors();
 	AllocBumpers();
-
-	//Adding Pegs
-	pegsList.add(App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f));
-	pegsList.add(App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f));
-	pegsList.add(App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f));
+	AllocPegs();
 
 	return ret;
 }
@@ -577,6 +522,49 @@ void ModuleSceneIntro::AllocStaticElements()
 	overRightKicker.create({ 405, 796 }, { 89, 44, 15, 13 });
 }
 
+void ModuleSceneIntro::AllocTextures()
+{
+	map = App->textures->Load("pinball/sprites/map.png");
+	ramps = App->textures->Load("pinball/sprites/ramps.png");
+	spriteSheet = App->textures->Load("pinball/sprites/sprite_sheet.png");
+}
+
+void ModuleSceneIntro::AllocSoundsFx()
+{
+	ball_collision_fx = App->audio->LoadFx("pinball/audio/ball_collision.wav");
+	ball_lost_fx = App->audio->LoadFx("pinball/audio/ball_lost.wav");
+	big_bumper_left_fx = App->audio->LoadFx("pinball/audio/big_bumper_left.wav");
+	big_bumper_right_fx = App->audio->LoadFx("pinball/audio/big_bumper_right.wav");
+	flipper_top_fx = App->audio->LoadFx("pinball/audio/flipper_top.wav");
+	flipper_bottom_fx = App->audio->LoadFx("pinball/audio/flipper_bottom.wav");
+	game_over_fx = App->audio->LoadFx("pinball/audio/game_over.wav");
+	lat_light_light_up_fx = App->audio->LoadFx("pinball/audio/lat_light_light_up.wav");
+	light_lights_up_fx = App->audio->LoadFx("pinball/audio/light_lights_up.wav");
+	left_kicker_fx = App->audio->LoadFx("pinball/audio/left_kicker.wav");
+	tunnel_in_out_fx = App->audio->LoadFx("pinball/audio/tunnel_in_out.wav");
+	ramp_entrance_fx = App->audio->LoadFx("pinball/audio/ramp_entrance.wav");
+	ramp_exit_fx = App->audio->LoadFx("pinball/audio/ramp_exit.wav");
+	top_left_bumper_fx = App->audio->LoadFx("pinball/audio/top_left_bumpers.wav");
+	peg_consumed_fx = App->audio->LoadFx("pinball/audio/peg_consumed.wav");
+	kicker_used_fx = App->audio->LoadFx("pinball/audio/kicker_used.wav");
+}
+
+void ModuleSceneIntro::AllocFlippers()
+{
+	leftFlipperRect = { 0,62,50,26 };
+	leftFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f - 5, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f - 2,
+		9, flipperCoordinates.leftFlipper, 16, leftFlipperRect, -45, 0, LEFT_FLIPPER);
+
+	rightFlipperRect = { 70,62,50,26 };
+	rightFlipper = App->physics->CreateFlipper(SCREEN_WIDTH / 2.8f + 100, SCREEN_HEIGHT - SCREEN_HEIGHT / 11.0f - 2,
+		9, flipperCoordinates.rightFlipper, 16, rightFlipperRect, 0, 45, RIGHT_FLIPPER);
+}
+
+void ModuleSceneIntro::AllocKicker()
+{
+	pinballKicker = App->physics->CreateKicker(SCREEN_WIDTH - SCREEN_WIDTH / 25 + 1, SCREEN_HEIGHT - 21, 9, kickerRect, 0.0f, 1.0f, -0.43f, 1.0f);
+}
+
 void ModuleSceneIntro::AllocWalls()
 {
 	generalWallsList.add(App->physics->CreateChain(0, 0, wallCoordinates.outsideWalls, 231, b2_staticBody));
@@ -638,6 +626,13 @@ void ModuleSceneIntro::AllocBumpers()
 	bumpersList.add(App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Red Middle
 
 	topRightBumper = App->physics->CreateCircle(400, 153, 11, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);
+}
+
+void ModuleSceneIntro::AllocPegs()
+{
+	pegsList.add(App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f));
+	pegsList.add(App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f));
+	pegsList.add(App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f));
 }
 
 void ModuleSceneIntro::UnderBallElements()
@@ -731,10 +726,7 @@ void ModuleSceneIntro::PegsLogic()
 		}
 		pegsList.clear();
 
-		pegsList.add(App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f));
-		pegsList.add(App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f));
-		pegsList.add(App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f));
-
+		AllocPegs();
 		mustRestorePegs = false;
 
 		for (int i = 0; i < 3; i++)
