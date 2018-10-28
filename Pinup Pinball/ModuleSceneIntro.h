@@ -323,7 +323,70 @@ public:
 	PhysBody* bumperLeftProjection;
 	
 	//Circular Bumpers
+	PhysBody* bumperCRampBlocker;
+	PhysBody* bumperTopRedLeft;
+	PhysBody* bumperDownRedCenter;
+	PhysBody* bumperTopBlueRight;
 
+	//Chain Bumpers
+	PhysBody* bumperBigLeft;
+	PhysBody* bumper_hugger_left;
+
+	PhysBody* bumperBigRight;
+	PhysBody* bumper_hugger_right;
+
+	//Chains of the Chain Bumpers
+	int left_bumper[8] = {
+		78, 580,
+		120, 658,
+		110, 662,
+		68, 583
+	};
+
+	// Pivot 0, 0
+	int left_bumper_h[28] = {
+		68, 583,
+		78, 580,
+		71, 567,
+		66, 566,
+		62, 566,
+		59, 568,
+		56, 572,
+		56, 630,
+		111, 677,
+		119, 677,
+		124, 672,
+		124, 664,
+		120, 658,
+		110, 662
+	};
+
+
+	// Pivot 0, 0
+	int right_bumper[8] = {
+		332, 582,
+		322, 578,
+		280, 657,
+		289, 661
+	};
+
+	// Pivot 0, 0
+	int right_bumper_h[28] = {
+		332, 582,
+		322, 578,
+		329, 567,
+		335, 566,
+		340, 567,
+		344, 573,
+		344, 630,
+		289, 677,
+		282, 677,
+		278, 674,
+		276, 670,
+		276, 664,
+		280, 657,
+		289, 661
+	};
 
 	uint bonus_fx;
 };

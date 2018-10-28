@@ -163,7 +163,18 @@ bool ModuleSceneIntro::Start()
 	//Bumpers
 	bumperLeftProjection = App->physics->CreateRectangle(10, 470, 40, 20, b2_staticBody,collision_type::LEFT_KICKER, 4.0f);
 	bumperLeftProjection->listener = this;
-	
+
+	//bumperCRampBlocker = App->physics->CreateCircle(400,153, 11,b2_staticBody,collision_type::NONE,0.5f);
+	bumperTopRedLeft = App->physics->CreateCircle(61, 212, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);
+	bumperDownRedCenter = App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);
+	bumperTopBlueRight = App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);
+
+	bumperBigLeft = App->physics->CreateChain(0, 0, left_bumper, 8, b2_staticBody, collision_type::BUMPER_LEFT, 1.75f);
+	bumper_hugger_left = App->physics->CreateChain(0, 0, left_bumper_h, 28, b2_staticBody);
+
+	bumperBigRight = App->physics->CreateChain(0, 0, right_bumper, 8, b2_staticBody, collision_type::BUMPER_RIGHT, 1.75f);
+	bumper_hugger_right = App->physics->CreateChain(0, 0, right_bumper_h, 28, b2_staticBody);
+
 	return ret;
 }
 
@@ -453,7 +464,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			case collision_type::TUNNEL_RIGHT:
 				sensorFlags.tunnels[1] = true;
 				break;
-			case collision_type::BUMPER:
+			case collision_type::BUMPER_LEFT:
+				break;
+			case collision_type::BUMPER_RIGHT:
 				break;
 			case collision_type::SMALL_BUMPER:
 				break;
