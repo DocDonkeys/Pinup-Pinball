@@ -259,57 +259,59 @@ update_status ModuleSceneIntro::Update()
 		App->physics->KickerSetMotorSpeed(pinballKicker, -15.0f);
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
-	{
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9));
-		circles.getLast()->data->listener = this;
-	}
+	if (App->physics->GetDebug() == true) {
+		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		{
+			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9));
+			circles.getLast()->data->listener = this;
+		}
 
-	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
-	{
-		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
-		boxes.getLast()->data->listener = this;
-	}
+		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+		{
+			boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
+			boxes.getLast()->data->listener = this;
+		}
 
-	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
-	{
-		// Pivot 0, 0
-		int rick_head[64] = {
-			14, 36,
-			42, 40,
-			40, 0,
-			75, 30,
-			88, 4,
-			94, 39,
-			111, 36,
-			104, 58,
-			107, 62,
-			117, 67,
-			109, 73,
-			110, 85,
-			106, 91,
-			109, 99,
-			103, 104,
-			100, 115,
-			106, 121,
-			103, 125,
-			98, 126,
-			95, 137,
-			83, 147,
-			67, 147,
-			53, 140,
-			46, 132,
-			34, 136,
-			38, 126,
-			23, 123,
-			30, 114,
-			10, 102,
-			29, 90,
-			0, 75,
-			30, 62
-		};
+		if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+		{
+			// Pivot 0, 0
+			int rick_head[64] = {
+				14, 36,
+				42, 40,
+				40, 0,
+				75, 30,
+				88, 4,
+				94, 39,
+				111, 36,
+				104, 58,
+				107, 62,
+				117, 67,
+				109, 73,
+				110, 85,
+				106, 91,
+				109, 99,
+				103, 104,
+				100, 115,
+				106, 121,
+				103, 125,
+				98, 126,
+				95, 137,
+				83, 147,
+				67, 147,
+				53, 140,
+				46, 132,
+				34, 136,
+				38, 126,
+				23, 123,
+				30, 114,
+				10, 102,
+				29, 90,
+				0, 75,
+				30, 62
+			};
 
-		ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
+			ricks.add(App->physics->CreateChain(App->input->GetMouseX(), App->input->GetMouseY(), rick_head, 64));
+		}
 	}
 
 	// Ramp logic
@@ -343,7 +345,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (topRightBumper != nullptr && topRightBumper->mustDestroy == true) {
 		topRightBumper->mustDestroy = false;
-		App->physics->world->DestroyBody(topRightBumper->body);
+		App->physics->GetWorld()->DestroyBody(topRightBumper->body);
 		delete topRightBumper;
 		topRightBumper == nullptr;
 	}
@@ -392,7 +394,7 @@ update_status ModuleSceneIntro::Update()
 	for (p2List_item<PhysBody*>* currentPeg = pegsList.getFirst(); currentPeg != nullptr; currentPeg = tmpBody) {
 		if (currentPeg->data->mustDestroy == true) {
 			currentPeg->data->mustDestroy = false;
-			App->physics->world->DestroyBody(currentPeg->data->body);
+			App->physics->GetWorld()->DestroyBody(currentPeg->data->body);
 
 			tmpBody = currentPeg->next;
 			pegsList.del(currentPeg);
@@ -404,7 +406,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (mustRestorePegs == true) {
 		for (p2List_item<PhysBody*>* currentPeg = pegsList.getFirst(); currentPeg != nullptr; currentPeg = tmpBody) {
-			App->physics->world->DestroyBody(currentPeg->data->body);
+			App->physics->GetWorld()->DestroyBody(currentPeg->data->body);
 			tmpBody = currentPeg->next;
 			pegsList.del(currentPeg);
 		}
@@ -447,7 +449,7 @@ update_status ModuleSceneIntro::Update()
 	{
 		if (c->data->mustDestroy == true) {
 			c->data->mustDestroy = false;
-			App->physics->world->DestroyBody(c->data->body);
+			App->physics->GetWorld()->DestroyBody(c->data->body);
 			tmpBody = c;
 			c = c->next;
 			circles.del(tmpBody);
@@ -808,18 +810,18 @@ void ModuleSceneIntro::TeleportBall(collision_type collType)
 void ModuleSceneIntro::CreateRamps()	//@Carles
 {
 	for (p2List_item<PhysBody*>* tmp = generalWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
-		App->physics->world->DestroyBody(tmp->data->body);
+		App->physics->GetWorld()->DestroyBody(tmp->data->body);
 	}
 	generalWallsList.clear();
 	
 	for (p2List_item<PhysBody*>* tmp = smallTopWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
-		App->physics->world->DestroyBody(tmp->data->body);
+		App->physics->GetWorld()->DestroyBody(tmp->data->body);
 	}
 	smallTopWallsList.clear();
 
 	uint i = 0;
 	for (p2List_item<PhysBody*>* tmp = bumpersList.getLast(); i < 2; i++) {
-		App->physics->world->DestroyBody(tmp->data->body);
+		App->physics->GetWorld()->DestroyBody(tmp->data->body);
 		tmp = tmp->prev;
 		bumpersList.del(tmp->next);
 	}
@@ -834,13 +836,13 @@ void ModuleSceneIntro::CreateRamps()	//@Carles
 void ModuleSceneIntro::DeleteRamps()	//@Carles
 {
 	for (p2List_item<PhysBody*>* tmp = rampWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
-		App->physics->world->DestroyBody(tmp->data->body);
+		App->physics->GetWorld()->DestroyBody(tmp->data->body);
 	}
 	rampWallsList.clear();
 
 	uint i = 0;
 	for (p2List_item<PhysBody*>* tmp = sensorList.getLast(); i < 2; i++) {
-		App->physics->world->DestroyBody(tmp->data->body);
+		App->physics->GetWorld()->DestroyBody(tmp->data->body);
 		tmp = tmp->prev;
 		sensorList.del(tmp->next);
 	}

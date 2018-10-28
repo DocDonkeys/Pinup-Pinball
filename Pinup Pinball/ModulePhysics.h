@@ -128,11 +128,15 @@ public:
 	void BeginContact(b2Contact* contact);
 
 public:
-
-	b2World* world;	// IMPROVE: Add functions to physics instead of using world on other modules
+	b2World* GetWorld() const {
+		return world;
+	}
+	bool GetDebug() const {
+		return debug;
+	}
 
 private:
-
+	b2World* world;	// IMPROVE: Add functions to physics instead of using world on other modules
 	bool debug;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
