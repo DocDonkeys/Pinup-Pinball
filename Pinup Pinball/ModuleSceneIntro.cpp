@@ -187,7 +187,7 @@ bool ModuleSceneIntro::Start()
 	bumpersList.add(App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Blue Right
 	bumpersList.add(App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Red Middle
 
-	bumpersList.add(App->physics->CreateCircle(400, 153, 11, b2_staticBody, collision_type::NONE, 0.5f));
+	topRightBumper = App->physics->CreateCircle(400, 153, 11, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);	//Top Right	//CHANGE/FIX: DELETE
 
 	//Adding Pegs
 	pegsList.add(App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f));
@@ -339,6 +339,17 @@ update_status ModuleSceneIntro::Update()
 	// UNDER-ball static elements: Draw and management	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
 	int i = 0;
 	p2List_item<PhysBody*>* tmpBody;
+
+	if (topRightBumper != nullptr && topRightBumper->mustDestroy == true) {
+		topRightBumper->mustDestroy = false;
+		App->physics->world->DestroyBody(topRightBumper->body);
+		delete topRightBumper;
+		topRightBumper == nullptr;
+	}
+	if (mustCreateTopRightBumper == true) {
+		topRightBumper = App->physics->CreateCircle(400, 153, 11, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f);
+		mustCreateTopRightBumper = false;
+	}
 
 	if (sensorFlags.thirdRamp == true) {
 		App->renderer->Blit(spriteSheet, (int)missingBumper.position.x, (int)missingBumper.position.y, &missingBumper.rect);
@@ -647,6 +658,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				break;
 			case collision_type::THIRD_RAMP:
 				sensorFlags.thirdRamp = false;
+				sensorFlags.arrows[2] = false;
+				mustCreateTopRightBumper = true;
 				App->player->AddScore(scoreRewards.thirdRamp);
 				break;
 			case collision_type::LEFT_KICKER:
@@ -719,6 +732,9 @@ void ModuleSceneIntro::CheckThirdRamp()	//@Carles
 		}
 		else {
 			sensorFlags.thirdRamp = true;
+			sensorFlags.arrows[2] = true;
+			
+			topRightBumper->mustDestroy = true;
 		}
 
 		for (int i = 0; i < 4; i++) {

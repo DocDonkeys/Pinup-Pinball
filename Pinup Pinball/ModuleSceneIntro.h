@@ -138,6 +138,7 @@ public:
 	p2List<PhysBody*> rampWallsList;
 
 	p2List<PhysBody*> bumpersList;
+	PhysBody* topRightBumper;
 
 	p2List<PhysBody*> pegsList;
 
@@ -181,6 +182,7 @@ public:
 	//Flags
 	bool mustCreateRamps = false;	//CHANGE/FIX
 	bool mustDeleteRamps = false;
+	bool mustCreateTopRightBumper = false;
 	bool mustRestorePegs = false;
 
 	//Tunnel
