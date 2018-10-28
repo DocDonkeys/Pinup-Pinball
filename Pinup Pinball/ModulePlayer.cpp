@@ -65,6 +65,11 @@ update_status ModulePlayer::Update()
 	sprintf_s(balls_number, 8, "%7d", remainingBalls);
 	App->fonts->BlitText(160, 115, yellow_font, balls_number);
 
+	if (remainingBalls == 0)
+	{
+		App->fonts->BlitText(SCREEN_WIDTH / 2 - 45, SCREEN_HEIGHT / 2, yellow_font, "game over");
+		App->fonts->BlitText(SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2 + 20, yellow_font, "press space to restart");
+	}
 	return UPDATE_CONTINUE;
 }
 
