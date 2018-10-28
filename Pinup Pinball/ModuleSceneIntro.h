@@ -390,5 +390,10 @@ public:
 		289, 661
 	};
 
+	//Pegs
+	PhysBody* leftPeg;
+	PhysBody* rightPeg;
+	PhysBody* centerPeg;
+
 	uint bonus_fx;
 };

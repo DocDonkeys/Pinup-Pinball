@@ -175,6 +175,10 @@ bool ModuleSceneIntro::Start()
 	bumperBigRight = App->physics->CreateChain(0, 0, right_bumper, 8, b2_staticBody, collision_type::BUMPER_RIGHT, 1.75f);
 	bumper_hugger_right = App->physics->CreateChain(0, 0, right_bumper_h, 28, b2_staticBody);
 
+	leftPeg = App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f);
+	rightPeg = App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f);
+	centerPeg = App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f);
+
 	return ret;
 }
 
@@ -472,12 +476,15 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				break;
 			case collision_type::PEG_LEFT:
 				sensorFlags.pegs[0] = true;
+				bodyB->mustDestroy = true;
 				break;
 			case collision_type::PEG_MIDDLE:
 				sensorFlags.pegs[1] = true;
+				bodyB->mustDestroy = true;
 				break;
 			case collision_type::PEG_RIGHT:
 				sensorFlags.pegs[2] = true;
+				bodyB->mustDestroy = true;
 				break;
 			case collision_type::LOSE_BALL:
 				bodyA->mustDestroy = true;
