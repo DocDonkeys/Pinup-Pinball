@@ -6,28 +6,28 @@ No previous installations is required to play the game, just download and execut
 
 ## Usage
 ### General Controls
-* ESC: Quit the game
-* Spacebar: Restart Game
+- ESC: Quit the game
+- Spacebar: Restart Game
 
 ### Player Controls
-* Keyboard:
-	* Flippers: LEFT ARROW & RIGHT ARROW
-	* Kicker: DOWN ARROW
+- Keyboard:
+	- Flippers: LEFT ARROW & RIGHT ARROW
+	- Kicker: DOWN ARROW
 
 ### Map Features
-* Turning all top middle lights adds +1 to your score multiplier.
-* Turning on all top left lights will unlock ramp 3, if ramp 3 is unlocked it adds +1 to your score multiplier.
-* Going through ramp 3 deactivates, but rewards you with A LOT of points!
-* Turning on both side lights start the "Ramps Event".
-* Making your ball go across ramp 1 and 2 during "Ramps Event" gives an extra ball to use!
-* Lights next to bumpers will only turn after getting out of a ramp. Turning one of them OFF recovers all wasted bumpers and gives score for each of them.
-* Tunnel with catch your ball and launch it from the other end 2 seconds later.
-* Small grey "pegs" save your ball from falling! They are wasted however, but can be recovered by turning off a down light or losing a ball.
+- Turning all top middle lights adds +1 to your score multiplier.
+- Turning on all top left lights will unlock ramp 3, if ramp 3 is unlocked it adds +1 to your score multiplier.
+- Going through ramp 3 deactivates, but rewards you with A LOT of points!
+- Turning on both side lights start the "Ramps Event".
+- Making your ball go across ramp 1 and 2 during "Ramps Event" gives an extra ball to use!
+- Lights next to bumpers will only turn after getting out of a ramp. Turning one of them OFF recovers all wasted bumpers and gives score for each of them.
+- Tunnel with catch your ball and launch it from the other end 2 seconds later.
+- Small grey "pegs" save your ball from falling! They are wasted however, but can be recovered by turning off a down light or losing a ball.
 
 ### Debug Mode
-* F1: Enable/Disable Debug Mode
-* 1: Create Ball on mouse
-* Mouse Click on Ball: Drag ball
+- F1: Enable/Disable Debug Mode
+- 1: Create Ball on mouse
+- Mouse Click on Ball: Drag ball
 
 ## Contributing
 1. Fork it!
