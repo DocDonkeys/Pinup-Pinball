@@ -786,6 +786,10 @@ void ModuleSceneIntro::DynamicElements()
 	{
 		if (c->data->mustDestroy == true) {
 			c->data->mustDestroy = false;
+			if (c->data->body == App->physics->GetBodyClicked())
+			{
+				App->physics->DestroyMouseJoint();
+			}
 			App->physics->GetWorld()->DestroyBody(c->data->body);
 			tmpBody = c;
 			c = c->next;
