@@ -560,8 +560,6 @@ void ModuleSceneIntro::CreateRamps() {	//@Carles
 	}
 	smallTopWallsList.clear();
 
-	//smallTopWallsList.clear();
-
 	rampWallsList.add(App->physics->CreateChain(0, 0, leftRampWalls, 52, b2_staticBody));
 	rampWallsList.add(App->physics->CreateChain(0, 0, rightRampWalls, 26, b2_staticBody));
 }
