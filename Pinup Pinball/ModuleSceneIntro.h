@@ -398,5 +398,17 @@ public:
 	PhysBody* rightPeg;
 	PhysBody* centerPeg;
 
-	uint bonus_fx;
+	//SFX
+	uint ball_collision_fx;
+	uint ball_lost_fx;
+	uint big_bumper_left_fx;
+	uint big_bumper_right_fx;
+	uint flipper_top_fx;
+	uint flipper_bottom_fx;
+	uint game_over_fx;
+	uint lat_light_light_up_fx;
+	uint light_lights_up_fx;
+	uint left_kicker_fx;
+	
+
 };
