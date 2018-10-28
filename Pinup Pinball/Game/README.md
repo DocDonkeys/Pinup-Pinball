@@ -24,6 +24,15 @@ No previous installations is required to play the game, just download and execut
 - Tunnel with catch your ball and launch it from the other end 2 seconds later.
 - Small grey "pegs" save your ball from falling! They are wasted however, but can be recovered by turning off a down light or losing a ball.
 
+### Differences From The Original
+- No multiball, different rewards instead.
+- Peg recovery is for all pegs, does not depend on light's side.
+- No score shown on place of impact.
+- No bumper animations.
+- Alternative, original fonts static on top instead of game fonts.
+- Static camera instead of moving up and down.
+- Slight audio variations (same sounds for different events and ball collisions always produces sound).
+
 ### Debug Mode
 - F1: Enable/Disable Debug Mode
 - 1: Create Ball on mouse
