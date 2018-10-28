@@ -114,6 +114,8 @@ public:
 public:	//@Carles
 
 	// Sensor logic events
+	void checkLightCollisions(PhysBody* bodyA, PhysBody* bodyB);
+	void checkOtherCollisions(PhysBody* bodyA, PhysBody* bodyB);
 	void CheckThirdRamp();
 	void CheckMultiplier();
 	void CheckRampEventStart();
@@ -133,6 +135,10 @@ public:	//@Carles
 
 	// Update Cycle
 	void UnderBallElements();
+	void TopRightBumperLogic();
+	void ArrowsLogic();
+	void LightsLogic();
+	void PegsLogic();
 	void FlipperLogic();
 	void KickerLogic();
 	void RampsLogic();

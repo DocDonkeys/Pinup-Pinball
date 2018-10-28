@@ -186,209 +186,220 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	if (bodyB != nullptr) {
 		if (bodyB->collision <= collision_type::LIGHT_DOWN_RIGHT) {
-			switch (bodyB->collision) {	// CHANGE/FIX: TURN INTO FUNCTION
-			case collision_type::LIGHT_TOP_LEFT_1:
-				if (sensorFlags.activatedRamps == false) {
-					sensorFlags.lightsTopLeft[0] = true;
-					App->player->AddScore(scoreRewards.topLeftLight);
-					CheckThirdRamp();
-				}
-				break;
-			case collision_type::LIGHT_TOP_LEFT_2:
-				if (sensorFlags.activatedRamps == false) {
-					sensorFlags.lightsTopLeft[1] = true;
-					App->player->AddScore(scoreRewards.topLeftLight);
-					CheckThirdRamp();
-				}
-				break;
-			case collision_type::LIGHT_TOP_LEFT_3:
-				if (sensorFlags.activatedRamps == false) {
-					sensorFlags.lightsTopLeft[2] = true;
-					App->player->AddScore(scoreRewards.topLeftLight);
-					CheckThirdRamp();
-				}
-				break;
-			case collision_type::LIGHT_TOP_LEFT_4:
-				if (sensorFlags.activatedRamps == false) {
-					sensorFlags.lightsTopLeft[3] = true;
-					App->player->AddScore(scoreRewards.topLeftLight);
-					CheckThirdRamp();
-				}
-				break;
-			case collision_type::LIGHT_TOP_1:
-				sensorFlags.lightsTop[0] = true;
-				App->audio->PlayFx(light_lights_up_fx);
-				App->player->AddScore(scoreRewards.buttonLight);
-				CheckMultiplier();
-				break;
-			case collision_type::LIGHT_TOP_2:
-				sensorFlags.lightsTop[1] = true;
-				App->audio->PlayFx(light_lights_up_fx);
-				App->player->AddScore(scoreRewards.buttonLight);
-				CheckMultiplier();
-				break;
-			case collision_type::LIGHT_TOP_3:
-				sensorFlags.lightsTop[2] = true;
-				App->audio->PlayFx(light_lights_up_fx);
-				App->player->AddScore(scoreRewards.buttonLight);
-				CheckMultiplier();
-				break;
-			case collision_type::LIGHT_TOP_4:
-				sensorFlags.lightsTop[3] = true;
-				App->audio->PlayFx(light_lights_up_fx);
-				App->player->AddScore(scoreRewards.buttonLight);
-				CheckMultiplier();
-				break;
-			case collision_type::LIGHT_LEFT:
-				sensorFlags.lightsMiddle[0] = true;
-				App->audio->PlayFx(lat_light_light_up_fx);
-				App->player->AddScore(scoreRewards.buttonLight);
-				CheckRampEventStart();
-				break;
-			case collision_type::LIGHT_RIGHT:
-				sensorFlags.lightsMiddle[1] = true;
-				App->audio->PlayFx(lat_light_light_up_fx);
-				App->player->AddScore(scoreRewards.buttonLight);
-				CheckRampEventStart();
-				break;
-			case collision_type::LIGHT_DOWN_LEFT:
-				App->player->AddScore(scoreRewards.pegScore);
-				if (sensorFlags.rampDone[0] == true) {
-					if (sensorFlags.lightsDown[0] == false) {
-						sensorFlags.lightsDown[0] = true;
-					}
-					else {
-						RestorePegs(collision_type::LIGHT_DOWN_LEFT);
-						sensorFlags.lightsDown[0] = false;
-					}
-
-					sensorFlags.rampDone[0] = false;
-				}
-				break;
-			case collision_type::LIGHT_DOWN_RIGHT:
-				App->player->AddScore(scoreRewards.pegScore);
-				if (sensorFlags.rampDone[1] == true) {
-					if (sensorFlags.lightsDown[1] == false) {
-						sensorFlags.lightsDown[1] = true;
-					}
-					else {
-						RestorePegs(collision_type::LIGHT_DOWN_RIGHT);
-						sensorFlags.lightsDown[1] = false;
-					}
-
-					sensorFlags.rampDone[1] = false;
-				}
-				break;
-			default:
-				break;
-			}
+			checkLightCollisions(bodyA, bodyB);
 		}
 		else {
-			switch (bodyB->collision) {	// CHANGE/FIX: TURN INTO FUNCTION
-			case collision_type::RAMP_ACTIVATE:
-				if (sensorFlags.activatedRamps == false) {
-					mustCreateRamps = true;
-					sensorFlags.activatedRamps = true;
-					App->player->AddScore(scoreRewards.enterRamp);
-					App->audio->PlayFx(ramp_entrance_fx);
-				};
-				break;
-			case collision_type::RAMP_DEACTIVATE:
-				if (sensorFlags.activatedRamps == true) {
-					mustDeleteRamps = true;
-					sensorFlags.activatedRamps = false;
-				}
-				break;
-			case collision_type::RAMP_LEFT_FINISH:
-				sensorFlags.rampDone[0] = true;
-
-				if (sensorFlags.arrows[1] == true) {
-					sensorFlags.arrows[1] = false;
-					sensorFlags.rampEventDone[0] = true;
-					CheckRampEventEnd();
-				}
-				if (sensorFlags.activatedRamps == true) {
-					mustDeleteRamps = true;
-					sensorFlags.activatedRamps = false;
-				}
-				App->audio->PlayFx(ramp_exit_fx);
-				break;
-			case collision_type::RAMP_RIGHT_FINISH:
-				sensorFlags.rampDone[1] = true;
-
-				if (sensorFlags.arrows[0] == true) {
-					sensorFlags.arrows[0] = false;
-					sensorFlags.rampEventDone[1] = true;
-					CheckRampEventEnd();
-				}
-				if (sensorFlags.activatedRamps == true) {
-					mustDeleteRamps = true;
-					sensorFlags.activatedRamps = false;
-				}
-				App->audio->PlayFx(ramp_exit_fx);
-				break;
-			case collision_type::THIRD_RAMP:
-				sensorFlags.thirdRamp = false;
-				sensorFlags.arrows[2] = false;
-				mustCreateTopRightBumper = true;
-				App->player->AddScore(scoreRewards.thirdRamp);
-				break;
-			case collision_type::LEFT_KICKER:
-				App->player->AddScore(scoreRewards.leftKicker);
-				App->audio->PlayFx(left_kicker_fx);
-				break;
-			case collision_type::TUNNEL_LEFT:
-				bodyA->mustDestroy = true;
-				sensorFlags.tunnels[0] = true;
-				tunnelTimer = SDL_GetTicks();
-				App->player->AddScore(scoreRewards.tunnel);
-				App->audio->PlayFx(tunnel_in_out_fx);
-				break;
-			case collision_type::TUNNEL_RIGHT:
-				bodyA->mustDestroy = true;
-				sensorFlags.tunnels[1] = true;
-				tunnelTimer = SDL_GetTicks();
-				App->player->AddScore(scoreRewards.tunnel);
-				App->audio->PlayFx(tunnel_in_out_fx);
-				break;
-			case collision_type::BUMPER_LEFT:
-				App->audio->PlayFx(big_bumper_left_fx);
-				App->player->AddScore(scoreRewards.bumper);
-				break;
-			case collision_type::BUMPER_RIGHT:
-				App->audio->PlayFx(big_bumper_right_fx);
-				App->player->AddScore(scoreRewards.bumper);
-				break;
-			case collision_type::SMALL_BUMPER:
-				App->player->AddScore(scoreRewards.smallBumper);
-				App->audio->PlayFx(top_left_bumper_fx);
-				break;
-			case collision_type::PEG_LEFT:
-				sensorFlags.pegs[0] = true;
-				bodyB->mustDestroy = true;
-				App->audio->PlayFx(peg_consumed_fx);
-				break;
-			case collision_type::PEG_MIDDLE:
-				sensorFlags.pegs[1] = true;
-				bodyB->mustDestroy = true;
-				App->audio->PlayFx(peg_consumed_fx);
-				break;
-			case collision_type::PEG_RIGHT:
-				sensorFlags.pegs[2] = true;
-				bodyB->mustDestroy = true;
-				App->audio->PlayFx(peg_consumed_fx);
-				break;
-			case collision_type::LOSE_BALL:
-				bodyA->mustDestroy = true;
-				RestorePegs(collision_type::LOSE_BALL);
-				App->player->LoseBall();
-				App->audio->PlayFx(ball_lost_fx);
-				break;
-			default:
-				break;
-			}
+			checkOtherCollisions(bodyA, bodyB);
 		}
-			App->audio->PlayFx(ball_collision_fx);
+		
+		App->audio->PlayFx(ball_collision_fx);
+	}
+}
+
+void ModuleSceneIntro::checkLightCollisions(PhysBody* bodyA, PhysBody* bodyB)
+{
+	switch (bodyB->collision) {
+	case collision_type::LIGHT_TOP_LEFT_1:
+		if (sensorFlags.activatedRamps == false) {
+			sensorFlags.lightsTopLeft[0] = true;
+			App->player->AddScore(scoreRewards.topLeftLight);
+			CheckThirdRamp();
+		}
+		break;
+	case collision_type::LIGHT_TOP_LEFT_2:
+		if (sensorFlags.activatedRamps == false) {
+			sensorFlags.lightsTopLeft[1] = true;
+			App->player->AddScore(scoreRewards.topLeftLight);
+			CheckThirdRamp();
+		}
+		break;
+	case collision_type::LIGHT_TOP_LEFT_3:
+		if (sensorFlags.activatedRamps == false) {
+			sensorFlags.lightsTopLeft[2] = true;
+			App->player->AddScore(scoreRewards.topLeftLight);
+			CheckThirdRamp();
+		}
+		break;
+	case collision_type::LIGHT_TOP_LEFT_4:
+		if (sensorFlags.activatedRamps == false) {
+			sensorFlags.lightsTopLeft[3] = true;
+			App->player->AddScore(scoreRewards.topLeftLight);
+			CheckThirdRamp();
+		}
+		break;
+	case collision_type::LIGHT_TOP_1:
+		sensorFlags.lightsTop[0] = true;
+		App->audio->PlayFx(light_lights_up_fx);
+		App->player->AddScore(scoreRewards.buttonLight);
+		CheckMultiplier();
+		break;
+	case collision_type::LIGHT_TOP_2:
+		sensorFlags.lightsTop[1] = true;
+		App->audio->PlayFx(light_lights_up_fx);
+		App->player->AddScore(scoreRewards.buttonLight);
+		CheckMultiplier();
+		break;
+	case collision_type::LIGHT_TOP_3:
+		sensorFlags.lightsTop[2] = true;
+		App->audio->PlayFx(light_lights_up_fx);
+		App->player->AddScore(scoreRewards.buttonLight);
+		CheckMultiplier();
+		break;
+	case collision_type::LIGHT_TOP_4:
+		sensorFlags.lightsTop[3] = true;
+		App->audio->PlayFx(light_lights_up_fx);
+		App->player->AddScore(scoreRewards.buttonLight);
+		CheckMultiplier();
+		break;
+	case collision_type::LIGHT_LEFT:
+		sensorFlags.lightsMiddle[0] = true;
+		App->audio->PlayFx(lat_light_light_up_fx);
+		App->player->AddScore(scoreRewards.buttonLight);
+		CheckRampEventStart();
+		break;
+	case collision_type::LIGHT_RIGHT:
+		sensorFlags.lightsMiddle[1] = true;
+		App->audio->PlayFx(lat_light_light_up_fx);
+		App->player->AddScore(scoreRewards.buttonLight);
+		CheckRampEventStart();
+		break;
+	case collision_type::LIGHT_DOWN_LEFT:
+		App->player->AddScore(scoreRewards.pegScore);
+		if (sensorFlags.rampDone[0] == true) {
+			if (sensorFlags.lightsDown[0] == false) {
+				sensorFlags.lightsDown[0] = true;
+			}
+			else {
+				RestorePegs(collision_type::LIGHT_DOWN_LEFT);
+				sensorFlags.lightsDown[0] = false;
+			}
+
+			sensorFlags.rampDone[0] = false;
+		}
+		break;
+	case collision_type::LIGHT_DOWN_RIGHT:
+		App->player->AddScore(scoreRewards.pegScore);
+		if (sensorFlags.rampDone[1] == true) {
+			if (sensorFlags.lightsDown[1] == false) {
+				sensorFlags.lightsDown[1] = true;
+			}
+			else {
+				RestorePegs(collision_type::LIGHT_DOWN_RIGHT);
+				sensorFlags.lightsDown[1] = false;
+			}
+
+			sensorFlags.rampDone[1] = false;
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void ModuleSceneIntro::checkOtherCollisions(PhysBody* bodyA, PhysBody* bodyB)
+{
+	switch (bodyB->collision) {
+	case collision_type::RAMP_ACTIVATE:
+		if (sensorFlags.activatedRamps == false) {
+			mustCreateRamps = true;
+			sensorFlags.activatedRamps = true;
+			App->player->AddScore(scoreRewards.enterRamp);
+			App->audio->PlayFx(ramp_entrance_fx);
+		};
+		break;
+	case collision_type::RAMP_DEACTIVATE:
+		if (sensorFlags.activatedRamps == true) {
+			mustDeleteRamps = true;
+			sensorFlags.activatedRamps = false;
+		}
+		break;
+	case collision_type::RAMP_LEFT_FINISH:
+		sensorFlags.rampDone[0] = true;
+
+		if (sensorFlags.arrows[1] == true) {
+			sensorFlags.arrows[1] = false;
+			sensorFlags.rampEventDone[0] = true;
+			CheckRampEventEnd();
+		}
+		if (sensorFlags.activatedRamps == true) {
+			mustDeleteRamps = true;
+			sensorFlags.activatedRamps = false;
+		}
+		App->audio->PlayFx(ramp_exit_fx);
+		break;
+	case collision_type::RAMP_RIGHT_FINISH:
+		sensorFlags.rampDone[1] = true;
+
+		if (sensorFlags.arrows[0] == true) {
+			sensorFlags.arrows[0] = false;
+			sensorFlags.rampEventDone[1] = true;
+			CheckRampEventEnd();
+		}
+		if (sensorFlags.activatedRamps == true) {
+			mustDeleteRamps = true;
+			sensorFlags.activatedRamps = false;
+		}
+		App->audio->PlayFx(ramp_exit_fx);
+		break;
+	case collision_type::THIRD_RAMP:
+		sensorFlags.thirdRamp = false;
+		sensorFlags.arrows[2] = false;
+		mustCreateTopRightBumper = true;
+		App->player->AddScore(scoreRewards.thirdRamp);
+		break;
+	case collision_type::LEFT_KICKER:
+		App->player->AddScore(scoreRewards.leftKicker);
+		App->audio->PlayFx(left_kicker_fx);
+		break;
+	case collision_type::TUNNEL_LEFT:
+		bodyA->mustDestroy = true;
+		sensorFlags.tunnels[0] = true;
+		tunnelTimer = SDL_GetTicks();
+		App->player->AddScore(scoreRewards.tunnel);
+		App->audio->PlayFx(tunnel_in_out_fx);
+		break;
+	case collision_type::TUNNEL_RIGHT:
+		bodyA->mustDestroy = true;
+		sensorFlags.tunnels[1] = true;
+		tunnelTimer = SDL_GetTicks();
+		App->player->AddScore(scoreRewards.tunnel);
+		App->audio->PlayFx(tunnel_in_out_fx);
+		break;
+	case collision_type::BUMPER_LEFT:
+		App->audio->PlayFx(big_bumper_left_fx);
+		App->player->AddScore(scoreRewards.bumper);
+		break;
+	case collision_type::BUMPER_RIGHT:
+		App->audio->PlayFx(big_bumper_right_fx);
+		App->player->AddScore(scoreRewards.bumper);
+		break;
+	case collision_type::SMALL_BUMPER:
+		App->player->AddScore(scoreRewards.smallBumper);
+		App->audio->PlayFx(top_left_bumper_fx);
+		break;
+	case collision_type::PEG_LEFT:
+		sensorFlags.pegs[0] = true;
+		bodyB->mustDestroy = true;
+		App->audio->PlayFx(peg_consumed_fx);
+		break;
+	case collision_type::PEG_MIDDLE:
+		sensorFlags.pegs[1] = true;
+		bodyB->mustDestroy = true;
+		App->audio->PlayFx(peg_consumed_fx);
+		break;
+	case collision_type::PEG_RIGHT:
+		sensorFlags.pegs[2] = true;
+		bodyB->mustDestroy = true;
+		App->audio->PlayFx(peg_consumed_fx);
+		break;
+	case collision_type::LOSE_BALL:
+		bodyA->mustDestroy = true;
+		RestorePegs(collision_type::LOSE_BALL);
+		App->player->LoseBall();
+		App->audio->PlayFx(ball_lost_fx);
+		break;
+	default:
+		break;
 	}
 }
 
@@ -646,10 +657,14 @@ void ModuleSceneIntro::AllocBumpers()
 void ModuleSceneIntro::UnderBallElements()
 {
 	App->renderer->Blit(map, 0, 0, &fullScreenRect);
+	TopRightBumperLogic();
+	ArrowsLogic();
+	LightsLogic();
+	PegsLogic();
+}
 
-	int i = 0;
-	p2List_item<PhysBody*>* tmpBody;
-
+void ModuleSceneIntro::TopRightBumperLogic()
+{
 	if (topRightBumper != nullptr && topRightBumper->mustDestroy == true) {
 		topRightBumper->mustDestroy = false;
 		App->physics->GetWorld()->DestroyBody(topRightBumper->body);
@@ -664,14 +679,20 @@ void ModuleSceneIntro::UnderBallElements()
 	if (sensorFlags.thirdRamp == true) {
 		App->renderer->Blit(spriteSheet, (int)missingBumper.position.x, (int)missingBumper.position.y, &missingBumper.rect);
 	}
+}
 
-	for (i = 0; i < 3; i++) {
+void ModuleSceneIntro::ArrowsLogic()
+{
+	for (int i = 0; i < 3; i++) {
 		if (sensorFlags.arrows[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)arrows[i].position.x, (int)arrows[i].position.y, &arrows[i].rect);
 		}
 	}
+}
 
-	for (i = 0; i < 4; i++) {
+void ModuleSceneIntro::LightsLogic()
+{
+	for (int i = 0; i < 4; i++) {
 		if (sensorFlags.lightsTopLeft[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i].x, (int)lightPosList[i].y, &lightRect);
 		}
@@ -680,7 +701,7 @@ void ModuleSceneIntro::UnderBallElements()
 		}
 	}
 
-	for (i = 0; i < 2; i++) {
+	for (int i = 0; i < 2; i++) {
 		if (sensorFlags.lightsMiddle[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 8].x, (int)lightPosList[i + 8].y, &lightRect);
 		}
@@ -689,7 +710,7 @@ void ModuleSceneIntro::UnderBallElements()
 		}
 	}
 
-	for (i = 0; i < 3; i++) {
+	for (int i = 0; i < 3; i++) {
 		if (sensorFlags.lightsDown[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 10].x, (int)lightPosList[i + 10].y, &lightRect);
 		}
@@ -697,6 +718,11 @@ void ModuleSceneIntro::UnderBallElements()
 			App->renderer->Blit(spriteSheet, (int)pegs[i].position.x, (int)pegs[i].position.y, &pegs[i].rect);
 		}
 	}
+}
+
+void ModuleSceneIntro::PegsLogic()
+{
+	p2List_item<PhysBody*>* tmpBody;
 
 	for (p2List_item<PhysBody*>* currentPeg = pegsList.getFirst(); currentPeg != nullptr; currentPeg = tmpBody) {
 		if (currentPeg->data->mustDestroy == true) {
@@ -725,7 +751,7 @@ void ModuleSceneIntro::UnderBallElements()
 
 		mustRestorePegs = false;
 
-		for (i = 0; i < 3; i++)
+		for (int i = 0; i < 3; i++)
 			sensorFlags.pegs[i] = false;
 	}
 }
