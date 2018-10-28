@@ -25,6 +25,7 @@ bool ModulePlayer::Start()
 	remainingBalls = 3;
 
 	debug_font = App->fonts->Load("pinball/fonts/blue_font.png", "! @,_./0123456789$;<&?abcdefghijklmnopqrstuvwxyz", 1);
+	yellow_font = App->fonts->Load("pinball/fonts/yellow_font.png", "0123456789abcdefghiklmnoprstuvy©        ", 4);
 	return true;
 }
 
@@ -33,6 +34,8 @@ bool ModulePlayer::CleanUp()
 {
 	LOG("Unloading player");
 	App->fonts->UnLoad(debug_font);
+	App->fonts->UnLoad(yellow_font);
+
 	return true;
 }
 
@@ -44,13 +47,23 @@ update_status ModulePlayer::Update()
 		hiScore = score;
 	}
 	//Print Score
-	App->fonts->BlitText(50, 60, debug_font, "score:");
+	App->fonts->BlitText(70, 75, yellow_font, "score:");
 	sprintf_s(score_number, 8, "%7d", score);
-	App->fonts->BlitText(110, 60, debug_font, score_number);
+	App->fonts->BlitText(130, 75, yellow_font, score_number);
 	//Print Hi Score
-	App->fonts->BlitText(50, 80, debug_font, "hi-score:");
+	App->fonts->BlitText(40, 55, yellow_font, "hi-score:");
 	sprintf_s(hiScore_number, 8, "%7d", hiScore);
-	App->fonts->BlitText(110, 80, debug_font, hiScore_number);
+	App->fonts->BlitText(130, 55, yellow_font, hiScore_number);
+
+	//Print Multiplier
+	App->fonts->BlitText(150, 100, yellow_font, "multiplier");
+	sprintf_s(multiplier_number, 8, "%7d", multiplier);
+	App->fonts->BlitText(210, 100, yellow_font, multiplier_number);
+
+	//Print Balls
+	App->fonts->BlitText(150, 115, yellow_font, "balls");
+	sprintf_s(balls_number, 8, "%7d", remainingBalls);
+	App->fonts->BlitText(160, 115, yellow_font, balls_number);
 
 	return UPDATE_CONTINUE;
 }
@@ -63,7 +76,8 @@ void ModulePlayer::AddScore(uint scoreToAdd)
 
 void ModulePlayer::IncreaseMultiplier()
 {
-	multiplier++;
+	if (multiplier < 100)
+		multiplier++;
 }
 
 void ModulePlayer::AddBall()
@@ -73,6 +87,7 @@ void ModulePlayer::AddBall()
 
 void ModulePlayer::LoseBall()
 {
+	if (remainingBalls > 0)
 	remainingBalls--;
 }
 

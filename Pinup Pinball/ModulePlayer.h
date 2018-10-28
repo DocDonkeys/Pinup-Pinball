@@ -27,6 +27,7 @@ public:
 	ushort remainingBalls;
 
 	int debug_font = -1;
+	int yellow_font = -1;
 
 	//Chars
 	char score_number[8];
@@ -34,4 +35,10 @@ public:
 
 	char hiScore_number[8];
 	char hiScore_text[8];
+
+	char multiplier_number[4];
+	char multiplier_text[11];
+
+	char balls_number[4];
+	char balls_text[6];
 };
