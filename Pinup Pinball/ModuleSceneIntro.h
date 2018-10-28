@@ -139,6 +139,7 @@ public:	//@Carles
 	void AllocPegs();
 
 	// Update Cycle
+	void PlayerInput();
 	void UnderBallElements();
 	void TopRightBumperLogic();
 	void ArrowsLogic();
@@ -154,6 +155,10 @@ public:	//@Carles
 	// CleanUp
 	void CleanBodies();
 	void CleanTextures();
+
+	// Game flow
+	void CreateStartBall();
+	void RestartGame();
 
 public:
 	//PhysBodies
@@ -197,6 +202,7 @@ public:
 	score_rewards scoreRewards;
 
 	//Flags
+	bool mustCreateBall = false;
 	bool mustCreateRamps = false;
 	bool mustDeleteRamps = false;
 	bool mustCreateTopRightBumper = false;

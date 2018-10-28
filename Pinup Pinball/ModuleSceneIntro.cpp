@@ -36,6 +36,8 @@ bool ModuleSceneIntro::Start()
 	AllocBumpers();
 	AllocPegs();
 
+	CreateStartBall();
+
 	return ret;
 }
 
@@ -58,6 +60,9 @@ update_status ModuleSceneIntro::Update()
 	mouse.x = App->input->GetMouseX();
 	mouse.y = App->input->GetMouseY();
 
+	// Debug & Restart Input
+	PlayerInput();
+	
 	// All logic and blitting of different sections
 	UnderBallElements();
 	FlipperLogic();
@@ -295,7 +300,14 @@ void ModuleSceneIntro::checkOtherCollisions(PhysBody* bodyA, PhysBody* bodyB)
 		bodyA->mustDestroy = true;
 		RestorePegs(collision_type::LOSE_BALL);
 		App->player->LoseBall();
-		App->audio->PlayFx(ball_lost_fx);
+		if (App->player->GetBalls() <= 0) {
+			//Lose game fx //DidacAlert
+			RestartGame();
+		}
+		else {
+			App->audio->PlayFx(ball_lost_fx);
+			mustCreateBall = true;
+		}
 		break;
 	default:
 		break;
@@ -334,7 +346,7 @@ void ModuleSceneIntro::CheckThirdRamp()	//@Carles
 
 void ModuleSceneIntro::CheckRampEventStart()	//@Carles
 {
-	if (sensorFlags.lightsMiddle[0] == true && sensorFlags.lightsMiddle[1] == true && sensorFlags.arrows[1] == false && sensorFlags.arrows[2] == false) {
+	if (sensorFlags.lightsMiddle[0] == true && sensorFlags.lightsMiddle[1] == true && sensorFlags.arrows[0] == false && sensorFlags.arrows[1] == false) {
 		for (int i = 0; i < 2; i++) {
 			sensorFlags.arrows[i] = true;
 		}
@@ -603,6 +615,24 @@ void ModuleSceneIntro::AllocPegs()
 	pegsList.add(App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f));
 }
 
+void ModuleSceneIntro::PlayerInput() {
+	if (App->physics->GetDebug() == true) {
+		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9));
+			circles.getLast()->data->listener = this;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+			App->player->AddBall();
+		}
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && App->player->GetBalls() <= 0) {
+		mustCreateBall = true;
+		App->player->ResetPlayer();
+	}
+}
+
 void ModuleSceneIntro::UnderBallElements()
 {
 	App->renderer->Blit(map, 0, 0, &fullScreenRect);
@@ -798,6 +828,11 @@ void ModuleSceneIntro::DynamicElements()
 			c = c->next;
 		}
 	}
+
+	if (mustCreateBall == true) {
+		CreateStartBall();
+		mustCreateBall = false;
+	}
 }
 
 void ModuleSceneIntro::KickerLogic()
@@ -815,17 +850,6 @@ void ModuleSceneIntro::KickerLogic()
 	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
 	{
 		App->audio->PlayFx(kicker_used_fx);
-	}
-
-	if (App->physics->GetDebug() == true) {
-		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
-			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9));
-			circles.getLast()->data->listener = this;
-		}
-
-		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
-			App->player->AddBall();
-		}
 	}
 
 	//Draw the kicker
@@ -862,10 +886,7 @@ void ModuleSceneIntro::CleanBodies()
 	bumpersList.clear();
 	pegsList.clear();
 
-	if (topRightBumper != nullptr) {
-		delete topRightBumper;
-		topRightBumper = nullptr;
-	}
+	topRightBumper = nullptr;
 
 	// Sensors
 	sensorList.clear();
@@ -889,4 +910,38 @@ void ModuleSceneIntro::CleanTextures()
 	App->textures->Unload(map);
 	App->textures->Unload(ramps);
 	App->textures->Unload(spriteSheet);
+}
+
+void ModuleSceneIntro::CreateStartBall()
+{
+	circles.add(App->physics->CreateCircle(412, 700, 9));
+	circles.getLast()->data->listener = this;
+}
+
+void ModuleSceneIntro::RestartGame()
+{
+	for (int i = 0; i < 4; i++) {
+		sensorFlags.lightsTopLeft[i] = false;
+		sensorFlags.lightsTop[i] = false;
+	}
+
+	sensorFlags.activatedRamps = false;
+	sensorFlags.thirdRamp = false;
+
+	for (int i = 0; i < 2; i++) {
+		sensorFlags.rampDone[i] = false;
+		sensorFlags.rampEventDone[i] = false;
+		sensorFlags.lightsMiddle[i] = false;
+		sensorFlags.lightsDown[i] = false;
+		sensorFlags.tunnels[i] = false;
+	}
+
+	for (int i = 0; i < 3; i++) {
+		sensorFlags.arrows[i] = false;
+		sensorFlags.pegs[i] = false;
+	}
+
+	if (bumperTopRedLeft == nullptr) {
+		mustCreateTopRightBumper = true;
+	}
 }
