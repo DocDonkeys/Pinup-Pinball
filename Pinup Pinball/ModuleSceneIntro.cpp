@@ -187,11 +187,13 @@ bool ModuleSceneIntro::Start()
 	bumpersList.add(App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Blue Right
 	bumpersList.add(App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Red Middle
 
+	bumpersList.add(App->physics->CreateCircle(400, 153, 11, b2_staticBody, collision_type::NONE, 0.5f));
+
 	//Adding Pegs
 	pegsList.add(App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f));
 	pegsList.add(App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f));
 	pegsList.add(App->physics->CreateCircle(375, 520, 5, b2_staticBody, collision_type::PEG_RIGHT, 0.75f));
-	
+
 	return ret;
 }
 
@@ -636,22 +638,23 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				App->player->AddScore(scoreRewards.thirdRamp);
 				break;
 			case collision_type::LEFT_KICKER:
+				App->player->AddScore(scoreRewards.leftKicker);
 				break;
 			case collision_type::TUNNEL_LEFT:
-				App->player->AddScore(scoreRewards.tunnel);
 				sensorFlags.tunnels[0] = true;
+				App->player->AddScore(scoreRewards.tunnel);
 				break;
 			case collision_type::TUNNEL_RIGHT:
-				App->player->AddScore(scoreRewards.tunnel);
 				sensorFlags.tunnels[1] = true;
+				App->player->AddScore(scoreRewards.tunnel);
 				break;
 			case collision_type::BUMPER_LEFT:
-				App->player->AddScore(scoreRewards.bumper);
 				App->audio->PlayFx(big_bumper_left_fx);
+				App->player->AddScore(scoreRewards.bumper);
 				break;
 			case collision_type::BUMPER_RIGHT:
-				App->player->AddScore(scoreRewards.bumper);
 				App->audio->PlayFx(big_bumper_right_fx);
+				App->player->AddScore(scoreRewards.bumper);
 				break;
 			case collision_type::SMALL_BUMPER:
 				App->player->AddScore(scoreRewards.smallBumper);

@@ -472,11 +472,6 @@ public:
 		289, 661
 	};
 
-	//Pegs
-	PhysBody* leftPeg;
-	PhysBody* rightPeg;
-	PhysBody* centerPeg;
-
 	//SFX
 	uint ball_collision_fx;
 	uint ball_lost_fx;
@@ -488,6 +483,4 @@ public:
 	uint lat_light_light_up_fx;
 	uint light_lights_up_fx;
 	uint left_kicker_fx;
-	
-
 };

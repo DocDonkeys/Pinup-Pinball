@@ -8,7 +8,7 @@
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	hiscore = 0;
+	hiScore = 0;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -35,17 +35,10 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
-	/*if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+	if (score > hiScore)
 	{
-		App->physics->flipper_joint->SetMaxMotorTorque(400.0f);
-		App->physics->flipper_joint->SetMotorSpeed(-500.0f);
+		hiScore = score;
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == (KEY_UP))
-	{
-		App->physics->flipper_joint->SetMaxMotorTorque(-20.0f);
-		App->physics->flipper_joint->SetMotorSpeed(0.0f);
-	}*/
 
 	return UPDATE_CONTINUE;
 }
