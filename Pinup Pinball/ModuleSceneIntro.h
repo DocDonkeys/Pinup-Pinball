@@ -145,10 +145,10 @@ public:	//@Carles
 	void LightsLogic();
 	void PegsLogic();
 	void FlipperLogic();
-	void KickerLogic();
 	void RampsLogic();
 	void TunnelsLogic();
 	void DynamicElements();
+	void KickerLogic();
 	void OverBallElements();
 
 public:

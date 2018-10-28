@@ -44,7 +44,6 @@ bool ModuleSceneIntro::CleanUp()
 {
 	LOG("Unloading Intro scene");
 
-	// CHANGE/FIX: Put into function
 	//PhysBodies
 	circles.clear();
 	smallTopWallsList.clear();
@@ -93,7 +92,6 @@ update_status ModuleSceneIntro::Update()
 	// All logic and blitting of different sections
 	UnderBallElements();
 	FlipperLogic();
-	KickerLogic();
 	RampsLogic();
 	TunnelsLogic();
 
@@ -103,6 +101,8 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	DynamicElements();
+
+	KickerLogic();
 
 	// Ramps Not Active
 	if (sensorFlags.activatedRamps == false) {
@@ -782,44 +782,6 @@ void ModuleSceneIntro::FlipperLogic()
 		rightFlipper.Pbody->GetRotation(), -rightFlipper.Rect.x, -rightFlipper.Rect.y);
 }
 
-
-void ModuleSceneIntro::KickerLogic()
-{
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
-	{
-		App->physics->KickerSetMaxMotorForce(pinballKicker, -1.0f);
-	}
-	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_IDLE)
-	{
-		App->physics->KickerSetMaxMotorForce(pinballKicker, (pinballKicker.pbody->body->GetPosition().y) + 5.0f);
-		App->physics->KickerSetMotorSpeed(pinballKicker, -15.0f);
-		
-	}
-	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
-	{
-		App->audio->PlayFx(kicker_used_fx);
-	}
-
-	if (App->physics->GetDebug() == true) {
-		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
-			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9));
-			circles.getLast()->data->listener = this;
-		}
-
-		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
-			App->player->AddBall();
-		}
-	}
-
-	//Draw the kicker
-	iPoint coords;
-	pinballKicker.pbody->GetPosition(coords.x, coords.y);
-	App->renderer->Blit(spriteSheet, coords.x, coords.y, &pinballKicker.rect);
-
-	App->renderer->Blit(spriteSheet, (int)overLeftKicker.position.x, (int)overLeftKicker.position.y, &overLeftKicker.rect);
-	App->renderer->Blit(spriteSheet, (int)overRightKicker.position.x, (int)overRightKicker.position.y, &overRightKicker.rect);
-}
-
 void ModuleSceneIntro::RampsLogic()
 {
 	if (mustCreateRamps == true) {
@@ -867,6 +829,43 @@ void ModuleSceneIntro::DynamicElements()
 			c = c->next;
 		}
 	}
+}
+
+void ModuleSceneIntro::KickerLogic()
+{
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN)
+	{
+		App->physics->KickerSetMaxMotorForce(pinballKicker, -1.0f);
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_IDLE)
+	{
+		App->physics->KickerSetMaxMotorForce(pinballKicker, (pinballKicker.pbody->body->GetPosition().y) + 5.0f);
+		App->physics->KickerSetMotorSpeed(pinballKicker, -15.0f);
+
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	{
+		App->audio->PlayFx(kicker_used_fx);
+	}
+
+	if (App->physics->GetDebug() == true) {
+		if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN) {
+			circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 9));
+			circles.getLast()->data->listener = this;
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN) {
+			App->player->AddBall();
+		}
+	}
+
+	//Draw the kicker
+	iPoint coords;
+	pinballKicker.pbody->GetPosition(coords.x, coords.y);
+	App->renderer->Blit(spriteSheet, coords.x, coords.y, &pinballKicker.rect);
+
+	App->renderer->Blit(spriteSheet, (int)overLeftKicker.position.x, (int)overLeftKicker.position.y, &overLeftKicker.rect);
+	App->renderer->Blit(spriteSheet, (int)overRightKicker.position.x, (int)overRightKicker.position.y, &overRightKicker.rect);
 }
 
 void ModuleSceneIntro::OverBallElements()
