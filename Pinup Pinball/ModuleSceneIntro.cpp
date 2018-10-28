@@ -185,6 +185,8 @@ bool ModuleSceneIntro::Start()
 	bumpersList.add(App->physics->CreateCircle(102, 217, 8, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Blue Right
 	bumpersList.add(App->physics->CreateCircle(77, 250, 10, b2_staticBody, collision_type::SMALL_BUMPER, 0.75f));	//Red Middle
 
+	bumpersList.add(App->physics->CreateCircle(400, 153, 11, b2_staticBody, collision_type::NONE, 0.5f));
+
 	//Adding Pegs
 	pegsList.add(App->physics->CreateCircle(25, 520, 5, b2_staticBody, collision_type::PEG_LEFT, 0.75f));
 	pegsList.add(App->physics->CreateCircle(200, 764, 5, b2_staticBody, collision_type::PEG_MIDDLE, 0.75f));
