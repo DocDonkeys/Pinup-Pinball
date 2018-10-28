@@ -66,7 +66,6 @@ bool ModuleSceneIntro::CleanUp()
 	App->textures->Unload(ramps);
 	App->textures->Unload(spriteSheet);
 
-
 	//CleanChain Bumpers
 	if (bumperHuggerLeft != nullptr)
 	{
