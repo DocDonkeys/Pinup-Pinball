@@ -244,7 +244,6 @@ struct wall_coordinates {
 };
 
 struct bumper_coordinates {
-	//Chains of the Chain Bumpers
 	// Pivot 0,0
 	int leftBumper[8] = {
 		78, 580,
@@ -253,11 +252,35 @@ struct bumper_coordinates {
 		68, 583
 	};
 
-	// Pivot 0, 0
 	int rightBumper[8] = {
 		332, 582,
 		322, 578,
 		280, 657,
 		289, 661
+	};
+};
+
+struct flipper_coordinates {
+	// Pivot 0,0
+	int leftFlipper[16] = {
+			6, 62,
+			15, 62,
+			47, 82,
+			47, 86,
+			43, 86,
+			5, 77,
+			1, 71,
+			1, 66,
+	};
+
+	int rightFlipper[16] = {
+		105, 61,
+		72, 82,
+		71, 85,
+		75, 87,
+		115, 78,
+		119, 72,
+		119, 66,
+		113, 61
 	};
 };

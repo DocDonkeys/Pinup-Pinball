@@ -129,9 +129,14 @@ public:	//@Carles
 	
 	// Starting Allocations
 	void AllocStaticElements();
+	void AllocTextures();
+	void AllocSoundsFx();
+	void AllocFlippers();
+	void AllocKicker();
 	void AllocWalls();
 	void AllocSensors();
 	void AllocBumpers();
+	void AllocPegs();
 
 	// Update Cycle
 	void UnderBallElements();
@@ -204,6 +209,8 @@ public:
 	SDL_Rect fullScreenRect;	// @Carles
 
 	//Flippers @Dídac
+	flipper_coordinates flipperCoordinates;
+
 	flipper leftFlipper;
 	flipper rightFlipper;
 
