@@ -166,9 +166,6 @@ bool ModuleSceneIntro::Start()
 	sensorList.add(App->physics->CreateRectangleSensor(210, 175, 6, 16, b2_staticBody, collision_type::RAMP_DEACTIVATE));
 	sensorList.add(App->physics->CreateRectangleSensor(250, 143, 6, 15, b2_staticBody, collision_type::RAMP_DEACTIVATE));
 
-	sensorList.add(App->physics->CreateRectangleSensor(50, 556, 12, 10, b2_staticBody, collision_type::RAMP_LEFT_FINISH));
-	sensorList.add(App->physics->CreateRectangleSensor(355, 580, 12, 10, b2_staticBody, collision_type::RAMP_RIGHT_FINISH));
-
 	sensorList.add(App->physics->CreateRectangleSensor(48, 422, 18, 4, b2_staticBody, collision_type::TUNNEL_LEFT));
 	sensorList.add(App->physics->CreateRectangleSensor(420, 315, 4, 18, b2_staticBody, collision_type::TUNNEL_RIGHT));
 
@@ -322,10 +319,22 @@ update_status ModuleSceneIntro::Update()
 	// Draw map -----------------------------------------------------------------	// @Carles
 	App->renderer->Blit(map, 0, 0, &fullScreenRect);
 
-	// UNDER-ball static elements: Draw and deletions	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
-
+	// UNDER-ball static elements: Draw and management	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
 	int i = 0;
 	p2List_item<PhysBody*>* tmpBody;
+
+	if (sensorFlags.thirdRamp == true) {
+		App->renderer->Blit(spriteSheet, (int)missingBumper.position.x, (int)missingBumper.position.y, &missingBumper.rect);
+	}
+
+	if (sensorFlags.lightsMiddle[0] == true && sensorFlags.lightsMiddle[1] == true) {
+		if (sensorFlags.rampDone[0] == false) {
+			App->renderer->Blit(spriteSheet, (int)arrows[0].position.x, (int)arrows[0].position.y, &arrows[0].rect);
+		}
+		if (sensorFlags.rampDone[1] == false) {
+			App->renderer->Blit(spriteSheet, (int)arrows[1].position.x, (int)arrows[1].position.y, &arrows[1].rect);
+		}
+	}
 
 	for (i = 0; i < 4; i++) {
 		if (sensorFlags.lightsTopLeft[i] == true) {
@@ -345,8 +354,6 @@ update_status ModuleSceneIntro::Update()
 		}
 	}
 
-	App->renderer->Blit(spriteSheet, (int)missingBumper.position.x, (int)missingBumper.position.y, &missingBumper.rect);
-
 	for (i = 0; i < 3; i++) {
 		if (sensorFlags.lightsDown[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)lightPosList[i + 10].x, (int)lightPosList[i + 10].y, &lightRect);
@@ -354,10 +361,6 @@ update_status ModuleSceneIntro::Update()
 		if (sensorFlags.pegs[i] == true) {
 			App->renderer->Blit(spriteSheet, (int)pegs[i].position.x, (int)pegs[i].position.y, &pegs[i].rect);
 		}
-	}
-
-	if (sensorFlags.arrows[i] == true) {
-		App->renderer->Blit(spriteSheet, (int)arrows[i].position.x, (int)arrows[i].position.y, &arrows[i].rect);
 	}
 
 	for (p2List_item<PhysBody*>* currentPeg = pegsList.getFirst(); currentPeg != nullptr; currentPeg = tmpBody) {
@@ -373,8 +376,22 @@ update_status ModuleSceneIntro::Update()
 		}
 	}
 
-	// Prepare for raycast ------------------------------------------------------
+	// OVER-ball static elements: Draw and management (RAMPS ACTIVE)
+	if (sensorFlags.activatedRamps == true) {
+		App->renderer->Blit(spriteSheet, (int)tunnels[0].position.x, (int)tunnels[0].position.y, &tunnels[0].rect);
+		App->renderer->Blit(spriteSheet, (int)tunnels[1].position.x, (int)tunnels[1].position.y, &tunnels[1].rect);
 
+		if (sensorFlags.tunnels[0] == true) {
+			App->renderer->Blit(spriteSheet, (int)greenRightLight.position.x, (int)greenRightLight.position.y, &greenRightLight.rect);
+		}
+		if (sensorFlags.tunnels[1] == true) {
+			App->renderer->Blit(spriteSheet, (int)greenLeftLight.position.x, (int)greenLeftLight.position.y, &greenLeftLight.rect);
+		}
+
+		App->renderer->Blit(ramps, 0, 0, &fullScreenRect);
+	}
+
+	// Prepare for raycast ------------------------------------------------------
 	iPoint mouse;
 	mouse.x = App->input->GetMouseX();
 	mouse.y = App->input->GetMouseY();
@@ -419,17 +436,6 @@ update_status ModuleSceneIntro::Update()
 		c = c->next;
 	}
 
-	// Draw OVER-ball static elements	// @Carles	//CHANGE/FIX: Add loops and conditions for drawing
-	App->renderer->Blit(spriteSheet, (int)tunnels[0].position.x, (int)tunnels[0].position.y, &tunnels[0].rect);
-	App->renderer->Blit(spriteSheet, (int)tunnels[1].position.x, (int)tunnels[1].position.y, &tunnels[1].rect);
-	
-	if (sensorFlags.tunnels[0] == true) {
-		App->renderer->Blit(spriteSheet, (int)greenRightLight.position.x, (int)greenRightLight.position.y, &greenRightLight.rect);
-	}
-	if (sensorFlags.tunnels[1] == true) {
-		App->renderer->Blit(spriteSheet, (int)greenLeftLight.position.x, (int)greenLeftLight.position.y, &greenLeftLight.rect);
-	}
-
 	//Draw the kicker
 	iPoint coords;
 	pinballKicker.pbody->GetPosition(coords.x, coords.y);
@@ -438,10 +444,20 @@ update_status ModuleSceneIntro::Update()
 	App->renderer->Blit(spriteSheet, (int)overLeftKicker.position.x, (int)overLeftKicker.position.y, &overLeftKicker.rect);
 	App->renderer->Blit(spriteSheet, (int)overRightKicker.position.x, (int)overRightKicker.position.y, &overRightKicker.rect);
 
+	// OVER-ball static elements: Draw and management (RAMPS NOT ACTIVE)	//CHANGE/FIX: Add loops and conditions for drawing, also copypasted above
+	if (sensorFlags.activatedRamps == false) {
+		App->renderer->Blit(spriteSheet, (int)tunnels[0].position.x, (int)tunnels[0].position.y, &tunnels[0].rect);
+		App->renderer->Blit(spriteSheet, (int)tunnels[1].position.x, (int)tunnels[1].position.y, &tunnels[1].rect);
 
-	// Draw ramps -------------------------------------------------------------	// CHANGE/FIX: Add conditions so ball can draw after this and not before
-	App->renderer->Blit(ramps, 0, 0, &fullScreenRect);	// @Carles
+		if (sensorFlags.tunnels[0] == true) {
+			App->renderer->Blit(spriteSheet, (int)greenRightLight.position.x, (int)greenRightLight.position.y, &greenRightLight.rect);
+		}
+		if (sensorFlags.tunnels[1] == true) {
+			App->renderer->Blit(spriteSheet, (int)greenLeftLight.position.x, (int)greenLeftLight.position.y, &greenLeftLight.rect);
+		}
 
+		App->renderer->Blit(ramps, 0, 0, &fullScreenRect);
+	}
 	
 	//Draw the Flippers
 	leftFlipper.Pbody->GetPosition(coords.x,coords.y);
@@ -463,52 +479,65 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			case collision_type::LIGHT_TOP_LEFT_1:
 				if (sensorFlags.activatedRamps == false) {
 					sensorFlags.lightsTopLeft[0] = true;
+					checkThirdRamp();
 				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_2:
 				if (sensorFlags.activatedRamps == false) {
 					sensorFlags.lightsTopLeft[1] = true;
+					checkThirdRamp();
 				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_3:
 				if (sensorFlags.activatedRamps == false) {
 					sensorFlags.lightsTopLeft[2] = true;
+					checkThirdRamp();
 				}
 				break;
 			case collision_type::LIGHT_TOP_LEFT_4:
 				if (sensorFlags.activatedRamps == false) {
 					sensorFlags.lightsTopLeft[3] = true;
+					checkThirdRamp();
 				}
 				break;
 			case collision_type::LIGHT_TOP_1:
 				sensorFlags.lightsTop[0] = true;
 				App->audio->PlayFx(light_lights_up_fx);
+				checkThirdRamp();
 				break;
 			case collision_type::LIGHT_TOP_2:
 				sensorFlags.lightsTop[1] = true;
 				App->audio->PlayFx(light_lights_up_fx);
+				checkMultiplier();
 				break;
 			case collision_type::LIGHT_TOP_3:
 				sensorFlags.lightsTop[2] = true;
 				App->audio->PlayFx(light_lights_up_fx);
+				checkMultiplier();
 				break;
 			case collision_type::LIGHT_TOP_4:
 				sensorFlags.lightsTop[3] = true;
 				App->audio->PlayFx(light_lights_up_fx);
+				checkMultiplier();
 				break;
 			case collision_type::LIGHT_LEFT:
 				sensorFlags.lightsMiddle[0] = true;
 				App->audio->PlayFx(lat_light_light_up_fx);
+				checkMultiplier();
 				break;
 			case collision_type::LIGHT_RIGHT:
 				sensorFlags.lightsMiddle[1] = true;
 				App->audio->PlayFx(lat_light_light_up_fx);
 				break;
 			case collision_type::LIGHT_DOWN_LEFT:
-				sensorFlags.lightsDown[0] = true;
+				if (sensorFlags.rampDone[0] == true) {
+					sensorFlags.lightsDown[0] = true;
+				}
 				break;
 			case collision_type::LIGHT_DOWN_RIGHT:
-				sensorFlags.lightsDown[1] = true;
+				if (sensorFlags.rampDone[1] == true) {
+					sensorFlags.lightsDown[1] = true;
+				}
 				break;
 			default:
 				break;
@@ -584,12 +613,40 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	}
 }
 
-void ModuleSceneIntro::CreateRamps() {	//@Carles
+void ModuleSceneIntro::checkMultiplier()	//@Carles
+{
+	if (sensorFlags.lightsTop[0] && sensorFlags.lightsTop[1] && sensorFlags.lightsTop[2] && sensorFlags.lightsTop[3]) {
+		//multiplier++;	//CHANGE/FIX: Add multiplier
+
+		for (int i = 0; i < 4; i++) {
+			sensorFlags.lightsTop[i] = false;
+		}
+	}
+}
+
+void ModuleSceneIntro::checkThirdRamp()	//@Carles
+{
+	if (sensorFlags.lightsTopLeft[0] && sensorFlags.lightsTopLeft[1] && sensorFlags.lightsTopLeft[2] && sensorFlags.lightsTopLeft[3]) {
+		sensorFlags.thirdRamp = true;
+
+		for (int i = 0; i < 4; i++) {
+			sensorFlags.lightsTopLeft[i] = false;
+		}
+	}
+}
+
+void ModuleSceneIntro::CreateRamps()	//@Carles
+{
 	for (p2List_item<PhysBody*>* tmp = generalWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
 		App->physics->world->DestroyBody(tmp->data->body);
 	}
 	generalWallsList.clear();
 	
+	for (p2List_item<PhysBody*>* tmp = smallTopWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
+		App->physics->world->DestroyBody(tmp->data->body);
+	}
+	smallTopWallsList.clear();
+
 	uint i = 0;
 	for (p2List_item<PhysBody*>* tmp = bumpersList.getLast(); i < 2; i++) {
 		App->physics->world->DestroyBody(tmp->data->body);
@@ -597,20 +654,26 @@ void ModuleSceneIntro::CreateRamps() {	//@Carles
 		bumpersList.del(tmp->next);
 	}
 
-	for (p2List_item<PhysBody*>* tmp = smallTopWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
-		App->physics->world->DestroyBody(tmp->data->body);
-	}
-	smallTopWallsList.clear();
+	sensorList.add(App->physics->CreateRectangleSensor(50, 556, 12, 10, b2_staticBody, collision_type::RAMP_LEFT_FINISH));
+	sensorList.add(App->physics->CreateRectangleSensor(355, 580, 12, 10, b2_staticBody, collision_type::RAMP_RIGHT_FINISH));
 
 	rampWallsList.add(App->physics->CreateChain(0, 0, leftRampWalls, 52, b2_staticBody));
 	rampWallsList.add(App->physics->CreateChain(0, 0, rightRampWalls, 26, b2_staticBody));
 }
 
-void ModuleSceneIntro::DeleteRamps() {	//@Carles
+void ModuleSceneIntro::DeleteRamps()	//@Carles
+{
 	for (p2List_item<PhysBody*>* tmp = rampWallsList.getFirst(); tmp != nullptr; tmp = tmp->next) {
 		App->physics->world->DestroyBody(tmp->data->body);
 	}
 	rampWallsList.clear();
+
+	uint i = 0;
+	for (p2List_item<PhysBody*>* tmp = sensorList.getLast(); i < 2; i++) {
+		App->physics->world->DestroyBody(tmp->data->body);
+		tmp = tmp->prev;
+		sensorList.del(tmp->next);
+	}
 
 	generalWallsList.add(App->physics->CreateChain(0, 0, outsideWalls, 231, b2_staticBody));
 	generalWallsList.add(App->physics->CreateChain(0, 0, topLeftWalls, 32, b2_staticBody));

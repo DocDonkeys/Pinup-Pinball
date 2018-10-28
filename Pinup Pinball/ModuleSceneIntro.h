@@ -19,6 +19,7 @@ struct sensor_flags {	// @Carles
 
 	bool activatedRamps;
 	bool rampDone[2];
+	bool thirdRamp;
 
 	bool tunnels[2];
 
@@ -33,6 +34,7 @@ struct sensor_flags {	// @Carles
 		}
 
 		activatedRamps = false;
+		thirdRamp = false;
 
 		for (int i = 0; i < 2; i++) {
 			rampDone[i] = false;
@@ -98,6 +100,9 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:	//@Carles
+	void checkThirdRamp();
+	void checkMultiplier();
+
 	void CreateRamps();
 	void DeleteRamps();
 
