@@ -8,6 +8,7 @@
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	hiscore = 0;
 }
 
 ModulePlayer::~ModulePlayer()
@@ -17,6 +18,9 @@ ModulePlayer::~ModulePlayer()
 bool ModulePlayer::Start()
 {
 	LOG("Loading player");
+
+	score = 0;
+	multiplier = 1;
 	return true;
 }
 
@@ -46,5 +50,15 @@ update_status ModulePlayer::Update()
 	return UPDATE_CONTINUE;
 }
 
+
+void ModulePlayer::AddScore(uint scoreToAdd)
+{
+	score += scoreToAdd * multiplier;
+}
+
+void ModulePlayer::IncreaseMultiplier()
+{
+	multiplier++;
+}
 
 

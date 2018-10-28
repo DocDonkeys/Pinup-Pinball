@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModulePlayer.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -632,7 +633,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 void ModuleSceneIntro::checkMultiplier()	//@Carles
 {
 	if (sensorFlags.lightsTop[0] == true && sensorFlags.lightsTop[1] == true && sensorFlags.lightsTop[2] == true && sensorFlags.lightsTop[3] == true) {
-		//multiplier++;	//CHANGE/FIX: Add multiplier
+		App->player->IncreaseMultiplier(); //This does multiplier++ but controlled by the player who owns the score
 
 		for (int i = 0; i < 4; i++) {
 			sensorFlags.lightsTop[i] = false;

@@ -13,6 +13,11 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-public:
+	void AddScore(uint scoreToAdd);
+	void IncreaseMultiplier();
 
+public:
+	uint score;
+	uint hiscore;
+	uint multiplier;
 };
